@@ -15,14 +15,11 @@
 <meta property="og:site_name" content="凉月の博客">
 <meta property="og:description" content="Scoop是Windows的命令行安装程序,帮助我们管理开发环境。通过scoop来安装工具，工具都会自动添加到环境变量中，非常方便。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fulsun.github.io/post/7cd42b82/Snipaste_2019-09-07_10-53-44.png">
-<meta property="og:image" content="https://fulsun.github.io/post/7cd42b82/Snipaste_2019-09-07_10-58-42.png">
-<meta property="article:published_time" content="2019-01-05T05:04:09.000Z">
-<meta property="article:modified_time" content="2021-09-23T09:49:08.000Z">
+<meta property="article:published_time" content="2021-01-05T05:04:09.000Z">
+<meta property="article:modified_time" content="2022-02-12T09:57:21.470Z">
 <meta property="article:author" content="凉月">
-<meta property="article:tag" content="配置环境">
+<meta property="article:tag" content="环境搭建">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://fulsun.github.io/post/7cd42b82/Snipaste_2019-09-07_10-53-44.png">
   
     <link rel="alternative" href="/atom.xml" title="凉月の博客" type="application/atom+xml">
   
@@ -33,7 +30,7 @@
   <style type="text/css">
   
     #container.show {
-      background: linear-gradient(200deg, #30cfd0 0%, #330867 100%);
+      background: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
     }
   </style>
   
@@ -47,7 +44,7 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #326799">
+<div class="overlay" style="background: #08AEEA">
 	
 </div>
 <div class="intrude-less">
@@ -67,7 +64,9 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+				<li><a href="/wyq520">喜❤欢</a></li>
+	        
+				<li><a href="/tags/%E6%97%A5%E8%AE%B0/">日记</a></li>
 	        
 			</ul>
 		</nav>
@@ -105,7 +104,7 @@
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #326799"></div>
+  	<div class="overlay js-overlay" style="background: #08AEEA"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -121,6 +120,8 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>迷茫是暂时的，加油💪<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
 			
 				
 			
@@ -144,12 +145,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+					<li style="width: 33.333333333333336%"><a href="/wyq520">喜❤欢</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/tags/%E6%97%A5%E8%AE%B0/">日记</a></li>
 		        
 				</ul>
 				<ul style="width: 50%">
@@ -168,7 +171,7 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-0-环境搭建/Scoop的安装与使用/index.zh-CN" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-0-环境搭建/2-Scoop命令行工具" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -181,7 +184,7 @@
 
         
         <a href="/post/7cd42b82" class="archive-article-date">
-  	<time datetime="2019-01-05T05:04:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-05</time>
+  	<time datetime="2021-01-05T05:04:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-05</time>
 </a>
         
       </header>
@@ -191,7 +194,7 @@
         
       <span id="more"></span>
 
-<h2 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h2><p>Scoop是Windows的命令行安装程序,帮助我们管理开发环境。通过scoop来安装工具，工具都会自动添加到环境变量中，非常方便。</p>
+<p>Scoop是Windows的命令行安装程序,帮助我们管理开发环境。通过scoop来安装工具，工具都会自动添加到环境变量中，非常方便。</p>
 <ul>
 <li>Windows 7 SP1 + &#x2F; Windows Server 2008+</li>
 <li>PowerShell 5（或更高版本，包括PowerShell Core）和.NET Framework 4.5（或更高版本）</li>
@@ -207,16 +210,17 @@
 <h3 id="将全局程序安装到自定义目录"><a href="#将全局程序安装到自定义目录" class="headerlink" title="将全局程序安装到自定义目录"></a>将全局程序安装到自定义目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">配置环境变量并添加到path中</span></span><br><span class="line"><span class="meta">$</span><span class="language-bash"><span class="built_in">env</span>:SCOOP_GLOBAL=<span class="string">&#x27;D:\dev\Scoop\Global&#x27;</span></span></span><br><span class="line">[Environment]::SetEnvironmentVariable(&#x27;SCOOP_GLOBAL&#x27;, $env:SCOOP_GLOBAL, &#x27;Machine&#x27;)</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">run the installer</span></span><br><span class="line">Invoke-Expression (New-Object System.Net.WebClient).DownloadString(&#x27;https://get.scoop.sh&#x27;)</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">or shorter</span></span><br><span class="line">iwr -useb get.scoop.sh | iex</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="国内源"><a href="#国内源" class="headerlink" title="国内源"></a>国内源</h3><ol>
+<h3 id="国内源配置"><a href="#国内源配置" class="headerlink" title="国内源配置"></a>国内源配置</h3><ul>
 <li><p>更换 scoop 源</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scoop config SCOOP_REPO https://gitee.com/squallliu/scoop</span><br><span class="line">scoop update</span><br></pre></td></tr></table></figure>
-
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scoop config SCOOP_REPO https://gitee.com/squallliu/scoop</span><br><span class="line">scoop update</span><br></pre></td></tr></table></figure>
 
 </li>
 <li><p>更换 bucket 源</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scoop install git</span><br><span class="line">git -C <span class="string">&quot;<span class="variable">$&#123;Env:USERPROFILE&#125;</span>\scoop\buckets\main&quot;</span> remote set-url origin https://hub.fastgit.org/ScoopInstaller/Main.git</span><br><span class="line"><span class="comment"># 以此类推 extras 的为</span></span><br><span class="line">git -C <span class="string">&quot;<span class="variable">$&#123;Env:USERPROFILE&#125;</span>\scoop\buckets\extras&quot;</span> remote set-url origin https://hub.fastgit.org/lukesampson/scoop-extras.git</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><table>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scoop install git</span><br><span class="line">git -C <span class="string">&quot;<span class="variable">$&#123;Env:USERPROFILE&#125;</span>\scoop\buckets\main&quot;</span> remote set-url origin https://hub.fastgit.org/ScoopInstaller/Main.git</span><br><span class="line"><span class="comment"># 以此类推 extras 的为</span></span><br><span class="line">git -C <span class="string">&quot;<span class="variable">$&#123;Env:USERPROFILE&#125;</span>\scoop\buckets\extras&quot;</span> remote set-url origin https://hub.fastgit.org/lukesampson/scoop-extras.git</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><ul>
+<li><p>基本命令</p>
+<table>
 <thead>
 <tr>
 <th>命令</th>
@@ -252,106 +256,60 @@
 <td>打开软件主页</td>
 </tr>
 </tbody></table>
-<ul>
-<li>重置应用以解决冲突,会重置环境变量,快捷方式等..  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop reset *</span><br></pre></td></tr></table></figure></li>
-<li>检查潜在的问题..执行下看看使用scoop会有什么问题  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop checkup</span><br></pre></td></tr></table></figure></li>
-<li>如果使用了aria2感觉慢的话可以关闭  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop config aria2-enabled <span class="literal">false</span>  </span><br></pre></td></tr></table></figure></li>
-<li>下面是日常更新软件命令  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo scoop update * -g ;</span><br><span class="line">scoop update * ; </span><br><span class="line">sudo scoop cleanup * -g ; </span><br><span class="line">scoop cleanup *</span><br></pre></td></tr></table></figure></li>
-<li>查看 Scoop 还能直接识别哪些 bucket  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="scoop配置存留persist"><a href="#scoop配置存留persist" class="headerlink" title="scoop配置存留persist"></a>scoop配置存留persist</h2><p>scoop安装的所有软件都是安装在scoop文件夹下的，如果软件升级了的话,旧软件的设置和数据是不是全部清除。因为scoop会将各个软件的设置数据,例如vscode软件的data文件夹(vscode的设置和插件都放在data文件夹),单独放到persist文件夹中,在用软链接链接到软件所在的文件夹,这样,每次升级软件,persist文件夹的各个软件的设置数据都会保持不变,从而保存设置.</p>
-<p>另一个需要注意的是,所有的对scoop操作都不要在文件夹中进行,因为有可能会破坏scoop的文件结构,想要对scoop进行任何操纵,都需要在命令行中进行</p>
-<h2 id="桶bucket"><a href="#桶bucket" class="headerlink" title="桶bucket"></a>桶bucket</h2><blockquote>
-<p>在 Scoop 里面，bucket 就是一个软件仓库。Scoop 将一个个仓库缓存至本地，当我们想要安装一个软件的时候，Scoop 就从本地的仓库中挑选出我们想要安装的软件的安装配置文件，并依照这个配置文件进行软件的安装工作。</p>
-</blockquote>
-<h3 id="scoop可以直接识别的bucket"><a href="#scoop可以直接识别的bucket" class="headerlink" title="scoop可以直接识别的bucket"></a>scoop可以直接识别的bucket</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ scoop bucket known</span><br><span class="line">main</span><br><span class="line">extras</span><br><span class="line">versions</span><br><span class="line">nightlies</span><br><span class="line">nirsoft</span><br><span class="line">php</span><br><span class="line">nerd-fonts</span><br><span class="line">nonportable</span><br><span class="line">java</span><br><span class="line">games</span><br><span class="line">jetbrains</span><br></pre></td></tr></table></figure>
-<h3 id="添加常用的bucket"><a href="#添加常用的bucket" class="headerlink" title="添加常用的bucket"></a>添加常用的bucket</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scoop bucket add extras;</span><br><span class="line">scoop bucket add Java;</span><br><span class="line">scoop bucket add versions;</span><br><span class="line">scoop bucket add Ash258 <span class="string">&#x27;https://github.com/Ash258/Scoop-Ash258.git&#x27;</span></span><br><span class="line">scoop bucket add dorado https://hub.fastgit.org/h404bi/dorado</span><br><span class="line">scoop bucket add iszy https://github.com/ZvonimirSun/scoop-iszy</span><br><span class="line"><span class="comment"># 国内网络</span></span><br><span class="line">scoop bucket add apps https://gitee.com/kkzzhizhou/scoop-apps</span><br></pre></td></tr></table></figure>
-
-<h3 id="建立一个bucket"><a href="#建立一个bucket" class="headerlink" title="建立一个bucket"></a>建立一个bucket</h3><ol>
-<li>github创建自己的仓库 scoop-buckets</li>
-<li>拉取到本地，并cd进入</li>
-<li>按bucket规则创建一个<code>json文件</code></li>
-<li>git推送提交</li>
-<li>将该git仓库配置为本地的桶即可</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ scoop bucket add fulsun https://github.com/fulsun/my-bucket</span><br><span class="line">Checking repo... ok</span><br><span class="line">The fulsun bucket was added successfully.</span><br></pre></td></tr></table></figure>
-
-<h2 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h2><h3 id="多线程下载-aria2"><a href="#多线程下载-aria2" class="headerlink" title="多线程下载 aria2"></a>多线程下载 aria2</h3><ul>
-<li>Scoop可以利用它aria2来使用多连接下载。只需aria2通过Scoop 安装，它将在以后用于所有下载。</li>
-<li>您可以使用以下命令调整以下aria2设置<code>scoop config</code>：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">scoop install aria2</span><br><span class="line"><span class="comment"># aria2-enabled (default: true)</span></span><br><span class="line">scoop config aria2-enabled <span class="literal">false</span></span><br><span class="line"><span class="comment"># aria2-retry-wait (default: 2)</span></span><br><span class="line"><span class="comment"># aria2-split (default: 5)</span></span><br><span class="line"><span class="comment"># aria2-max-connection-per-server (default: 5)</span></span><br><span class="line"><span class="comment"># aria2-min-split-size (default: 5M)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置代理并多线程下载,因为桶配置都是放在github中</span></span><br><span class="line">scoop config proxy 127.0.0.1:8118</span><br></pre></td></tr></table></figure>
-
-<h3 id="设置配置："><a href="#设置配置：" class="headerlink" title="设置配置："></a>设置配置：</h3><p>配置文件路径：&#96;C:\Users&lt;user&gt;\.config\scoop</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;lastupdate&quot;</span><span class="punctuation">:</span>  <span class="string">&quot;2019-11-09T09:45:50.0880266+08:00&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;SCOOP_REPO&quot;</span><span class="punctuation">:</span>  <span class="string">&quot;https://github.com/lukesampson/scoop&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;SCOOP_BRANCH&quot;</span><span class="punctuation">:</span>  <span class="string">&quot;master&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;proxy&quot;</span><span class="punctuation">:</span>  <span class="string">&quot;127.0.0.1:8118&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="aria2下载命令"><a href="#aria2下载命令" class="headerlink" title="aria2下载命令"></a>aria2下载命令</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> aria2c http://down.sandai.net/thunderx/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>/<span class="number">12</span> <span class="number">17</span>:<span class="number">53</span>:<span class="number">33</span> [<span class="type">NOTICE</span>] Downloading <span class="number">1</span> item(s)</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>/<span class="number">12</span> <span class="number">17</span>:<span class="number">53</span>:<span class="number">34</span> [<span class="type">NOTICE</span>] Download complete: D:/Development/huishi<span class="literal">-server</span>/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line">Download Results:</span><br><span class="line">gid   |stat|avg speed  |path/URI</span><br><span class="line">======+====+===========+=======================================================</span><br><span class="line"><span class="number">67</span>cbeb|OK  |    <span class="number">10</span>MiB/s|D:/Development/huishi<span class="literal">-server</span>/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line">Status Legend:</span><br><span class="line">(OK):download completed.</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="常用软件"><a href="#常用软件" class="headerlink" title="常用软件"></a>常用软件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;lastupdate&quot;</span>:  <span class="string">&quot;2019-11-09T09:45:50.0880266+08:00&quot;</span>,</span><br><span class="line">    <span class="string">&quot;SCOOP_REPO&quot;</span>:  <span class="string">&quot;https://github.com/lukesampson/scoop&quot;</span>,</span><br><span class="line">    <span class="string">&quot;SCOOP_BRANCH&quot;</span>:  <span class="string">&quot;master&quot;</span>,</span><br><span class="line">    <span class="string">&quot;proxy&quot;</span>:  <span class="string">&quot;127.0.0.1:8118&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">scoop install sudo</span><br><span class="line">scoop install git <span class="built_in">curl</span> <span class="number">7</span>zip</span><br><span class="line"><span class="comment">#解压</span></span><br><span class="line">scoop install bandizip;</span><br><span class="line"><span class="comment">#浏览器</span></span><br><span class="line">scoop install chrome;</span><br><span class="line"><span class="comment">#cmd</span></span><br><span class="line">scoop install Cmder;</span><br><span class="line"><span class="comment">#文件检索,</span></span><br><span class="line">scoop install everything;</span><br><span class="line"><span class="comment">#git,程序员必备</span></span><br><span class="line">scoop install git;</span><br><span class="line"><span class="comment">#包管理</span></span><br><span class="line">scoop install maven;</span><br><span class="line"><span class="comment">#远程终端</span></span><br><span class="line">scoop install MobaXterm;</span><br><span class="line"><span class="comment">#播放器</span></span><br><span class="line">scoop install potplayer;</span><br><span class="line"><span class="comment">#redis</span></span><br><span class="line">scoop install redis;</span><br><span class="line"><span class="comment">#桌面控制</span></span><br><span class="line">scoop install teamviewer;</span><br><span class="line"><span class="comment">#markdown编写</span></span><br><span class="line">scoop install typora;</span><br><span class="line"><span class="comment">#编辑器</span></span><br><span class="line">scoop install vscode;</span><br><span class="line"><span class="comment">#效率启动神器</span></span><br><span class="line">scoop install WOX;</span><br><span class="line"><span class="comment">#离线文档浏览器</span></span><br><span class="line">scoop install zeal;</span><br><span class="line"></span><br><span class="line">scoop install aria2 <span class="built_in">curl</span> grep sed less touch</span><br><span class="line">scoop install python ruby go perl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">###安装全局应用</span></span><br><span class="line">scoop install mysql56 <span class="literal">-g</span>;</span><br><span class="line">scoop install nodejs <span class="literal">-g</span>;</span><br><span class="line">scoop install oraclejdk8 <span class="literal">-g</span>;</span><br><span class="line">scoop install python36 <span class="literal">-g</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="WindowTerminal"><a href="#WindowTerminal" class="headerlink" title="WindowTerminal"></a>WindowTerminal</h3><ul>
-<li>windwos 推出的新的终端</li>
-</ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop install WindowsTerminal</span><br></pre></td></tr></table></figure>
-
-<p>设置右键快捷键：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\WindowsTerminal]</span><br><span class="line">@=<span class="string">&quot;Windows Terminal Here&quot;</span></span><br><span class="line"><span class="string">&quot;Icon&quot;</span>=<span class="string">&quot;D:\\Program Files\\Scoop\\apps\\WindowsTerminal\\current\\Images\\Square44x44Logo.targetsize-32.png&quot;</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\WindowsTerminal\<span class="built_in">command</span>]</span><br><span class="line">@=<span class="string">&quot;D:\\Program Files\\Scoop\\apps\\WindowsTerminal\\current\\WindowsTerminal.exe&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>将以上代码保存到扩展名为 .reg 的文件中，双击打开</p>
-<p>当前目录打开时，Terminal 里的路径不是当前目录</p>
-<p>检查一下配置文件，看下是否有以下内容，删除之后就可以了。</p>
-<p>配置文件路径：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\&lt;usre&gt;\AppData\Local\Microsoft\Windows Terminal\profiles.json</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;profiles&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startingDirectory&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;%USERPROFILE%&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>需要修改为</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Copy&quot;startingDirectory&quot;: null</span><br></pre></td></tr></table></figure>
-
-<p>如果没有就自己配置这个参数设置为null.</p>
-<h3 id="sourceTree-安装"><a href="#sourceTree-安装" class="headerlink" title="sourceTree 安装"></a>sourceTree 安装</h3><ul>
-<li><p>这里使用 scoop SourceTree 来安装</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$:scoop install sourcetree</span><br><span class="line">Installing <span class="string">&#x27;sourcetree&#x27;</span> (3.2.6) [64bit]</span><br><span class="line">SourceTree-3.2.6-full.nupkg (23.1 MB) [=======================================================================] 100%</span><br><span class="line">Checking <span class="built_in">hash</span> of SourceTree-3.2.6-full.nupkg ... ok.</span><br><span class="line">Extracting SourceTree-3.2.6-full.nupkg ... <span class="keyword">done</span>.</span><br><span class="line">Linking D:\scoop\apps\sourcetree\current =&gt; D:\scoop\apps\sourcetree\3.2.6</span><br><span class="line">Creating shim <span class="keyword">for</span> <span class="string">&#x27;sourcetree&#x27;</span>.</span><br><span class="line">Creating shortcut <span class="keyword">for</span> Atlassian SourceTree (sourcetree.exe)</span><br><span class="line"><span class="string">&#x27;sourcetree&#x27;</span> (3.2.6) was installed successfully!</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="跳过注册"><a href="#跳过注册" class="headerlink" title="跳过注册"></a>跳过注册</h4><ul>
-<li>上面安装成功后，运行软件，发现要注册。</li>
-<li>如果你的网络可以，注册使用没有问题，不想注册的可以继续往下看。</li>
-</ul>
-<h4 id="创建-accounts-json"><a href="#创建-accounts-json" class="headerlink" title="创建 accounts.json"></a>创建 accounts.json</h4><ul>
-<li><p>放置目录：<code>%LocalAppData%\Atlassian\SourceTree</code>,目录不存在需要先运行软件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;<span class="variable">$id</span>&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;<span class="variable">$type</span>&quot;</span>: <span class="string">&quot;SourceTree.Api.Host.Identity.Model.IdentityAccount, SourceTree.Api.Host.Identity&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Authenticate&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;HostInstance&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;<span class="variable">$id</span>&quot;</span>: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">      <span class="string">&quot;<span class="variable">$type</span>&quot;</span>: <span class="string">&quot;SourceTree.Host.Atlassianaccount.AtlassianAccountInstance, SourceTree.Host.AtlassianAccount&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Host&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;<span class="variable">$id</span>&quot;</span>: <span class="string">&quot;3&quot;</span>,</span><br><span class="line">        <span class="string">&quot;<span class="variable">$type</span>&quot;</span>: <span class="string">&quot;SourceTree.Host.Atlassianaccount.AtlassianAccountHost, SourceTree.Host.AtlassianAccount&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Id&quot;</span>: <span class="string">&quot;atlassian account&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;BaseUrl&quot;</span>: <span class="string">&quot;https://id.atlassian.com/&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;Credentials&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;<span class="variable">$id</span>&quot;</span>: <span class="string">&quot;4&quot;</span>,</span><br><span class="line">      <span class="string">&quot;<span class="variable">$type</span>&quot;</span>: <span class="string">&quot;SourceTree.Model.BasicAuthCredentials, SourceTree.Api.Account&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Username&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Email&quot;</span>: null</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;IsDefault&quot;</span>: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="修改-user-config"><a href="#修改-user-config" class="headerlink" title="修改 user.config"></a>修改 user.config</h4><ul>
-<li><p>文件目录：<code>%LocalAppData%\Atlassian</code></p>
 </li>
-<li><p>每次更新版本后会有一个<code>SourceTree.exe_Url_XXXX</code>的文件，创建的时候只有一个。进入后选择版本文件夹，找到 user.config 文件，如果没有找到就是选择的目录不对。</p>
+<li><p>重置应用以解决冲突,会重置环境变量,快捷方式等..</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop reset *</span><br></pre></td></tr></table></figure></li>
+<li><p>检查潜在的问题..执行下看看使用scoop会有什么问题</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop checkup</span><br></pre></td></tr></table></figure></li>
+<li><p>如果使用了aria2感觉慢的话可以关闭</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop config aria2-enabled <span class="literal">false</span>  </span><br></pre></td></tr></table></figure></li>
+<li><p>下面是日常更新软件命令</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scoop update * ; </span><br><span class="line">scoop cleanup *</span><br></pre></td></tr></table></figure></li>
+<li><p>查看 Scoop 还能直接识别哪些 bucket</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="persist说明"><a href="#persist说明" class="headerlink" title="persist说明"></a>persist说明</h3><ul>
+<li><p>scoop安装的所有软件都是安装在scoop文件夹下的，如果软件升级了的话,旧软件的设置和数据是不是全部清除。因为scoop会将各个软件的设置数据</p>
 </li>
-<li><p>添加 AgreedToEULA AgreedToEULAVersion Settings节点下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;userSettings&gt;</span><br><span class="line">        &lt;SourceTree.Properties.Settings&gt;</span><br><span class="line">            &lt;setting name=<span class="string">&quot;AgreedToEULA&quot;</span> serializeAs=<span class="string">&quot;String&quot;</span>&gt;</span><br><span class="line">                &lt;value&gt;True&lt;/value&gt;</span><br><span class="line">            &lt;/setting&gt;</span><br><span class="line">            &lt;setting name=<span class="string">&quot;AgreedToEULAVersion&quot;</span> serializeAs=<span class="string">&quot;String&quot;</span>&gt;</span><br><span class="line">                &lt;value&gt;20160201&lt;/value&gt;</span><br><span class="line">            &lt;/setting&gt;</span><br><span class="line">            ....</span><br><span class="line">            保持原样</span><br><span class="line">            ....</span><br><span class="line">        &lt;/SourceTree.Properties.Settings&gt;</span><br><span class="line">    &lt;/userSettings&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><ul>
-<li>再次运行软件，弹出Mercurial询问窗口，可以根据实际情况做相应的选择，比如使用默认选项下载Mercurial，或者使用第四个选项“我不想使用Mercurial”。</li>
-</ul>
-<h4 id="修改-SSH-客户端"><a href="#修改-SSH-客户端" class="headerlink" title="修改 SSH 客户端"></a>修改 SSH 客户端</h4><ul>
-<li>我们使用git生成的ssh,不要使用的Putty&#x2F;plink,(似乎要转换，比较麻烦)<br><img src="/post/7cd42b82/Snipaste_2019-09-07_10-53-44.png"></li>
-</ul>
-<h4 id="配置比较工具"><a href="#配置比较工具" class="headerlink" title="配置比较工具"></a>配置比较工具</h4><ul>
-<li><p>这里推荐使用Beyond Compare 4</p>
-<p><img src="/post/7cd42b82/Snipaste_2019-09-07_10-58-42.png"></p>
+<li><p>例如vscode软件的data文件夹(vscode的设置和插件都放在data文件夹),单独放到persist文件夹中,在用软链接链接到软件所在的文件夹,这样,每次升级软件,persist文件夹的各个软件的设置数据都会保持不变,从而保存设置.</p>
 </li>
-<li><p>Git 选项下有个强制推送可以选择开启</p>
+<li><p>另一个需要注意的是,所有的对scoop操作都不要在文件夹中进行,因为有可能会破坏scoop的文件结构,想要对scoop进行任何操纵,都需要在命令行中进行</p>
 </li>
 </ul>
-<h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><ul>
+<h3 id="桶bucket"><a href="#桶bucket" class="headerlink" title="桶bucket"></a>桶bucket</h3><ul>
+<li><p>在 Scoop 里面，bucket 就是一个软件仓库。</p>
+</li>
+<li><p>Scoop 将一个个仓库缓存至本地，当我们想要安装一个软件的时候，Scoop 就从本地的仓库中挑选出我们想要安装的软件的安装配置文件，并依照这个配置文件进行软件的安装工作。</p>
+</li>
+<li><p>scoop可以直接识别的bucket</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ scoop bucket known</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加常用的bucket</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scoop bucket add extras;</span><br><span class="line">scoop bucket add Java;</span><br><span class="line">scoop bucket add versions;</span><br><span class="line">scoop bucket add Ash258 <span class="string">&#x27;https://github.com/Ash258/Scoop-Ash258.git&#x27;</span></span><br><span class="line">scoop bucket add dorado https://hub.fastgit.org/h404bi/dorado</span><br><span class="line">scoop bucket add iszy https://github.com/ZvonimirSun/scoop-iszy</span><br><span class="line"><span class="comment"># 国内网络</span></span><br><span class="line">scoop bucket add apps https://gitee.com/kkzzhizhou/scoop-apps</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h3><ul>
+<li><p>Scoop可以利用aria2来使用多连接下载。只需aria2通过Scoop 安装，它将在以后用于所有下载。</p>
+</li>
+<li><p>您可以使用以下命令调整以下aria2设置<code>scoop config</code>：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">scoop install aria2</span><br><span class="line"><span class="comment"># aria2-enabled (default: true)</span></span><br><span class="line">scoop config aria2-enabled <span class="literal">false</span></span><br><span class="line"><span class="comment"># aria2-retry-wait (default: 2)</span></span><br><span class="line"><span class="comment"># aria2-split (default: 5)</span></span><br><span class="line"><span class="comment"># aria2-max-connection-per-server (default: 5)</span></span><br><span class="line"><span class="comment"># aria2-min-split-size (default: 5M)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置代理并多线程下载,因为桶配置都是放在github中</span></span><br><span class="line">scoop config proxy 127.0.0.1:8118</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>aria2下载命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> aria2c http://down.sandai.net/thunderx/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>/<span class="number">12</span> <span class="number">17</span>:<span class="number">53</span>:<span class="number">33</span> [<span class="type">NOTICE</span>] Downloading <span class="number">1</span> item(s)</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>/<span class="number">12</span> <span class="number">17</span>:<span class="number">53</span>:<span class="number">34</span> [<span class="type">NOTICE</span>] Download complete: D:/Development/huishi<span class="literal">-server</span>/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line">Download Results:</span><br><span class="line">gid   |stat|avg speed  |path/URI</span><br><span class="line">======+====+===========+=======================================================</span><br><span class="line"><span class="number">67</span>cbeb|OK  |    <span class="number">10</span>MiB/s|D:/Development/huishi<span class="literal">-server</span>/XunLeiWebSetup10.<span class="number">1.16</span>.<span class="number">466</span>dl.exe</span><br><span class="line"></span><br><span class="line">Status Legend:</span><br><span class="line">(OK):download completed.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="scoop配置"><a href="#scoop配置" class="headerlink" title="scoop配置"></a>scoop配置</h3><ul>
+<li><p>配置文件路径：<code>C:\Users\&lt;user&gt;\\.config\scoop</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;lastupdate&quot;</span>:  <span class="string">&quot;2019-11-09T09:45:50.0880266+08:00&quot;</span>,</span><br><span class="line">    <span class="string">&quot;SCOOP_REPO&quot;</span>:  <span class="string">&quot;https://github.com/lukesampson/scoop&quot;</span>,</span><br><span class="line">    <span class="string">&quot;SCOOP_BRANCH&quot;</span>:  <span class="string">&quot;master&quot;</span>,</span><br><span class="line">    <span class="string">&quot;proxy&quot;</span>:  <span class="string">&quot;127.0.0.1:8118&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="软件推荐"><a href="#软件推荐" class="headerlink" title="软件推荐"></a>软件推荐</h2><h3 id="常用软件"><a href="#常用软件" class="headerlink" title="常用软件"></a>常用软件</h3><ul>
+<li><p>常用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">scoop install sudo</span><br><span class="line">scoop install git curl 7zip</span><br><span class="line"><span class="comment">#解压</span></span><br><span class="line">scoop install bandizip;</span><br><span class="line"><span class="comment">#浏览器</span></span><br><span class="line">scoop install chrome;</span><br><span class="line"><span class="comment">#cmd</span></span><br><span class="line">scoop install Cmder;</span><br><span class="line"><span class="comment">#文件检索,</span></span><br><span class="line">scoop install everything;</span><br><span class="line"><span class="comment">#git,程序员必备</span></span><br><span class="line">scoop install git;</span><br><span class="line"><span class="comment">#包管理</span></span><br><span class="line">scoop install maven;</span><br><span class="line"><span class="comment">#远程终端</span></span><br><span class="line">scoop install MobaXterm;</span><br><span class="line"><span class="comment">#播放器</span></span><br><span class="line">scoop install potplayer;</span><br><span class="line"><span class="comment">#redis</span></span><br><span class="line">scoop install redis;</span><br><span class="line"><span class="comment">#桌面控制</span></span><br><span class="line">scoop install teamviewer;</span><br><span class="line"><span class="comment">#markdown编写</span></span><br><span class="line">scoop install typora;</span><br><span class="line"><span class="comment">#编辑器</span></span><br><span class="line">scoop install vscode;</span><br><span class="line"><span class="comment">#效率启动神器</span></span><br><span class="line">scoop install WOX;</span><br><span class="line"><span class="comment">#离线文档浏览器</span></span><br><span class="line">scoop install zeal;</span><br><span class="line"></span><br><span class="line">scoop install aria2 curl grep sed less <span class="built_in">touch</span></span><br><span class="line">scoop install python ruby go perl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">###安装全局应用</span></span><br><span class="line">scoop install mysql56 -g;</span><br><span class="line">scoop install nodejs -g;</span><br><span class="line">scoop install oraclejdk8 -g;</span><br><span class="line">scoop install python36 -g;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="sourceTree"><a href="#sourceTree" class="headerlink" title="sourceTree"></a>sourceTree</h3><ul>
 <li><p>ssh-agent”失败，错误代码：-1：System.Exception: Unable to to start</p>
 </li>
-<li><p>原因： 我是用的scoop安装的git,导致sourceTree 的 git.exe 路径不正确<br>解决办法：<code>%LocalAppData%\Atlassian</code> ，同上面提到的 user.config ,修改配置文件的 GitSystemPath 为正式的路径，软件会自动选择这个目录下的 cmd&#x2F;git.exe</p>
+<li><p>原因： 我用的scoop安装的git,导致sourceTree 的 git.exe 路径不正确</p>
+</li>
+<li><p>解决办法：<code>%LocalAppData%\Atlassian</code> ,修改配置文件user.config 的 GitSystemPath 的路径，软件会自动选择这个目录下的 cmd&#x2F;git.exe</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;setting name=<span class="string">&quot;GitSystemPath&quot;</span> serializeAs=<span class="string">&quot;String&quot;</span>&gt;</span><br><span class="line">    &lt;value&gt;D:\scoop\apps\git\2.23.0.windows.1&lt;/value&gt;</span><br><span class="line">&lt;/setting&gt;</span><br></pre></td></tr></table></figure></li>
 </ul>
 
@@ -372,10 +330,10 @@
     
     <br>
     <strong class="create-time">发布时间：</strong>
-    2019-01-05
+    2021-01-05
     <br>
     <strong class="update-time">最后更新：</strong>
-    2021-09-23
+    2022-02-12
     <br>
     <strong class="article-titles">本文标题：</strong>
     <a href="https://fulsun.github.io/post/7cd42b82.html" title="Scoop命令行工具" target="_blank">Scoop命令行工具</a>
@@ -404,7 +362,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">配置环境</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">环境搭建</a>
         		</li>
       		
 		</ul>
@@ -417,10 +375,6 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="/categories/9-环境搭建/" class="article-tag-list-link color2">9_环境搭建</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/9-环境搭建/Windows/" class="article-tag-list-link color3">Windows</a>
         		</li>
       		
 		</ul>
@@ -489,15 +443,20 @@
   
 <nav id="article-nav">
   
-    <a href="/post/diary/20200225" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/post/66b815d1" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          2021年2月25日
+          配置MacOS环境
         
       </div>
     </a>
   
+  
+    <a href="/post/41defcae" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">配置Windows环境</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -522,7 +481,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%88%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.</span> <span class="toc-text">安装到自定义目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%85%A8%E5%B1%80%E7%A8%8B%E5%BA%8F%E5%AE%89%E8%A3%85%E5%88%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%AE%E5%BD%95"><span class="toc-number">2.2.</span> <span class="toc-text">将全局程序安装到自定义目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BD%E5%86%85%E6%BA%90"><span class="toc-number">2.3.</span> <span class="toc-text">国内源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scoop%E9%85%8D%E7%BD%AE%E5%AD%98%E7%95%99persist"><span class="toc-number">4.</span> <span class="toc-text">scoop配置存留persist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%B6bucket"><span class="toc-number">5.</span> <span class="toc-text">桶bucket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#scoop%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E8%AF%86%E5%88%AB%E7%9A%84bucket"><span class="toc-number">5.1.</span> <span class="toc-text">scoop可以直接识别的bucket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%B8%B8%E7%94%A8%E7%9A%84bucket"><span class="toc-number">5.2.</span> <span class="toc-text">添加常用的bucket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AAbucket"><span class="toc-number">5.3.</span> <span class="toc-text">建立一个bucket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">安装软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD-aria2"><span class="toc-number">6.1.</span> <span class="toc-text">多线程下载 aria2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">6.2.</span> <span class="toc-text">设置配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aria2%E4%B8%8B%E8%BD%BD%E5%91%BD%E4%BB%A4"><span class="toc-number">6.3.</span> <span class="toc-text">aria2下载命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">7.</span> <span class="toc-text">常用软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WindowTerminal"><span class="toc-number">7.1.</span> <span class="toc-text">WindowTerminal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sourceTree-%E5%AE%89%E8%A3%85"><span class="toc-number">7.2.</span> <span class="toc-text">sourceTree 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%B3%E8%BF%87%E6%B3%A8%E5%86%8C"><span class="toc-number">7.2.1.</span> <span class="toc-text">跳过注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-accounts-json"><span class="toc-number">7.2.2.</span> <span class="toc-text">创建 accounts.json</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-user-config"><span class="toc-number">7.2.3.</span> <span class="toc-text">修改 user.config</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">7.2.4.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-SSH-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">7.2.5.</span> <span class="toc-text">修改 SSH 客户端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%AF%94%E8%BE%83%E5%B7%A5%E5%85%B7"><span class="toc-number">7.2.6.</span> <span class="toc-text">配置比较工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-number">7.2.7.</span> <span class="toc-text">问题：</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%88%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">安装到自定义目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%85%A8%E5%B1%80%E7%A8%8B%E5%BA%8F%E5%AE%89%E8%A3%85%E5%88%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9B%AE%E5%BD%95"><span class="toc-number">1.2.</span> <span class="toc-text">将全局程序安装到自定义目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BD%E5%86%85%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">国内源配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4"><span class="toc-number">2.1.</span> <span class="toc-text">命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#persist%E8%AF%B4%E6%98%8E"><span class="toc-number">2.2.</span> <span class="toc-text">persist说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%B6bucket"><span class="toc-number">2.3.</span> <span class="toc-text">桶bucket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.4.</span> <span class="toc-text">多线程下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scoop%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.</span> <span class="toc-text">scoop配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90"><span class="toc-number">3.</span> <span class="toc-text">软件推荐</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">常用软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sourceTree"><span class="toc-number">3.2.</span> <span class="toc-text">sourceTree</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -556,9 +515,7 @@
 			<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
             <span style="line-height: 24px;" id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
-			
-				<span id="sitetime"></span>
-			
+			<span id="sitetime"></span>
       		<!-- <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
       	</div>
     </div>
@@ -575,9 +532,9 @@
 			var todayYear = today.getFullYear();
 			var todayMonth = today.getMonth()+1;
 			var todayDate = today.getDate();
-			var todayHour = today.getHours();
-			var todayMinute = today.getMinutes();
-			var todaySecond = today.getSeconds();
+			// var todayHour = today.getHours();
+			// var todayMinute = today.getMinutes();
+			// var todaySecond = today.getSeconds();
 			/* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
 			year - 作为date对象的年份，为4位年份值
 			month - 0-11之间的整数，做为date对象的月份
@@ -586,15 +543,15 @@
 			minutes - 0-59之间的整数，做为date对象的分钟数
 			seconds - 0-59之间的整数，做为date对象的秒数
 			microseconds - 0-999之间的整数，做为date对象的毫秒数 */
-			var t1 = Date.parse("Mon Aug 12 2019 08:00:00 GMT+0800 (中国标准时间)");//建站时间
-			var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+			var t1 = Date.UTC(2021,01,22); //建站时间
+			var t2 = Date.UTC(todayYear,todayMonth,todayDate);
 			var diff = t2-t1;
 			var diffYears = Math.floor(diff/years);
 			var diffDays = Math.floor((diff/days)-diffYears*365);
-			var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
-			var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
-			var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
-			document.getElementById("sitetime").innerHTML=" 已运行"+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+			// var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+			// var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+			// var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+			document.getElementById("sitetime").innerHTML=" 已运行"+/*diffYears+" 年 "+*/diffDays+" 天 "/*+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒"*/;
 	}
 	siteTime();
 </script>
@@ -674,19 +631,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">环境搭建</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">日记</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">MacOS优化</a>
+                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">windows优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">配置环境</a>
+                <a href="javascript:void(0)" class="js-tag color4">Elasticsearch</a>
               </li>
             
             <div class="clearfix"></div>

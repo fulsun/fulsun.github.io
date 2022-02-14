@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://fulsun.github.io">
-  <title>MacOS下环境配置 | 凉月の博客</title>
+  <title>配置MacOS环境 | 凉月の博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="macOS版本为Big Sur 11.1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MacOS下环境配置">
+<meta property="og:title" content="配置MacOS环境">
 <meta property="og:url" content="https://fulsun.github.io/post/66b815d1">
 <meta property="og:site_name" content="凉月の博客">
 <meta property="og:description" content="macOS版本为Big Sur 11.1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-26T07:27:35.000Z">
-<meta property="article:modified_time" content="2022-02-11T14:34:10.599Z">
+<meta property="article:modified_time" content="2022-02-12T10:11:21.097Z">
 <meta property="article:author" content="凉月">
-<meta property="article:tag" content="MacOS优化">
+<meta property="article:tag" content="环境搭建">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="凉月の博客" type="application/atom+xml">
@@ -30,7 +30,7 @@
   <style type="text/css">
   
     #container.show {
-      background: linear-gradient(200deg, #30cfd0 0%, #330867 100%);
+      background: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
     }
   </style>
   
@@ -44,7 +44,7 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #326799">
+<div class="overlay" style="background: #08AEEA">
 	
 </div>
 <div class="intrude-less">
@@ -64,7 +64,9 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+				<li><a href="/wyq520">喜❤欢</a></li>
+	        
+				<li><a href="/tags/%E6%97%A5%E8%AE%B0/">日记</a></li>
 	        
 			</ul>
 		</nav>
@@ -102,7 +104,7 @@
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #326799"></div>
+  	<div class="overlay js-overlay" style="background: #08AEEA"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -118,6 +120,8 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>迷茫是暂时的，加油💪<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
 			
 				
 			
@@ -141,12 +145,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+					<li style="width: 33.333333333333336%"><a href="/wyq520">喜❤欢</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/tags/%E6%97%A5%E8%AE%B0/">日记</a></li>
 		        
 				</ul>
 				<ul style="width: 50%">
@@ -165,14 +171,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-0-环境搭建/MacOS环境搭建/index.zh-CN" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-0-环境搭建/3-MacOS环境搭建" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      MacOS下环境配置
+      配置MacOS环境
     </h1>
   
 
@@ -188,65 +194,6 @@
         
       <span id="more"></span>
 
-<h2 id="Bash设置"><a href="#Bash设置" class="headerlink" title="Bash设置"></a>Bash设置</h2><ul>
-<li>从 macOS Catalina 版开始，您的 Mac 将使用 zsh 作为默认登录 Shell 和交互式 Shell。您还可以在较低版本的 macOS 中将 zsh 设置为默认 Shell。</li>
-<li>修改：选取苹果菜单  &gt;“系统偏好设置”，然后点按“用户与群组”。在左侧的用户列表中，按住 Control 键点按您的用户名，然后选取“高级选项，从“登录 Shell”菜单中选取一个 Shell，然后点按“好”以存储更改。</li>
-<li>既然官方不用bash，那我就跟着使用zsh。</li>
-</ul>
-<h2 id="zsh配置"><a href="#zsh配置" class="headerlink" title="zsh配置"></a>zsh配置</h2><ul>
-<li><p>类似bash 有 ~&#x2F;.bash_profile 和 ~&#x2F;.bash配置环境变量。zsh使用 ~&#x2F;.zshrc作为配置文件。</p>
-</li>
-<li><p>常用别名</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -alF&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> la=<span class="string">&#x27;ls -A&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> l=<span class="string">&#x27;ls -CF&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Bash修改终端显示</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CLICOLOR=1</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">&#x27;\[\033[01;33m\]\u@\h\[\033[01;31m\] \W\$\[\033[00m\] &#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>zsh 方式</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PS1=<span class="string">&quot;%10F%m%f:%11F%1~%f \$ &quot;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="忽略大小写"><a href="#忽略大小写" class="headerlink" title="忽略大小写"></a>忽略大小写</h2><ul>
-<li><p>Mac 终端默认是大小写不敏感的，<code>cd desktop</code> 其实也能切到桌面，但是无法通过tab补全。</p>
-</li>
-<li><p>如果你已经使用了zsh，那么一般情况下，修改.inputrc 并没有效果。可以在.zshrc 里添加下面两个命令,再执行<code>source ~/.zshrc</code></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">autoload</span> -Uz compinit &amp;&amp; compinit</span><br><span class="line"><span class="built_in">zstyle</span> <span class="string">&#x27;:completion:*&#x27;</span> matcher-list <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125;&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>直接建立 .zshrc 文件可能遇到的问题</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zsh compinit: insecure directories, run compaudit <span class="keyword">for</span> list.</span><br><span class="line">Ignore insecure directories and <span class="built_in">continue</span> [y] or abort compinit [n]?</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解决</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行compaudit返回如下：</span></span><br><span class="line">$ compaudit</span><br><span class="line">There are insecure directories:</span><br><span class="line">/usr/local/share/zsh/site-functions</span><br><span class="line">/usr/local/share/zsh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭group-writable权限</span></span><br><span class="line"></span><br><span class="line">% <span class="built_in">chmod</span> g-w /usr/local/share/zsh </span><br><span class="line">% <span class="built_in">chmod</span> g-w /usr/local/share/zsh/site-functions</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="github-访问"><a href="#github-访问" class="headerlink" title="github 访问"></a>github 访问</h2><ul>
-<li><p>网站检索 : <a target="_blank" rel="noopener" href="https://www.ipaddress.com/">https://www.ipaddress.com/</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Github Hosts</span></span><br><span class="line"><span class="comment"># Update 20210707</span></span><br><span class="line"><span class="comment"># domain: github.com</span></span><br><span class="line">140.82.113.4 github.com</span><br><span class="line">140.82.113.9 nodeload.github.com</span><br><span class="line">140.82.114.5 api.github.com</span><br><span class="line">140.82.113.9 codeload.github.com</span><br><span class="line">185.199.108.133 raw.github.com</span><br><span class="line">185.199.108.153 training.github.com</span><br><span class="line">185.199.108.153 assets-cdn.github.com</span><br><span class="line">185.199.108.153 documentcloud.github.com</span><br><span class="line">185.199.108.154 help.github.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># domain: githubstatus.com</span></span><br><span class="line">185.199.108.153 githubstatus.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># domain: fastly.net</span></span><br><span class="line">199.232.69.194 github.global.ssl.fastly.net</span><br><span class="line"></span><br><span class="line"><span class="comment"># domain: githubusercontent.com</span></span><br><span class="line">185.199.108.133 raw.githubusercontent.com</span><br><span class="line">185.199.108.133 cloud.githubusercontent.com</span><br><span class="line">185.199.108.133 gist.githubusercontent.com</span><br><span class="line">185.199.108.133 marketplace-screenshots.githubusercontent.com</span><br><span class="line">185.199.108.133 repository-images.githubusercontent.com</span><br><span class="line">185.199.108.133 user-images.githubusercontent.com</span><br><span class="line">185.199.108.133 desktop.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars0.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars1.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars2.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars3.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars4.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars5.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars6.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars7.githubusercontent.com</span><br><span class="line">185.199.108.133 avatars8.githubusercontent.com</span><br><span class="line"><span class="comment"># End of the section</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改 Hosts 文件, macOS 上可以使用 VSCode 打开修改 Hosts 文件，比之前介绍的<code>vim</code>更佳直观。当然需要安装 VSCode 以及配置<code>code</code>环境变量。用其他的文本编辑器也可以打开编辑。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vscode editing</span></span><br><span class="line">sudo code /etc/hosts</span><br><span class="line"><span class="comment"># texteditor editing</span></span><br><span class="line">sudo open /etc/hosts</span><br><span class="line"><span class="comment"># vim editing</span></span><br><span class="line">sudo vim /etc/hosts</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>应用 DNS 的修改需要刷新一下网络缓存。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># macOS</span></span><br><span class="line">sudo killall -HUP mDNSResponder</span><br><span class="line"><span class="comment"># Windows</span></span><br><span class="line">ipconfig /flushdns</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="git-乱码"><a href="#git-乱码" class="headerlink" title="git 乱码"></a>git 乱码</h2><ul>
-<li><p>core.quotepath设为false的话，就不会对0x80以上的字符进行quote</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.quotepath false</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>别名</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.lg <span class="string">&quot;log --color --graph --pretty=format:&#x27;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)&lt;%an&gt;%Creset&#x27; --date=format:&#x27;%Y-%m-%d %H:%M:%S&#x27; --abbrev-commit&quot;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="修改vim显示效果的设置"><a href="#修改vim显示效果的设置" class="headerlink" title="修改vim显示效果的设置"></a>修改vim显示效果的设置</h2><ul>
-<li><p>切换到主用户目录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>复制vim的系统配置文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/vim/vimrc ~/.vimrc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编辑用户配置文件.vimrc：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim .vimrc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>按 i 进入插入模式，在文件末尾添加如下代码：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">colorscheme default     <span class="string">&quot; 设置颜色主题</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">syntax on               &quot;</span> 语法高亮</span><br><span class="line"></span><br><span class="line">filetype on             <span class="string">&quot; 检测文件的类型</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set number              &quot;</span> 显示行号</span><br><span class="line"><span class="built_in">set</span> cursorline          <span class="string">&quot; 用浅色高亮当前行</span></span><br><span class="line"><span class="string">&quot;</span>autocmd InsertLeave * se nocul</span><br><span class="line"><span class="string">&quot;autocmd InsertEnter * se cul</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set ruler               &quot;</span> 在编辑过程中，在右下角显示光标位置的状态行</span><br><span class="line"><span class="built_in">set</span> laststatus=2        <span class="string">&quot; 显示状态栏 (默认值为 1, 无法显示状态栏)</span></span><br><span class="line"><span class="string">set statusline=\ %&lt;%F[%1*%M%*%n%R%H]%=\ %y\ %0(%&#123;&amp;fileformat&#125;\ %&#123;&amp;encoding&#125;\ %c:%l/%L%)\</span></span><br><span class="line"><span class="string">                        &quot;</span> 设置在状态行显示的信息</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> tabstop=4           <span class="string">&quot; Tab键的宽度</span></span><br><span class="line"><span class="string">set softtabstop=4</span></span><br><span class="line"><span class="string">set shiftwidth=4        &quot;</span> 统一缩进为4</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> autoindent          <span class="string">&quot; vim使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)</span></span><br><span class="line"><span class="string">set cindent             &quot;</span> (cindent是特别针对 C语言语法自动缩进)</span><br><span class="line"><span class="built_in">set</span> smartindent         <span class="string">&quot; 依据上面的对齐格式，智能的选择对齐方式，对于类似C语言编写上有用</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set scrolloff=3         &quot;</span> 光标移动到buffer的顶部和底部时保持3行距离</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> incsearch           <span class="string">&quot; 输入搜索内容时就显示搜索结果</span></span><br><span class="line"><span class="string">set hlsearch            &quot;</span> 搜索时高亮显示被找到的文本</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> foldmethod=indent   <span class="string">&quot; 设置缩进折叠</span></span><br><span class="line"><span class="string">set foldlevel=99        &quot;</span> 设置折叠层数</span><br><span class="line">nnoremap &lt;space&gt; @=((foldclosed(line(<span class="string">&#x27;.&#x27;</span>)) &lt; 0) ? <span class="string">&#x27;zc&#x27;</span> : <span class="string">&#x27;zo&#x27;</span>)&lt;CR&gt;</span><br><span class="line">                        <span class="string">&quot; 用空格键来开关折叠</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;</span> 自动跳转到上次退出的位置</span><br><span class="line"><span class="keyword">if</span> has(<span class="string">&quot;autocmd&quot;</span>)</span><br><span class="line">    au BufReadPost * <span class="keyword">if</span> line(<span class="string">&quot;&#x27;\&quot;&quot;</span>) &gt; 1 &amp;&amp; line(<span class="string">&quot;&#x27;\&quot;&quot;</span>) &lt;= line(<span class="string">&quot;$&quot;</span>) | exe <span class="string">&quot;normal! g&#x27;\&quot;&quot;</span> | endif</span><br><span class="line">endif</span><br></pre></td></tr></table></figure></li>
-</ul>
 <h2 id="brew安装"><a href="#brew安装" class="headerlink" title="brew安装"></a>brew安装</h2><ul>
 <li><p>苹果电脑标准安装脚本：（推荐 优点全面 缺点慢一点）</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/zsh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
@@ -263,7 +210,56 @@
 <li><p>Linux卸载脚本：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> HomebrewUninstall.sh ; wget https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh ; bash HomebrewUninstall.sh</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="NVM安装"><a href="#NVM安装" class="headerlink" title="NVM安装"></a>NVM安装</h2><ul>
+<h2 id="Shell说明"><a href="#Shell说明" class="headerlink" title="Shell说明"></a>Shell说明</h2><h3 id="Bash设置"><a href="#Bash设置" class="headerlink" title="Bash设置"></a>Bash设置</h3><ul>
+<li>从 macOS Catalina 版开始，您的 Mac 将使用 zsh 作为默认登录 Shell 和交互式 Shell。您还可以在较低版本的 macOS 中将 zsh 设置为默认 Shell。</li>
+<li>修改：选取苹果菜单  &gt;“系统偏好设置”，然后点按“用户与群组”。在左侧的用户列表中，按住 Control 键点按您的用户名，然后选取“高级选项，从“登录 Shell”菜单中选取一个 Shell，然后点按“好”以存储更改。</li>
+<li>既然官方不用bash，那我就跟着使用zsh。</li>
+</ul>
+<h3 id="zsh配置"><a href="#zsh配置" class="headerlink" title="zsh配置"></a>zsh配置</h3><ul>
+<li><p>类似bash 有 ~&#x2F;.bash_profile 和 ~&#x2F;.bash配置环境变量。zsh使用 ~&#x2F;.zshrc作为配置文件。</p>
+</li>
+<li><p>常用别名</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -alF&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> la=<span class="string">&#x27;ls -A&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> l=<span class="string">&#x27;ls -CF&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Bash修改终端显示</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CLICOLOR=1</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">&#x27;\[\033[01;33m\]\u@\h\[\033[01;31m\] \W\$\[\033[00m\] &#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>zsh 方式</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PS1=<span class="string">&quot;%10F%m%f:%11F%1~%f \$ &quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="忽略大小写"><a href="#忽略大小写" class="headerlink" title="忽略大小写"></a>忽略大小写</h3><ul>
+<li><p>Mac 终端默认是大小写不敏感的，<code>cd desktop</code> 其实也能切到桌面，但是无法通过tab补全。</p>
+</li>
+<li><p>如果你已经使用了zsh，那么一般情况下，修改.inputrc 并没有效果。可以在.zshrc 里添加下面两个命令,再执行<code>source ~/.zshrc</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">autoload</span> -Uz compinit &amp;&amp; compinit</span><br><span class="line"><span class="built_in">zstyle</span> <span class="string">&#x27;:completion:*&#x27;</span> matcher-list <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125;&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span> <span class="string">&#x27;m:&#123;[:lower:][:upper:]&#125;=&#123;[:upper:][:lower:]&#125; l:|=* r:|=*&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接建立 .zshrc 文件可能遇到的问题</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zsh compinit: insecure directories, run compaudit <span class="keyword">for</span> list.</span><br><span class="line">Ignore insecure directories and <span class="built_in">continue</span> [y] or abort compinit [n]?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解决</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行compaudit返回如下：</span></span><br><span class="line">$ compaudit</span><br><span class="line">There are insecure directories:</span><br><span class="line">/usr/local/share/zsh/site-functions</span><br><span class="line">/usr/local/share/zsh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭group-writable权限</span></span><br><span class="line"></span><br><span class="line">% <span class="built_in">chmod</span> g-w /usr/local/share/zsh </span><br><span class="line">% <span class="built_in">chmod</span> g-w /usr/local/share/zsh/site-functions</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><ul>
+<li><p>core.quotepath设为false的话，就不会对0x80以上的字符进行quote，避免乱码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.quotepath false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>别名</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.lg <span class="string">&quot;log --color --graph --pretty=format:&#x27;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)&lt;%an&gt;%Creset&#x27; --date=format:&#x27;%Y-%m-%d %H:%M:%S&#x27; --abbrev-commit&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><ul>
+<li><p>切换到主用户目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复制vim的系统配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/vim/vimrc ~/.vimrc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑用户配置文件.vimrc：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim .vimrc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按 i 进入插入模式，在文件末尾添加如下代码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">colorscheme default     <span class="string">&quot; 设置颜色主题</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">syntax on               &quot;</span> 语法高亮</span><br><span class="line"></span><br><span class="line">filetype on             <span class="string">&quot; 检测文件的类型</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set number              &quot;</span> 显示行号</span><br><span class="line"><span class="built_in">set</span> cursorline          <span class="string">&quot; 用浅色高亮当前行</span></span><br><span class="line"><span class="string">&quot;</span>autocmd InsertLeave * se nocul</span><br><span class="line"><span class="string">&quot;autocmd InsertEnter * se cul</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set ruler               &quot;</span> 在编辑过程中，在右下角显示光标位置的状态行</span><br><span class="line"><span class="built_in">set</span> laststatus=2        <span class="string">&quot; 显示状态栏 (默认值为 1, 无法显示状态栏)</span></span><br><span class="line"><span class="string">set statusline=\ %&lt;%F[%1*%M%*%n%R%H]%=\ %y\ %0(%&#123;&amp;fileformat&#125;\ %&#123;&amp;encoding&#125;\ %c:%l/%L%)\</span></span><br><span class="line"><span class="string">                        &quot;</span> 设置在状态行显示的信息</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> tabstop=4           <span class="string">&quot; Tab键的宽度</span></span><br><span class="line"><span class="string">set softtabstop=4</span></span><br><span class="line"><span class="string">set shiftwidth=4        &quot;</span> 统一缩进为4</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> autoindent          <span class="string">&quot; vim使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)</span></span><br><span class="line"><span class="string">set cindent             &quot;</span> (cindent是特别针对 C语言语法自动缩进)</span><br><span class="line"><span class="built_in">set</span> smartindent         <span class="string">&quot; 依据上面的对齐格式，智能的选择对齐方式，对于类似C语言编写上有用</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set scrolloff=3         &quot;</span> 光标移动到buffer的顶部和底部时保持3行距离</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> incsearch           <span class="string">&quot; 输入搜索内容时就显示搜索结果</span></span><br><span class="line"><span class="string">set hlsearch            &quot;</span> 搜索时高亮显示被找到的文本</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> foldmethod=indent   <span class="string">&quot; 设置缩进折叠</span></span><br><span class="line"><span class="string">set foldlevel=99        &quot;</span> 设置折叠层数</span><br><span class="line">nnoremap &lt;space&gt; @=((foldclosed(line(<span class="string">&#x27;.&#x27;</span>)) &lt; 0) ? <span class="string">&#x27;zc&#x27;</span> : <span class="string">&#x27;zo&#x27;</span>)&lt;CR&gt;</span><br><span class="line">                        <span class="string">&quot; 用空格键来开关折叠</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;</span> 自动跳转到上次退出的位置</span><br><span class="line"><span class="keyword">if</span> has(<span class="string">&quot;autocmd&quot;</span>)</span><br><span class="line">    au BufReadPost * <span class="keyword">if</span> line(<span class="string">&quot;&#x27;\&quot;&quot;</span>) &gt; 1 &amp;&amp; line(<span class="string">&quot;&#x27;\&quot;&quot;</span>) &lt;= line(<span class="string">&quot;$&quot;</span>) | exe <span class="string">&quot;normal! g&#x27;\&quot;&quot;</span> | endif</span><br><span class="line">endif</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><h3 id="NVM"><a href="#NVM" class="headerlink" title="NVM"></a>NVM</h3><ul>
 <li><p>使用 brew 安装 nvm</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install nvm</span><br></pre></td></tr></table></figure>
 </li>
@@ -276,11 +272,11 @@
 <li><p>npm 源</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g nrm --registry https://registry.npm.taobao.org/ <span class="comment"># windows下使用 yrm 修复了 nrm 的错误</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="MySQL配置"><a href="#MySQL配置" class="headerlink" title="MySQL配置"></a>MySQL配置</h2><ul>
+<h3 id="MySQL配置"><a href="#MySQL配置" class="headerlink" title="MySQL配置"></a>MySQL配置</h3><ul>
 <li><p>安装 mysql 后需要配置环境变量，否则 MySQL 等命令无法识别, 在 .zshrc 文件中添加如下配置</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\nexport PATH=<span class="variable">$&#123;PATH&#125;</span>:/usr/local/mysql/bin&quot;</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h2><ul>
+<h3 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h3><ul>
 <li><p>安装包直接安装即可</p>
 </li>
 <li><p>安装JDK1.8和JDK11双版本并任意切换，这里使用安装包方式安装 jdk8, 下载jdk 的 11 压缩包</p>
@@ -288,7 +284,7 @@
 <li><p>安装jdk1.8: 略</p>
 </li>
 <li><p>安装jdk11: 解压到安装目录即可</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxvf jdk-11_osx-x64_bin.tar.gz -C /Library/Java/JavaVirtualMachines/</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxvf jdk-11_osx-x64_bin.tar.gz -C /Library/Java/JavaVirtualMachines/</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>验证：进入jdk安装目录并查看该目录</p>
 <figure class="highlight ls"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /Library/Java/JavaVirtualMachines</span><br><span class="line">$ ls -al</span><br><span class="line">drwxr-xr-x  <span class="number">3</span> <span class="number">667</span>   staff   <span class="number">96</span>  <span class="number">8</span> <span class="number">23</span>  <span class="number">2018</span> jdk-<span class="number">11.jdk</span>/</span><br><span class="line">drwxr-xr-x  <span class="number">3</span> root  wheel   <span class="number">96</span>  <span class="number">8</span>  <span class="number">8</span> <span class="number">16</span>:<span class="number">26</span> jdk1.<span class="number">8.0_201</span>.jdk/</span><br></pre></td></tr></table></figure>
@@ -297,8 +293,6 @@
 </li>
 </ul>
 </li>
-</ul>
-<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><ul>
 <li><p>配置环境变量</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.zshrc</span><br><span class="line"></span><br><span class="line"><span class="comment">#添加下面的代码</span></span><br><span class="line"><span class="built_in">export</span> JAVA_8_HOME=<span class="string">&quot;<span class="subst">$(/usr/libexec/java_home -v 1.8)</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> JAVA_11_HOME=<span class="string">&quot;<span class="subst">$(/usr/libexec/java_home -v 11)</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#默认设为JDK1.8</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=<span class="variable">$JAVA_8_HOME</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#alias命令动态切换JDK版本</span></span><br><span class="line"><span class="built_in">alias</span> jdk8=<span class="string">&quot;export JAVA_HOME=<span class="variable">$JAVA_8_HOME</span>&quot;</span></span><br><span class="line"><span class="built_in">alias</span> jdk11=<span class="string">&quot;export JAVA_HOME=<span class="variable">$JAVA_11_HOME</span>&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -333,13 +327,13 @@
     2021-01-26
     <br>
     <strong class="update-time">最后更新：</strong>
-    2022-02-11
+    2022-02-12
     <br>
     <strong class="article-titles">本文标题：</strong>
-    <a href="https://fulsun.github.io/post/66b815d1.html" title="MacOS下环境配置" target="_blank">MacOS下环境配置</a>
+    <a href="https://fulsun.github.io/post/66b815d1.html" title="配置MacOS环境" target="_blank">配置MacOS环境</a>
     <br>
     <strong class="article-url">本文链接：</strong>
-    <a href="https://fulsun.github.io/post/66b815d1.html" title="MacOS下环境配置" target="_blank">https://fulsun.github.io/post/66b815d1.html</a>
+    <a href="https://fulsun.github.io/post/66b815d1.html" title="配置MacOS环境" target="_blank">https://fulsun.github.io/post/66b815d1.html</a>
     <br>
     <strong class="copyright">版权声明：</strong>
     本作品采用
@@ -362,7 +356,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MacOS优化</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">环境搭建</a>
         		</li>
       		
 		</ul>
@@ -375,10 +369,6 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="/categories/9-环境搭建/" class="article-tag-list-link color2">9_环境搭建</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/9-环境搭建/MacOS/" class="article-tag-list-link color1">MacOS</a>
         		</li>
       		
 		</ul>
@@ -447,18 +437,18 @@
   
 <nav id="article-nav">
   
-    <a href="/post/diary/20210727" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/post/a771" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          2021年7月27日
+          vscode 之 Java 开发环境
         
       </div>
     </a>
   
   
-    <a href="/post/41defcae" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Windows下环境配置</div>
+    <a href="/post/7cd42b82" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Scoop命令行工具</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -485,7 +475,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Bash设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zsh%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">zsh配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="toc-number">3.</span> <span class="toc-text">忽略大小写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#github-%E8%AE%BF%E9%97%AE"><span class="toc-number">4.</span> <span class="toc-text">github 访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-%E4%B9%B1%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">git 乱码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9vim%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="toc-number">6.</span> <span class="toc-text">修改vim显示效果的设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#brew%E5%AE%89%E8%A3%85"><span class="toc-number">7.</span> <span class="toc-text">brew安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NVM%E5%AE%89%E8%A3%85"><span class="toc-number">8.</span> <span class="toc-text">NVM安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E9%85%8D%E7%BD%AE"><span class="toc-number">9.</span> <span class="toc-text">MySQL配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK%E5%AE%89%E8%A3%85"><span class="toc-number">10.</span> <span class="toc-text">JDK安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">10.1.</span> <span class="toc-text">配置环境变量</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#brew%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">brew安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text">Shell说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bash%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">Bash设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">zsh配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="toc-number">2.3.</span> <span class="toc-text">忽略大小写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git"><span class="toc-number">2.4.</span> <span class="toc-text">git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim"><span class="toc-number">2.5.</span> <span class="toc-text">vim</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NVM"><span class="toc-number">3.1.</span> <span class="toc-text">NVM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E9%85%8D%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">MySQL配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK%E5%AE%89%E8%A3%85"><span class="toc-number">3.3.</span> <span class="toc-text">JDK安装</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -519,9 +509,7 @@
 			<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
             <span style="line-height: 24px;" id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
-			
-				<span id="sitetime"></span>
-			
+			<span id="sitetime"></span>
       		<!-- <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
       	</div>
     </div>
@@ -538,9 +526,9 @@
 			var todayYear = today.getFullYear();
 			var todayMonth = today.getMonth()+1;
 			var todayDate = today.getDate();
-			var todayHour = today.getHours();
-			var todayMinute = today.getMinutes();
-			var todaySecond = today.getSeconds();
+			// var todayHour = today.getHours();
+			// var todayMinute = today.getMinutes();
+			// var todaySecond = today.getSeconds();
 			/* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
 			year - 作为date对象的年份，为4位年份值
 			month - 0-11之间的整数，做为date对象的月份
@@ -549,15 +537,15 @@
 			minutes - 0-59之间的整数，做为date对象的分钟数
 			seconds - 0-59之间的整数，做为date对象的秒数
 			microseconds - 0-999之间的整数，做为date对象的毫秒数 */
-			var t1 = Date.parse("Mon Aug 12 2019 08:00:00 GMT+0800 (中国标准时间)");//建站时间
-			var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+			var t1 = Date.UTC(2021,01,22); //建站时间
+			var t2 = Date.UTC(todayYear,todayMonth,todayDate);
 			var diff = t2-t1;
 			var diffYears = Math.floor(diff/years);
 			var diffDays = Math.floor((diff/days)-diffYears*365);
-			var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
-			var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
-			var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
-			document.getElementById("sitetime").innerHTML=" 已运行"+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+			// var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+			// var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+			// var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+			document.getElementById("sitetime").innerHTML=" 已运行"+/*diffYears+" 年 "+*/diffDays+" 天 "/*+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒"*/;
 	}
 	siteTime();
 </script>
@@ -637,19 +625,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">环境搭建</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">日记</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">MacOS优化</a>
+                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">windows优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">配置环境</a>
+                <a href="javascript:void(0)" class="js-tag color4">Elasticsearch</a>
               </li>
             
             <div class="clearfix"></div>
