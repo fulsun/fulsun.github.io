@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>2021-12_自由如风的朋友圈数据</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+	<style type="text/css">
+		body {
+			font-size: 14px;
+			line-height: 120%;
+			text-align: center;
+			color: #333;
+			position: relative;
+			background: #fcfcfc;
+		}
+
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			border: none;
+		}
+
+		.clearfix:after {
+			content: ".";
+			display: block;
+			height: 0;
+			clear: both;
+			visibility: hidden
+		}
+
+		.clearfix {
+			*height: 1%;
+		}
+
+		#list {
+			margin: 0 auto;
+			text-align: left;
+			max-width: 640px;
+			background: #fff;
+			box-shadow: rgba(60, 60, 60, 0.22) 0px 0px 5px;
+		}
+
+		.box {
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding: 1rem;
+		}
+
+		.box:hover .close {
+			display: block;
+		}
+
+		.head {
+			float: left;
+			width: 10%;
+			margin-right: 2%;
+			border-radius: 10%;
+		}
+
+		.content {
+			float: left;
+			width: 88%;
+		}
+
+		.main {
+			margin-bottom: 10px;
+		}
+
+		.share {
+			background: #f7f7f7;
+			padding: 3%;
+			vertical-align: middle;
+		}
+
+		.share .text {
+			float: left;
+			width: 85%;
+			display: inline-block;
+			font-size: 0.95rem;
+			color: #4966b9;
+			line-height: 1.3rem;
+		}
+
+		.share .text span {
+			font-size: 0.8rem;
+			line-height: 28px;
+			font-weight: 0;
+			color: #7d97e1;
+		}
+
+		.share .img {
+			float: left;
+			width: 12%;
+			margin-right: 2%;
+			display: inline-block;
+		}
+
+		.share .img img {
+			width: 100%;
+		}
+
+		.pic_0 {
+			clear: both;
+		}
+
+		.pic_1 {
+			overflow: hidden;
+			max-height: 40rem;
+		}
+
+		.pic_1 .pic {
+			width: 65%;
+		}
+
+		.pic_1 video {
+			width: 65%;
+		}
+
+		.pic_n .pic {
+			width: 32.2%;
+			display: inline-block;
+			height: 0px;
+			padding-bottom: 32.8%;
+			overflow: hidden;
+			background-position: center;
+			center;
+			background-size: cover;
+		}
+
+		.pic img {
+			width: 100%;
+		}
+
+		.txt {
+			line-height: 1.6rem;
+			font-size: 1rem;
+			margin-bottom: 1rem;
+		}
+
+		.txt img {
+			width: 1.2rem;
+			vertical-align: top;
+			margin: 0 0.1rem;
+			margin-top: 0.2rem;
+		}
+
+		.user {
+			color: #295c9d;
+			line-height: 1.6rem;
+		}
+
+		.info {
+			height: 20px;
+			line-height: 19px;
+			font-size: 0.6rem;
+			margin: 0 0 10px 0;
+		}
+
+		.info .time {
+			color: #ccc;
+			float: left;
+			height: 20px;
+		}
+
+		.zan {
+			background: #fdfdfd;
+			color: #175bb1;
+			line-height: 1.5rem;
+			font-size: 0.6rem;
+			margin: 0 5px;
+			padding: 5px;
+			font-size: 0.8rem;
+		}
+
+		.com {
+			background: #fdfdfd;
+			line-height: 1.5rem;
+			font-size: 0.8rem;
+			margin: 0 5px;
+			padding: 5px;
+			border-top: 1px solid #eee;
+			word-break: break-all;
+		}
+
+		.com img {
+			width: 1rem;
+			vertical-align: top;
+			margin: 0 0.1rem;
+			margin-top: 0.3rem;
+		}
+
+		.com span {
+			color: #175bb1;
+		}
+
+		.black_overlay {
+			display: none;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.95);
+			z-index: 1001;
+		}
+
+		.white_content {
+			display: none;
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			z-index: 1002;
+			overflow: auto;
+			text-align: center;
+			align-items: center;
+			margin: 0 auto;
+			background-position: center;
+			center;
+			background-size: 100%;
+			background-repeat: no-repeat;
+		}
+
+		#f_pic {
+			margin: 0 auto;
+			max-width: 640px;
+			width: 100%;
+		}
+
+		#l_c {
+			display: block;
+			position: fixed;
+			left: 0;
+			top: 50%;
+			padding: 1rem;
+			color: #fff;
+			background: rgba(255, 255, 255, 0.3);
+			font-size: 2rem;
+			line-height: 4rem;
+			z-index: 9999;
+		}
+
+		#r_c {
+			display: block;
+			position: fixed;
+			right: 0;
+			top: 50%;
+			padding: 1rem;
+			color: #fff;
+			background: rgba(255, 255, 255, 0.3);
+			;
+			font-size: 2rem;
+			line-height: 4rem;
+			z-index: 9999;
+		}
+
+		#wz {
+			color: #175bb1;
+			background: rgba(0, 0, 0, 0.3);
+			padding: 10px;
+			right: 0px;
+			top: 0px;
+			position: fixed;
+		}
+
+		.open {
+			display: none;
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			color: #f1f1f1;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="fade" class="black_overlay"></div>
+	<div id="light" class="white_content"
+		onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
+		<img id="f_pic" src="" style="margin-top:0;" />
+		<div id="l_c" onclick="prev();">&lt;</div>
+		<div id="r_c" onclick="next();">&gt;</div>
+	</div>
+	<div id="list">
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span
+							class="user">自由如风<br /></span>下雨天，淋着雨，冲进教室，有同学说没带课本算我旷课，老师再讲java与c代码之间的调用，有个库叫xxx.vim，叫前面一个同学到上面演示下，然后放了一段视频，程序的大脑创建一个永久的导管，传输信号量，然后我就被惊醒了<br />
+						——12月7日，做梦
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-12-07 00:40:42</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/12/07_002717_1.jpg" src="2021/12/07_002717_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/12/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-12-07 00:27:17</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>有大哥能借个百度会员下点东西嘛（大小5G)<img src="images/82.gif" /><img
+							src="images/82.gif" />
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/12/01_142115_1.jpg" src="2021/12/01_142115_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/12/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-12-01 14:21:15</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="share"><a
+							href="https://map.baidu.com/zt/client/push/index.html?id=7873c92e440622a14e86c8ff81eb3d00&fr=weixin_friends"
+							target="_blank">
+							<div class="img"><img
+									src="http://shmmsns.qpic.cn/mmsns/kEFnibZHKcUcN4EkAUE8c0EHrNeLqEoHUxqlGqxM3J3uVJoMqXWS2pBsibdN2VGmu3H7Yhv4U1vD4/150"
+									alt="" /></div>
+							<div class="text">上海市新增3例本土病例，详情公布 查看详情>><br /><span><span></div>
+						</a>
+						<div class="pic_0"></div>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-11-25 18:57:20</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>迷茫了
+					</p>
+					<div class="share"><a href="https://y.music.163.com/m/song?id=254359&userid=264911365"
+							target="_blank">
+							<div class="img"><img
+									src="http://shmmsns.qpic.cn/mmsns/kEFnibZHKcUcN4EkAUE8c0NAU4yYagwgEspJcWPxIRNFyAcMyx4Ivs8tXyMBqcbol0zTfpOKZCUk/150"
+									alt="" /></div>
+							<div class="text">和你一样<br /><span><span></div>
+						</a>
+						<div class="pic_0"></div>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-11-10 23:53:32</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>恭喜 edg 夺冠🎉
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-11-07 02:03:02</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>学会如何写评论了 [666][666]
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/10/27_160518_1.jpg" src="2021/10/27_160518_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-27 16:05:18</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>被熬夜
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/10/27_083627_1.jpg" src="2021/10/27_083627_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-27 08:36:27</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>回家了
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/10/12_080225_1.jpg"
+							style="background-image:url(2021/10/12_080225_1.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_2.jpg"
+							style="background-image:url(2021/10/12_080225_2.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_3.jpg"
+							style="background-image:url(2021/10/12_080225_3.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_4.jpg"
+							style="background-image:url(2021/10/12_080225_4.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_5.jpg"
+							style="background-image:url(2021/10/12_080225_5.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_6.jpg"
+							style="background-image:url(2021/10/12_080225_6.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_7.jpg"
+							style="background-image:url(2021/10/12_080225_7.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_8.jpg"
+							style="background-image:url(2021/10/12_080225_8.jpg);"></span>
+						<span class="pic" data-pic="2021/10/12_080225_9.jpg"
+							style="background-image:url(2021/10/12_080225_9.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-12 08:02:25</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>这雨来得突然
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/10/10_141336_1.jpg"
+							style="background-image:url(2021/10/10_141336_1.jpg);"></span>
+						<span class="pic" data-pic="2021/10/10_141336_2.jpg"
+							style="background-image:url(2021/10/10_141336_2.jpg);"></span>
+						<span class="pic" data-pic="2021/10/10_141336_3.jpg"
+							style="background-image:url(2021/10/10_141336_3.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-10 14:13:36</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>富兰克林「有的人死于 25 岁，却葬于 75 岁」
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-08 14:22:35</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/10/08_105734_1.jpg" src="2021/10/08_105734_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-08 10:57:34</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/10/07_143746_1.jpg" src="2021/10/07_143746_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-07 14:37:46</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>[叹气]
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/10/02_081937_1.jpg" src="2021/10/02_081937_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/10/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-10-02 08:19:37</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>时光啊 不听话 总催着人长大 <br /><br />[烟花][烟花]2021.08.19 [烟花][烟花]
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-08-22 20:01:15</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/08/16_205723_1.jpg" src="2021/08/16_205723_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/08/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-08-16 20:57:23</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>新生代农民工
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/08/16_191211_1.jpg" src="2021/08/16_191211_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/08/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-08-16 19:12:11</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>查询到15年的献血记录
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/21_215933_1.jpg" src="2021/07/21_215933_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-21 21:59:33</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>莫明其妙的封号。
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/07/21_215619_1.jpg"
+							style="background-image:url(2021/07/21_215619_1.jpg);"></span>
+						<span class="pic" data-pic="2021/07/21_215619_2.jpg"
+							style="background-image:url(2021/07/21_215619_2.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-21 21:56:19</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>6.5号，第一次和女生吃火锅
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/21_215345_1.jpg" src="2021/07/21_215345_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-21 21:53:45</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>嘉兴火车站
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/21_215129_1.jpg" src="2021/07/21_215129_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-21 21:51:29</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>凡事皆有代价，一切皆是取舍。
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-19 20:05:30</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/19_130624_1.jpg" src="2021/07/19_130624_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-19 13:06:24</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>Win11开机感觉挺好，运行起来就不行了，窗口变来变去的
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/12_221229_1.jpg" src="2021/07/12_221229_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-12 22:12:29</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>网络安全<img src="images/84.gif" />
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/07/05_182405_1.jpg" src="2021/07/05_182405_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-05 18:24:05</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>迷路了，没赶上公交
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/07/02_225320_1.jpg"
+							style="background-image:url(2021/07/02_225320_1.jpg);"></span>
+						<span class="pic" data-pic="2021/07/02_225320_2.jpg"
+							style="background-image:url(2021/07/02_225320_2.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-02 22:53:20</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>百年大党，生日快乐！🍉 🍉 [庆祝][庆祝][庆祝]
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/07/01_183236_1.jpg"
+							style="background-image:url(2021/07/01_183236_1.jpg);"></span>
+						<span class="pic" data-pic="2021/07/01_183236_2.jpg"
+							style="background-image:url(2021/07/01_183236_2.jpg);"></span>
+						<span class="pic" data-pic="2021/07/01_183236_3.jpg"
+							style="background-image:url(2021/07/01_183236_3.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/07/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-07-01 18:32:36</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>喷泉
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/05/30_084702_1.jpg"
+							style="background-image:url(2021/05/30_084702_1.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_2.jpg"
+							style="background-image:url(2021/05/30_084702_2.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_3.jpg"
+							style="background-image:url(2021/05/30_084702_3.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_4.jpg"
+							style="background-image:url(2021/05/30_084702_4.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_5.jpg"
+							style="background-image:url(2021/05/30_084702_5.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_6.jpg"
+							style="background-image:url(2021/05/30_084702_6.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_7.jpg"
+							style="background-image:url(2021/05/30_084702_7.jpg);"></span>
+						<span class="pic" data-pic="2021/05/30_084702_8.jpg"
+							style="background-image:url(2021/05/30_084702_8.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/05/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-05-30 08:47:02</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>[叹气][叹气]生活不易
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/05/17_114608_1.jpg" src="2021/05/17_114608_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/05/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-05-17 11:46:08</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/04/30_084928_1.jpg" src="2021/04/30_084928_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-30 08:49:28</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>春天
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/04/24_161135_1.jpg"
+							style="background-image:url(2021/04/24_161135_1.jpg);"></span>
+						<span class="pic" data-pic="2021/04/24_161135_2.jpg"
+							style="background-image:url(2021/04/24_161135_2.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-24 16:11:35</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>第一次游西湖
+					</p>
+					<div class="pic_1">
+						<video poster="" webkit-playsinline width="100%" height="100%" class="vplayinside notaplink"
+							x-webkit-airplay controls loop="loop" src="2021/04/22_080122_1.mp4"></video>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-22 08:01:22</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>人还是得长点心眼
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/04/22_075956_1.jpg"
+							style="background-image:url(2021/04/22_075956_1.jpg);"></span>
+						<span class="pic" data-pic="2021/04/22_075956_2.jpg"
+							style="background-image:url(2021/04/22_075956_2.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-22 07:59:56</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>早些年的看的一些"鸡汤\"
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/04/16_110648_1.jpg"
+							style="background-image:url(2021/04/16_110648_1.jpg);"></span>
+						<span class="pic" data-pic="2021/04/16_110648_2.jpg"
+							style="background-image:url(2021/04/16_110648_2.jpg);"></span>
+						<span class="pic" data-pic="2021/04/16_110648_3.jpg"
+							style="background-image:url(2021/04/16_110648_3.jpg);"></span>
+						<span class="pic" data-pic="2021/04/16_110648_4.jpg"
+							style="background-image:url(2021/04/16_110648_4.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-16 11:06:48</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span
+							class="user">自由如风<br /></span>今天替公司面试了一个17年毕业的3年经验的开发，她的回答特别像我之前面试的样子，没有准备，没有完整的知识结构，我给出了一般的评价，希望没能伤害到对方。<br /><br />技术会用只是入门，不能仅仅止步于此。——自勉
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/04/15_230244_1.jpg" src="2021/04/15_230244_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-15 23:02:44</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span><img src="images/54.gif" /><img src="images/54.gif" /><img
+							src="images/54.gif" />
+					</p>
+					<div class="pic_1">
+						<video poster="" webkit-playsinline width="100%" height="100%" class="vplayinside notaplink"
+							x-webkit-airplay controls loop="loop" src="2021/04/15_223849_1.mp4"></video>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-15 22:38:49</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>春天来了
+					</p>
+					<div class="pic_1">
+						<video poster="" webkit-playsinline width="100%" height="100%" class="vplayinside notaplink"
+							x-webkit-airplay controls loop="loop" src="2021/04/15_223314_1.mp4"></video>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-15 22:33:14</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>这是什么眼神啊
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/04/15_222924_1.jpg" src="2021/04/15_222924_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-15 22:29:24</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>饿<img src="images/77.gif" /><img src="images/77.gif" />
+					</p>
+					<div class="pic_1">
+						<video poster="" webkit-playsinline width="100%" height="100%" class="vplayinside notaplink"
+							x-webkit-airplay controls loop="loop" src="2021/04/15_222655_1.mp4"></video>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-15 22:26:55</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>哈哈哈
+					</p>
+					<div class="pic_1">
+						<video poster="" webkit-playsinline width="100%" height="100%" class="vplayinside notaplink"
+							x-webkit-airplay controls loop="loop" src="2021/04/14_204917_1.mp4"></video>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-14 20:49:17</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>
+					</p>
+					<div class="share"><a
+							href="http://wxapp.tc.qq.com/251/20302/stodownload?encfilekey=G83YYE2iciaib491UK8yGibLXOdhNpDoPpG7umSAgucTTicVt9riboCCus9lO5nkIW6Uz8Aic5J0PmbS0POBQiaOvbgYgU4k3LcGARgMOFy8kiagvAe4ID1k2Tw00XR4AOxJOk3EGkKeJN950mjYP7hMsvls3xK4CQibqAZ44a1gyRyxIKLAM&adaptivelytrans=0&bizid=1023&dotrans=930&hy=SH&idx=1&m=e246b4ece792423987b41cd8b12571bb&scene=0&token=AxricY7RBHdXmQpHTLibgGibAhFEzLzG1MY9tY0HtlOYu0wQianauGjYNq3P8FBndNbElrY4BFr4XwY"
+							target="_blank">
+							<div class="img"><img
+									src="http://wxapp.tc.qq.com/251/20304/stodownload?filekey=30350201010421301f020200fb04025348041031046a5e287fb839158d3ffd3b33e896020300ec6b040d00000004627466730000000131&storeid=323032313034313231323432323330303036623364613537363733616163383538303139303930303030303066623030303034663530&adaptivelytrans=0&bizid=1023&dotrans=0&hy=SH&m=31046a5e287fb839158d3ffd3b33e896"
+									alt="" /></div>
+							<div class="text">
+								新华网<br /><span>4月12日，外交部向全球特别推介湖北，时隔一年，共赴一场春天之约。当世界再次聚焦，看到的更是重生的武汉。英雄之地有着怎么样的密码？武汉究竟是一座怎样的城市？也许答案就藏在WUHAN这五个字母其中。#Wuhan的五个字母代表什么？<span>
+							</div>
+						</a>
+						<div class="pic_0"></div>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-13 07:42:51</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>好天气
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/04/06_103621_1.jpg" src="2021/04/06_103621_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/04/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-04-06 10:36:21</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>火锅进行中​​​
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/03/25_220820_1.jpg"
+							style="background-image:url(2021/03/25_220820_1.jpg);"></span>
+						<span class="pic" data-pic="2021/03/25_220820_2.jpg"
+							style="background-image:url(2021/03/25_220820_2.jpg);"></span>
+						<span class="pic" data-pic="2021/03/25_220820_3.jpg"
+							style="background-image:url(2021/03/25_220820_3.jpg);"></span>
+						<span class="pic" data-pic="2021/03/25_220820_4.jpg"
+							style="background-image:url(2021/03/25_220820_4.jpg);"></span>
+						<span class="pic" data-pic="2021/03/25_220820_5.jpg"
+							style="background-image:url(2021/03/25_220820_5.jpg);"></span>
+						<span class="pic" data-pic="2021/03/25_220820_6.jpg"
+							style="background-image:url(2021/03/25_220820_6.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/03/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-03-25 22:08:20</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>期待
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/03/20_212643_1.jpg" src="2021/03/20_212643_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/03/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-03-20 21:26:43</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>没用多少流量，有必要提醒我吗<img src="images/24.gif" />
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/03/15_101708_1.jpg" src="2021/03/15_101708_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/03/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-03-15 10:17:08</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>海底月是天上月
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/03/14_002102_1.jpg" src="2021/03/14_002102_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/03/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-03-14 00:21:02</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span><img src="images/6.gif" /><img src="images/6.gif" /><img
+							src="images/6.gif" />
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/02/20_172933_1.jpg" src="2021/02/20_172933_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-20 17:29:33</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>第一次被困电梯里 <img src="images/59.gif" /><img
+							src="images/59.gif" /> 还好3分钟左右就有人处理。
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/02/19_204754_1.jpg" src="2021/02/19_204754_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-19 20:47:54</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>支付宝 搜索🔍 的结果
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/02/15_211045_1.jpg" src="2021/02/15_211045_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-15 21:10:45</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>给自己的礼物
+					</p>
+					<div class="pic_1">
+						<img class="pic" data-pic="2021/02/14_211633_1.jpg" src="2021/02/14_211633_1.jpg" />
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-14 21:16:33</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>今天人还是挺多的
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/02/13_195003_1.jpg"
+							style="background-image:url(2021/02/13_195003_1.jpg);"></span>
+						<span class="pic" data-pic="2021/02/13_195003_2.jpg"
+							style="background-image:url(2021/02/13_195003_2.jpg);"></span>
+						<span class="pic" data-pic="2021/02/13_195003_3.jpg"
+							style="background-image:url(2021/02/13_195003_3.jpg);"></span>
+						<span class="pic" data-pic="2021/02/13_195003_4.jpg"
+							style="background-image:url(2021/02/13_195003_4.jpg);"></span>
+						<span class="pic" data-pic="2021/02/13_195003_5.jpg"
+							style="background-image:url(2021/02/13_195003_5.jpg);"></span>
+						<span class="pic" data-pic="2021/02/13_195003_6.jpg"
+							style="background-image:url(2021/02/13_195003_6.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-13 19:50:03</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>在新年之际，向朋友圈的朋友和您的家人道一声祝福：祝牛年大吉，身体健康，万事如意!
+					</p>
+					<div class="pic_0">
+
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-12 00:04:23</span>
+				</div>
+			</div>
+		</div>
+		<div class="box clearfix">
+			<img class="head" src="images/avatar.jpg" alt="" />
+			<div class="content">
+				<div class="main">
+					<p class="txt">
+						<span class="user">自由如风<br /></span>。。。。真的没好看点的照片了
+					</p>
+					<div class="pic_n">
+						<span class="pic" data-pic="2021/02/10_214402_1.jpg"
+							style="background-image:url(2021/02/10_214402_1.jpg);"></span>
+						<span class="pic" data-pic="2021/02/10_214402_2.jpg"
+							style="background-image:url(2021/02/10_214402_2.jpg);"></span>
+						<span class="pic" data-pic="2021/02/10_214402_3.jpg"
+							style="background-image:url(2021/02/10_214402_3.jpg);"></span>
+						<span class="pic" data-pic="2021/02/10_214402_4.jpg"
+							style="background-image:url(2021/02/10_214402_4.jpg);"></span>
+						<a class="open" onclick="CopyFile(this,'2021/02/')">Copy</a>
+					</div>
+				</div>
+				<div class="info clearfix">
+					<span class="time">2021-02-10 21:44:02</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div id="wz"></div> -->
+	<script type="text/JavaScript" language="javascript">
+window.onresize = function(){
+	location.reload();
+}
+function AddImgClickEvent()
+{
+	
+	var objs = document.getElementsByClassName("pic");
+	sum = objs.length;
+	for(var i=0;i<objs.length;i++)
+	{
+		objs[i].id=i+1;
+		objs[i].onclick=function()
+		{
+			now_p = parseInt(this.getAttribute("id"))-1;
+			now_n = parseInt(this.getAttribute("id"))+1;
+			
+			//document.getElementById('f_pic').style.marginTop=0+"px";
+			document.getElementById('f_pic').src = this.getAttribute("data-pic");
+			xzpic()
+		}
+	}
+}
+function xzpic()
+{
+	document.getElementById('f_pic').style.marginTop=0+"px";
+	var windowW = document.documentElement.clientWidth;
+	if(windowW>640){
+		windowW=640;
+	}
+	var windowH = document.documentElement.clientHeight;
+	var realWidth = document.getElementById('f_pic').naturalWidth;
+	var realHeight = document.getElementById('f_pic').naturalHeight;
+	var n_h=realHeight*windowW/realWidth;
+	if(n_h<windowH){
+		document.getElementById('f_pic').style.marginTop=((windowH-n_h)/2)+ 'px';
+	}else{
+		document.getElementById('f_pic').style.marginTop=0+"px";
+	}
+	document.getElementById('light').style.display='block';
+	document.getElementById('fade').style.display='block'
+}
+AddImgClickEvent();
+function boxClickEvent()
+{
+var obj_box = document.getElementsByClassName("box");
+for(var i=0;i<obj_box.length;i++)
+	{
+		obj_box[i].index=i+1;
+		obj_box[i].onmouseover=function()
+		{
+			document.getElementById('wz').innerHTML=this.index+" / "+obj_box.length;
+		}
+	}
+}
+
+boxClickEvent();
+function next()
+{
+	if(now_n>sum) return;
+	document.getElementById('f_pic').src = document.getElementById(now_n).getAttribute("data-pic");
+	location.href = "#"+now_n;
+	xzpic();
+	now_n=now_n+1;
+	now_p=now_p+1;
+	stopBubbling(event);
+}
+function prev()
+{
+	if(now_p<1) return;
+	document.getElementById('f_pic').src = document.getElementById(now_p).getAttribute("data-pic");
+	location.href = "#"+now_p;
+	xzpic();
+	now_n=now_n-1;
+	now_p=now_p-1;
+	stopBubbling(event);
+	
+}
+function stopBubbling(e) {
+	e = window.event || e;
+	if (e.stopPropagation) {
+		e.stopPropagation();
+	} else {
+		e.cancelBubble = true;
+	}
+}
+window.onload = function(){
+	document.onkeydown = function(ev){
+	var ev = ev || window.event;
+	switch(ev.keyCode){
+		case 37://left����
+		prev();
+		break;
+		case 39://right
+		next();
+		break;
+}
+}
+}
+</script>
+</body>
+
+</html>
