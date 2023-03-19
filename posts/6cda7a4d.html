@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Elasticsearch 集群环境搭建 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Elasticsearch 是一个（近乎）实时的分布式搜索和分析引擎。"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/posts/6cda7a4d"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"VLNBQBQSTG","apiKey":"64d289b15b380887164afa544ddc6b52","indexName":"hexo","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":250},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":200,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Elasticsearch 集群环境搭建',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-13 09:33:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/medias/css/mycss.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css"  media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/fcircle/"><i class="fa-fw fas fa-desktop"></i><span> 朋友圈</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/520/"><i class="fa-fw fas fa-heartbeat"></i><span> 表白</span></a></li><li><a class="site-page child" href="/talking"><i class="fa-fw fas fa-coffee"></i><span> 说说</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">凉月の博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/fcircle/"><i class="fa-fw fas fa-desktop"></i><span> 朋友圈</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/520/"><i class="fa-fw fas fa-heartbeat"></i><span> 表白</span></a></li><li><a class="site-page child" href="/talking"><i class="fa-fw fas fa-coffee"></i><span> 说说</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Elasticsearch 集群环境搭建</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-21T02:58:10.000Z" title="发表于 2021-11-21 10:58:10">2021-11-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-01-13T01:33:12.043Z" title="更新于 2023-01-13 09:33:12">2023-01-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Elasticsearch/">Elasticsearch</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Elasticsearch 集群环境搭建"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><blockquote>
+<p>单台 Elasticsearch 服务器提供服务，往往都有最大的负载能力，超过这个阈值，服务器性能就会大大降低甚至不可用，所以生产环境中，一般都是运行在指定服务器集群中。</p>
+</blockquote>
+<h3 id="单机"><a href="#单机" class="headerlink" title="单机"></a>单机</h3><p>除了负载能力，单点服务器也存在其他问题：</p>
+<ul>
+<li>单台机器存储容量有限</li>
+<li>单服务器容易出现单点故障，无法实现高可用</li>
+<li>单服务的并发处理能力有限</li>
+</ul>
+<h3 id="集群-Cluster"><a href="#集群-Cluster" class="headerlink" title="集群 Cluster"></a>集群 Cluster</h3><p>一个集群就是由一个或多个服务器节点组织在一起，共同持有整个的数据，并一起提供索引和搜索功能。一个 Elasticsearch 集群<strong>有一个唯一的名字标识</strong>，这个名字默认就是”elasticsearch”。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。</p>
+<ul>
+<li>配置服务器集群时，集群中节点数量没有限制，大于等于 2 个节点就可以看做是集群了。</li>
+<li>一般出于高性能及高可用方面来考虑集群中节点数量都是 3 个以上。</li>
+</ul>
+<h3 id="节点-Node"><a href="#节点-Node" class="headerlink" title="节点 Node"></a>节点 Node</h3><p>集群中包含很多服务器，一个节点就是其中的一个服务器。作为集群的一部分，它<strong>存储数据，参与集群的索引和搜索功能</strong>。</p>
+<ul>
+<li><p>一个节点也是由一个名字来标识的，默认情况下，这个名字是一个随机的漫威漫画角色的名字，这个名字会在启动的时候赋予节点。这个名字对于管理工作来说挺重要的，因为在这个管理过程中，你会去确定网络中的哪些服务器对应于 Elasticsearch 集群中的哪些节点。</p>
+</li>
+<li><p>一个节点可以通过配置集群名称的方式来加入一个指定的集群。默认情况下，每个节点都会被安排加入到一个叫做“elasticsearch”的集群中，这意味着，如果你在你的网络中启动了若干个节点，并假定它们能够相互发现彼此，它们将会自动地形成并加入到一个叫做“elasticsearch”的集群中。</p>
+</li>
+<li><p>在一个集群里，只要你想，可以拥有任意多个节点。而且，如果当前你的网络中没有运行任何 Elasticsearch 节点，这时启动一个节点，会默认创建并加入一个叫做“elasticsearch”的集群。</p>
+</li>
+</ul>
+<h2 id="Windows-集群"><a href="#Windows-集群" class="headerlink" title="Windows 集群"></a>Windows 集群</h2><h3 id="部署集群"><a href="#部署集群" class="headerlink" title="部署集群"></a>部署集群</h3><ol>
+<li><p>创建 elasticsearch-cluster 文件夹，在内部复制三个 elasticsearch 服务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Program\dev&gt; mkdir elasticsearch-cluster</span><br><span class="line">PS D:\Program\dev&gt; cp -r .\elasticsearch-<span class="number">7.8</span><span class="number">.0</span>\ .\elasticsearch-cluster\node-<span class="number">9001</span></span><br><span class="line">PS D:\Program\dev&gt; cp -r .\elasticsearch-<span class="number">7.8</span><span class="number">.0</span>\ .\elasticsearch-cluster\node-<span class="number">9002</span></span><br><span class="line">PS D:\Program\dev&gt; cp -r .\elasticsearch-<span class="number">7.8</span><span class="number">.0</span>\ .\elasticsearch-cluster\node-<span class="number">9003</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改集群文件目录中每个节点的 config&#x2F;elasticsearch.yml 配置文件</p>
+<ul>
+<li><p>node-1001 节点</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#节点 1 的配置信息：</span></span><br><span class="line"><span class="comment">#集群名称，节点之间要保持一致</span></span><br><span class="line">cluster.name: my-elasticsearch </span><br><span class="line"><span class="comment"># 节 点 名 称 ， 集 群 内 要 唯 一 </span></span><br><span class="line">node.name: node-9001 </span><br><span class="line">node.master: <span class="literal">true</span></span><br><span class="line">node.data: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ip 地址</span></span><br><span class="line">network.host: localhost </span><br><span class="line"><span class="comment">#http 端口</span></span><br><span class="line">http.port: 9001 </span><br><span class="line"><span class="comment">#tcp 监听端口</span></span><br><span class="line">transport.tcp.port: 9301</span><br><span class="line"></span><br><span class="line"><span class="comment">#discovery.seed_hosts: [&quot;localhost:9301&quot;, &quot;localhost:9302&quot;,&quot;localhost:9303&quot;] </span></span><br><span class="line"><span class="comment">#discovery.zen.fd.ping_timeout: 1m</span></span><br><span class="line"><span class="comment">#discovery.zen.fd.ping_retries: 5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集 群 内 的 可 以 被 选 为 主 节 点 的 节 点 列 表 </span></span><br><span class="line"><span class="comment">#cluster.initial_master_nodes: [&quot;node-1&quot;, &quot;node-2&quot;,&quot;node-3&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跨域配置</span></span><br><span class="line"><span class="comment">#action.destructive_requires_name: true </span></span><br><span class="line">http.cors.enabled: <span class="literal">true</span> </span><br><span class="line">http.cors.allow-origin: <span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>node-1002 节点</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#节点 2 的配置信息：</span></span><br><span class="line"><span class="comment">#集群名称，节点之间要保持一致</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-elasticsearch</span> </span><br><span class="line"><span class="comment"># 节 点 名 称 ， 集 群 内 要 唯 一 </span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-9002</span></span><br><span class="line"><span class="attr">node.master:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">node.data:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ip 地址</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="string">localhost</span> </span><br><span class="line"><span class="comment">#http 端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9002</span> </span><br><span class="line"><span class="comment">#tcp 监听端口</span></span><br><span class="line"><span class="attr">transport.tcp.port:</span> <span class="number">9302</span></span><br><span class="line"></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;localhost:9301&quot;</span>] </span><br><span class="line"><span class="attr">discovery.zen.fd.ping_timeout:</span> <span class="string">1m</span> </span><br><span class="line"><span class="attr">discovery.zen.fd.ping_retries:</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集 群 内 的 可 以 被 选 为 主 节 点 的 节 点 列 表 </span></span><br><span class="line"><span class="comment">#cluster.initial_master_nodes: [&quot;node-1&quot;, &quot;node-2&quot;,&quot;node-3&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跨域配置</span></span><br><span class="line"><span class="comment">#action.destructive_requires_name: true </span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span> </span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>node-1003 节点</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#节点 3 的配置信息：</span></span><br><span class="line"><span class="comment">#集群名称，节点之间要保持一致</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-elasticsearch</span> </span><br><span class="line"><span class="comment"># 节 点 名 称 ， 集 群 内 要 唯 一 </span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-9002</span></span><br><span class="line"><span class="attr">node.master:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">node.data:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ip 地址</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="string">localhost</span> </span><br><span class="line"><span class="comment">#http 端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9003</span></span><br><span class="line"><span class="comment">#tcp 监听端口</span></span><br><span class="line"><span class="attr">transport.tcp.port:</span> <span class="number">9303</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#候选主节点的地址，在开启服务后可以被选为主节点</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;localhost:9301&quot;</span>, <span class="string">&quot;localhost:9302&quot;</span>] </span><br><span class="line"><span class="attr">discovery.zen.fd.ping_timeout:</span> <span class="string">1m</span> </span><br><span class="line"><span class="attr">discovery.zen.fd.ping_retries:</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集 群 内 的 可 以 被 选 为 主 节 点 的 节 点 列 表 </span></span><br><span class="line"><span class="comment">#cluster.initial_master_nodes: [&quot;node-1&quot;, &quot;node-2&quot;,&quot;node-3&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跨域配置</span></span><br><span class="line"><span class="comment">#action.destructive_requires_name: true </span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span> </span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h3 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h3><ul>
+<li><p>启动前先删除每个节点中的 data 目录中所有内容（如果存在）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Program\dev\elasticsearch-cluster&gt; <span class="built_in">rm</span> -r .\node-1001\data\nodes\</span><br><span class="line">PS D:\Program\dev\elasticsearch-cluster&gt; <span class="built_in">rm</span> -r .\node-1002\data\nodes\</span><br><span class="line">PS D:\Program\dev\elasticsearch-cluster&gt; <span class="built_in">rm</span> -r .\node-1003\data\nodes\</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>分别双击执行 bin&#x2F;elasticsearch.bat, 启动节点服务器，启动后，会自动加入指定名称的集群</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.\node-1001\bin\elasticsearch.bat</span><br><span class="line">.\node-1002\bin\elasticsearch.bat</span><br><span class="line">.\node-1003\bin\elasticsearch.bat</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="测试集群"><a href="#测试集群" class="headerlink" title="测试集群"></a>测试集群</h3><ul>
+<li><p>启动 node1 节点，查看集群状态</p>
+<ul>
+<li>status: 字段标识当前集群在总体上是否正常工作，有三种颜色</li>
+<li>green: 所有主分片和副本分片都可以正常工作</li>
+<li>yello: 所有的主分片都正常工作，但不是所有的副本分片都正常工作</li>
+<li>red: 有主分片没有正常运行</li>
+</ul>
+</li>
+<li><p>启动 node-9001 节点</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Get http://127.0.0.1:9001/_cluster/health</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;cluster_name&quot;</span>: <span class="string">&quot;my-elasticsearch&quot;</span>,</span><br><span class="line">    <span class="string">&quot;status&quot;</span>: <span class="string">&quot;green&quot;</span>,</span><br><span class="line">    <span class="string">&quot;timed_out&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;number_of_nodes&quot;</span>: 1,</span><br><span class="line">    <span class="string">&quot;number_of_data_nodes&quot;</span>: 1,</span><br><span class="line">    <span class="string">&quot;active_primary_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;relocating_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;initializing_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;delayed_unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_pending_tasks&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_in_flight_fetch&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;task_max_waiting_in_queue_millis&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards_percent_as_number&quot;</span>: 100.0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>启动 node-9002 节点</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Get http://127.0.0.1:9002/_cluster/health</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;cluster_name&quot;</span>: <span class="string">&quot;my-elasticsearch&quot;</span>,</span><br><span class="line">    <span class="string">&quot;status&quot;</span>: <span class="string">&quot;green&quot;</span>,</span><br><span class="line">    <span class="string">&quot;timed_out&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;number_of_nodes&quot;</span>: 2,</span><br><span class="line">    <span class="string">&quot;number_of_data_nodes&quot;</span>: 2,</span><br><span class="line">    <span class="string">&quot;active_primary_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;relocating_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;initializing_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;delayed_unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_pending_tasks&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_in_flight_fetch&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;task_max_waiting_in_queue_millis&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards_percent_as_number&quot;</span>: 100.0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>启动 node-9003 节点</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Get http://127.0.0.1:9003/_cluster/health</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;cluster_name&quot;</span>: <span class="string">&quot;my-elasticsearch&quot;</span>,</span><br><span class="line">    <span class="string">&quot;status&quot;</span>: <span class="string">&quot;green&quot;</span>,</span><br><span class="line">    <span class="string">&quot;timed_out&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;number_of_nodes&quot;</span>: 3,</span><br><span class="line">    <span class="string">&quot;number_of_data_nodes&quot;</span>: 3,</span><br><span class="line">    <span class="string">&quot;active_primary_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;relocating_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;initializing_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;delayed_unassigned_shards&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_pending_tasks&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;number_of_in_flight_fetch&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;task_max_waiting_in_queue_millis&quot;</span>: 0,</span><br><span class="line">    <span class="string">&quot;active_shards_percent_as_number&quot;</span>: 100.0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>向集群中的 node-1001 节点增加索引</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PUT http://127.0.0.1:9001/user</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;acknowledged&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;shards_acknowledged&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;index&quot;</span>: <span class="string">&quot;user&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>向集群中的 node-1002 节点查询索引</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Get http://127.0.0.1:9002/user</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;user&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;aliases&quot;</span>: &#123;&#125;,</span><br><span class="line">        <span class="string">&quot;mappings&quot;</span>: &#123;&#125;,</span><br><span class="line">        <span class="string">&quot;settings&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;index&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;creation_date&quot;</span>: <span class="string">&quot;1637466026624&quot;</span>,</span><br><span class="line">                <span class="string">&quot;number_of_shards&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;number_of_replicas&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;uuid&quot;</span>: <span class="string">&quot;Ho7_z64XQB-MUWAOAyzSPA&quot;</span>,</span><br><span class="line">                <span class="string">&quot;version&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;created&quot;</span>: <span class="string">&quot;7080099&quot;</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;provided_name&quot;</span>: <span class="string">&quot;user&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Linux-集群"><a href="#Linux-集群" class="headerlink" title="Linux 集群"></a>Linux 集群</h2><h3 id="软件下载"><a href="#软件下载" class="headerlink" title="软件下载"></a>软件下载</h3><ul>
+<li>软件下载地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.elastic.co/cn/downloads/past-releases/elasticsearch-7-8-0">https://www.elastic.co/cn/downloads/past-releases/elasticsearch-7-8-0</a></li>
+</ul>
+<h3 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h3><ol>
+<li><p>将下载的软件解压缩</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /opt/module</span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -zxvf elasticsearch-7.8.0-linux-x86_64.tar.gz -C /opt/module </span><br><span class="line"><span class="comment"># 改名</span></span><br><span class="line"><span class="built_in">mv</span> elasticsearch-7.8.0 es-cluster</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将软件分发到其他节点：zy02, zy03</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo scp -r /opt/module/es-cluster/ root@zy02:/opt/module/es-cluster</span><br><span class="line">sudo scp -r /opt/module/es-cluster/ root@zy03:/opt/module/es-cluster</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>因为安全问题，Elasticsearch 不允许 root 用户直接运行，所以要在每个节点中创建新用户，在 root 用户中创建新用户</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useradd es <span class="comment">#新增 es 用户</span></span><br><span class="line">passwd es <span class="comment">#为 es 用户设置密码</span></span><br><span class="line">userdel -r es <span class="comment">#如果错了，可以删除再加</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R es:es /opt/module/es-cluster <span class="comment">#文件夹所有者</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><ol>
+<li><p>修改 <code>vim /opt/module/es-cluster/config/elasticsearch.yml</code> 文件</p>
+<ul>
+<li><p>加入如下配置</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ctrl+v, 进入列编辑模式，横向选中列的个数（如&quot;//&quot;注释符号，需要选中两列）, 然后按 d, 就会删除注释符号</span></span><br><span class="line"><span class="comment">#集群名称</span></span><br><span class="line">cluster.name: cluster-es</span><br><span class="line"><span class="comment">#节点名称，每个节点的名称不能重复</span></span><br><span class="line">node.name: node-1</span><br><span class="line"><span class="comment">#ip 地址，每个节点的地址不能重复</span></span><br><span class="line">network.host: zy01 </span><br><span class="line"><span class="comment">#是不是有资格主节点</span></span><br><span class="line">node.master: <span class="literal">true</span> </span><br><span class="line">node.data: <span class="literal">true</span> </span><br><span class="line">http.port: 9200</span><br><span class="line"><span class="comment"># head 插件需要这打开这两个配置</span></span><br><span class="line">http.cors.allow-origin: <span class="string">&quot;*&quot;</span> </span><br><span class="line">http.cors.enabled: <span class="literal">true</span> </span><br><span class="line">http.max_content_length: 200mb</span><br><span class="line"><span class="comment">#es7.x 之后新增的配置，初始化一个新的集群时需要此配置来选举 master</span></span><br><span class="line">cluster.initial_master_nodes: [<span class="string">&quot;node-1&quot;</span>] </span><br><span class="line"><span class="comment">#es7.x 之后新增的配置，节点发现</span></span><br><span class="line">discovery.seed_hosts: [<span class="string">&quot;zy01:9300&quot;</span>,<span class="string">&quot;zy02:9300&quot;</span>,<span class="string">&quot;zy03:9300&quot;</span>] </span><br><span class="line">gateway.recover_after_nodes: 2</span><br><span class="line">network.tcp.keep_alive: <span class="literal">true</span> </span><br><span class="line">network.tcp.no_delay: <span class="literal">true</span> transport.tcp.compress: <span class="literal">true</span></span><br><span class="line"><span class="comment">#集群内同时启动的数据任务个数，默认是 2 个</span></span><br><span class="line">cluster.routing.allocation.cluster_concurrent_rebalance: 16</span><br><span class="line"><span class="comment">#添加或删除节点及负载均衡时并发恢复的线程个数，默认 4 个</span></span><br><span class="line">cluster.routing.allocation.node_concurrent_recoveries: 16</span><br><span class="line"><span class="comment">#初始化数据恢复时，并发恢复线程的个数，默认 4 个</span></span><br><span class="line">cluster.routing.allocation.node_initial_primaries_recoveries: 16</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分发文件，修改节点名称和 IP 地址</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo scp -r /opt/module/es-cluster/config/elasticsearch.yml root@zy02:/opt/module/es-cluster/config/elasticsearch.yml</span><br><span class="line">sudo scp -r /opt/module/es-cluster/config/elasticsearch.yml root@zy03:/opt/module/es-cluster/config/elasticsearch.yml</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>修改<code>sudo vim /etc/security/limits.conf</code> </p>
+<ul>
+<li><p>在文件末尾中增加下面内容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每个进程可以打开的文件数的限制</span></span><br><span class="line">es soft nofile 65536 </span><br><span class="line">es hard nofile 65536</span><br><span class="line"><span class="comment"># 操作系统级别对每个用户创建的进程数的限制</span></span><br><span class="line"><span class="comment"># 注：* 带表 Linux 所有用户名称</span></span><br><span class="line">* hard <span class="built_in">nproc</span> 4096</span><br><span class="line">* soft <span class="built_in">nproc</span> 4096</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>并分发文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo scp -r /etc/security/limits.conf root@zy02:/etc/security/limits.conf</span><br><span class="line">sudo scp -r /etc/security/limits.conf root@zy03:/etc/security/limits.conf</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>修改&#x2F;etc&#x2F;sysctl.conf</p>
+<ul>
+<li><p>在文件中增加下面内容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个进程可以拥有的 VMA（虚拟内存区域）的数量，默认值为 65536</span></span><br><span class="line">vm.max_map_count=655360</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>并分发文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo scp -r /etc/sysctl.conf root@zy02:/etc/sysctl.conf</span><br><span class="line">sudo scp -r /etc/sysctl.conf root@zy03:/etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新加载</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h3 id="启动软件"><a href="#启动软件" class="headerlink" title="启动软件"></a>启动软件</h3><ul>
+<li><p>分别在不同节点上启动 ES 软件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除之前的数据</span></span><br><span class="line"><span class="built_in">rm</span> -rf /opt/module/es-cluster/data/nodes/</span><br><span class="line"><span class="comment"># 切换用户 </span></span><br><span class="line">su es</span><br><span class="line"><span class="comment">#启动</span></span><br><span class="line">/opt/module/es-cluster/bin/elasticsearch </span><br><span class="line"><span class="comment">#后台启动</span></span><br><span class="line">/opt/module/es-cluster/bin/elasticsearch -d</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>测试集群</p>
+<ul>
+<li>_cat</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Get http://zy01:9200/_cat/nodes</span><br><span class="line"><span class="comment"># Get http://zy01:9200//_cat/master</span></span><br><span class="line"></span><br><span class="line">192.168.61.45  9 92 52 1.81 0.94 0.42 dilmrt * node-1</span><br><span class="line">192.168.61.47 11 92 45 1.27 1.15 0.64 dilmrt - node-3</span><br><span class="line">192.168.61.46 10 92 44 1.63 0.74 0.29 dilmrt - node-2</span><br></pre></td></tr></table></figure></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/posts/6cda7a4d">https://fulsun.github.io/posts/6cda7a4d</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Elasticsearch/">Elasticsearch</a></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/001.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/9fd389c3"><img class="prev-cover" src="/medias/featureimages/011.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Elasticsearch 深入</div></div></a></div><div class="next-post pull-right"><a href="/posts/4e3d4ba5"><img class="next-cover" src="/medias/featureimages/010.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java API 方式操作 Elasticsearch</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/4e3d4ba5" title="Java API 方式操作 Elasticsearch"><img class="cover" src="/medias/featureimages/010.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-19</div><div class="title">Java API 方式操作 Elasticsearch</div></div></a></div><div><a href="/posts/4e3adf74" title="Elasticsearch 概述"><img class="cover" src="/medias/featureimages/012.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">Elasticsearch 概述</div></div></a></div><div><a href="/posts/76b8a0ec" title="HTTP 方式操作 Elasticsearch"><img class="cover" src="/medias/featureimages/013.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-14</div><div class="title">HTTP 方式操作 Elasticsearch</div></div></a></div><div><a href="/posts/9fd389c3" title="Elasticsearch 深入"><img class="cover" src="/medias/featureimages/011.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-21</div><div class="title">Elasticsearch 深入</div></div></a></div><div><a href="/posts/24b1beba" title="Spring Data 框架集成 Elasticsearch"><img class="cover" src="/medias/featureimages/011.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-22</div><div class="title">Spring Data 框架集成 Elasticsearch</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">相关概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA"><span class="toc-number">1.1.</span> <span class="toc-text">单机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4-Cluster"><span class="toc-number">1.2.</span> <span class="toc-text">集群 Cluster</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9-Node"><span class="toc-number">1.3.</span> <span class="toc-text">节点 Node</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-%E9%9B%86%E7%BE%A4"><span class="toc-number">2.</span> <span class="toc-text">Windows 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E9%9B%86%E7%BE%A4"><span class="toc-number">2.1.</span> <span class="toc-text">部署集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">2.2.</span> <span class="toc-text">启动集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%9B%86%E7%BE%A4"><span class="toc-number">2.3.</span> <span class="toc-text">测试集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E9%9B%86%E7%BE%A4"><span class="toc-number">3.</span> <span class="toc-text">Linux 集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E4%B8%8B%E8%BD%BD"><span class="toc-number">3.1.</span> <span class="toc-text">软件下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">3.2.</span> <span class="toc-text">软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.3.</span> <span class="toc-text">修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">3.4.</span> <span class="toc-text">启动软件</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2023 By 凉月</div><div class="footer_custom_text">Hi, welcome to my <a href="https://fulsun.github.io/">blog</a>!<p><a style="margin-inline:5px"target="_blank" href="https://hexo.io/" rel="external nofollow noreferrer"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo" title="博客框架为 Hexo" alt="HEXO"></a><a style="margin-inline:5px"target="_blank" href="https://butterfly.js.org/" rel="external nofollow noreferrer"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender" title="主题采用 Butterfly" alt="Butterfly"></a><a style="margin-inline:5px"target="_blank" href="https://www.jsdelivr.com/" rel="external nofollow noreferrer"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr" title="本站使用 Jsdelivr 为静态资源提供CDN加速" alt="Jsdelivr"></a><a style="margin-inline:5px"target="_blank" href="https://github.com/" rel="external nofollow noreferrer"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub" title="本站项目由 GitHub 托管" alt="GitHub"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris" alt="img" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="聊天"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch/dist/algoliasearch-lite.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instantsearch.js/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? '' : ''
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadWaline () {
+  function insertCSS () {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css"
+    document.head.appendChild(link)
+  }
+
+  function initWaline () {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline.fulsun.ml',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+  }
+
+  if (typeof Waline === 'function') initWaline()
+  else {
+    insertCSS()
+    getScript('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js').then(initWaline)
+  }
+}
+
+if ('Waline' === 'Waline' || !false) {
+  if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+  else setTimeout(loadWaline, 0)
+} else {
+  function loadOtherComment () {
+    loadWaline()
+  }
+}</script></div><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-theme-volantis@latest/source/js/issues.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script>(function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/9a6b0085.js","daovoice")
+</script><script>var isChatBtn = true
+daovoice('init', {
+  app_id: '9a6b0085',},{
+  launcher: { 
+     disableLauncherIcon: isChatBtn // 悬浮 ICON 是否显示
+  },
+});
+daovoice('update');
+
+if (isChatBtn) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      daovoice('show')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (false) {
+    function chatBtnHide () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: true // 悬浮 ICON 是否显示
+        },
+      });
+    }
+    function chatBtnShow () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: false // 悬浮 ICON 是否显示
+        },
+      });
+    }
+  }
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
