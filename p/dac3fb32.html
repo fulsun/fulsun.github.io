@@ -1,0 +1,703 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java环境变量与进制 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="搭建Java环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java环境变量与进制">
+<meta property="og:url" content="https://fulsun.github.io/p/dac3fb32">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="搭建Java环境">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/003.jpg">
+<meta property="article:published_time" content="2018-07-27T09:56:05.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.350Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="凉月">
+<meta property="article:tag" content="凉月文">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="web网站">
+<meta property="article:tag" content="经验分享">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="生活记录等">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/003.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/dac3fb32"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java环境变量与进制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/003.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java环境变量与进制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-07-27T09:56:05.000Z" title="发表于 2018-07-27 09:56:05">2018-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.350Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaSE/">JavaSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java环境变量与进制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><p>计算机程序</p>
+<p>为了让计算机执行某些操作或解决某个问题而编写的一系列有序指令的集合</p>
+</li>
+<li><p>计算机语言</p>
+<ul>
+<li>机器语言 0，1</li>
+<li>汇编语言 pop ,end 底层的语言</li>
+<li>高级语言 英文，数学表达式</li>
+</ul>
+</li>
+</ul>
+<h2 id="Dos命令"><a href="#Dos命令" class="headerlink" title="Dos命令"></a>Dos命令</h2><ul>
+<li>（Disk Operating System：磁盘操作系统）</li>
+<li>打开dos窗口：Win+R ,输入CMD。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>help</td>
+<td>帮助</td>
+</tr>
+<tr>
+<td>盘符:</td>
+<td>切换盘符，如<code>D:</code></td>
+</tr>
+<tr>
+<td>dir&#x2F;dir 路径</td>
+<td>显示文件目录清单</td>
+</tr>
+<tr>
+<td></td>
+<td>&#x2F;s 查看目录的文件和子目录</td>
+</tr>
+<tr>
+<td></td>
+<td>&#x2F;p 分屏显示</td>
+</tr>
+<tr>
+<td></td>
+<td>dir &#x2F;s&#x2F;p 分屏显示所有</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>改变目录</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cd ..</code> 返回上一级</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cd \</code> 返回根目录</td>
+</tr>
+<tr>
+<td>md 目录名</td>
+<td>创建目录&#x2F;创建文件夹</td>
+</tr>
+<tr>
+<td><code>copy con 文件名.扩展名</code></td>
+<td>创建并文件,输入内容后按ctrl+z键，然后再按回车保存。</td>
+</tr>
+<tr>
+<td><code>type 文件名.扩展名</code></td>
+<td>显示文件内容</td>
+</tr>
+<tr>
+<td><code>copy 文件名.扩展名 目标路径</code></td>
+<td>复制文件</td>
+</tr>
+<tr>
+<td><code>ren 原文件名 新文件名</code></td>
+<td>重命名</td>
+</tr>
+<tr>
+<td><code>move 原文件名 目标路径</code></td>
+<td>移动（剪切）</td>
+</tr>
+<tr>
+<td><code>rd 目录名</code></td>
+<td>删除空的目录</td>
+</tr>
+<tr>
+<td></td>
+<td>&#x2F;S 除目录本身外，还将<strong>删除指定目录下的所有子目录和文件</strong>。用于删除目录树。</td>
+</tr>
+<tr>
+<td></td>
+<td>&#x2F;Q <strong>安静模式</strong>，带 &#x2F;S 删除目录树时不要求确认</td>
+</tr>
+<tr>
+<td><code>del 文件.扩展名</code></td>
+<td>删除文件</td>
+</tr>
+<tr>
+<td>cls</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出</td>
+</tr>
+</tbody></table>
+<h2 id="java-的发展史"><a href="#java-的发展史" class="headerlink" title="java 的发展史"></a>java 的发展史</h2><ul>
+<li>1996年，sun发布了JDK1.0</li>
+<li>2009年 ，甲骨文收购了Sun</li>
+</ul>
+<h3 id="高级语言分类"><a href="#高级语言分类" class="headerlink" title="高级语言分类"></a>高级语言分类</h3><ul>
+<li><p>编译型：速度快</p>
+<ul>
+<li>源代码–(编译器)—-&gt; 机器码（针对特定的操作系统和CPU）</li>
+</ul>
+</li>
+<li><p>解释型:慢但可以跨平台</p>
+<ul>
+<li>源代码–(解释器)—-&gt; 解释执行</li>
+</ul>
+</li>
+<li><p>Java语言：<strong>编译解释型语言</strong></p>
+<ul>
+<li>源代码–(编译器)–&gt;字节码文件–(解释器)–&gt;机器码<br>比解释型快，还能跨平台</li>
+</ul>
+</li>
+</ul>
+<h3 id="Java-语言的特点"><a href="#Java-语言的特点" class="headerlink" title="Java 语言的特点"></a>Java 语言的特点</h3><ul>
+<li><p><code>可移植性</code>与平台无关的特性使Java程序可以方便地移植到网络上。（JVM不是跨平台的。）</p>
+</li>
+<li><p><code>垃圾回收</code>内存管理：自动回收,通常是内存满了才回收</p>
+</li>
+</ul>
+<h2 id="Java语言概述"><a href="#Java语言概述" class="headerlink" title="Java语言概述"></a>Java语言概述</h2><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/dac3fb32/791507e6b6e3d4f0978d48a342d6faf0.jpg"></p>
+<h3 id="Java是如何实现跨平台"><a href="#Java是如何实现跨平台" class="headerlink" title="Java是如何实现跨平台"></a>Java是如何实现跨平台</h3><ul>
+<li><p><strong>java virtual machine</strong>:就是我们常说的java虚拟机，它是整个java实现跨平台的最核心的部分，我们编写的Java源码，编译后会生成一种 .class 文件，称为<strong>字节码</strong>文件。Java虚拟机就是负责将字节码文件翻译成特定平台下的<strong>机器码</strong>然后运行。</p>
+</li>
+<li><p>也就是说class并不直接与机器的操作系统相对应，而是经过虚拟机间接与操作系统交互，由<strong>虚拟机将程序解释给本地系统执行</strong>。</p>
+</li>
+<li><p>JVM也是一个软件，是用C&#x2F;C++开发的，不同的平台有不同的版本。只要在不同平台上安装对应的JVM，就可以运行字节码文件，运行我们编写的Java程序。</p>
+</li>
+<li><p>而这个过程中，我们编写的Java程序没有做任何改变，仅仅是通过JVM这一”中间层“，就能在不同平台上运行，真正实现了”一次编译，到处运行“的目的。</p>
+</li>
+<li><p>所以，运行Java程序必须有JVM的支持，因为编译的结果不是机器码，必须要经过JVM的再次翻译才能执行。即使你将Java程序打包成可执行文件（例如 .exe），仍然需要JVM的支持。</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/dac3fb32/a83967343816855d475d2021abc5c576.jpg"></p>
+</li>
+</ul>
+<h3 id="JDK与JRE的区别"><a href="#JDK与JRE的区别" class="headerlink" title="JDK与JRE的区别"></a>JDK与JRE的区别</h3><ul>
+<li><p><strong>JDK</strong>是Java的开发工具，它不仅提供了Java程序运行所需的JRE，还提供了一系列的编译，运行等工具，如javac，java，javaw等。</p>
+<ul>
+<li>开发工具 + JRE + 类库</li>
+</ul>
+</li>
+<li><p><strong>JRE</strong>只是Java程序的运行环境，它最核心的内容就是JVM（Java虚拟机）及核心类库。</p>
+<ul>
+<li>JVM(java虚拟机) + 类库</li>
+</ul>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/dac3fb32/1044276a449b4caf757530f9d7c954c2.png"></p>
+</li>
+</ul>
+<h3 id="jdk工具部分exe解释"><a href="#jdk工具部分exe解释" class="headerlink" title="jdk工具部分exe解释"></a>jdk工具部分exe解释</h3><ul>
+<li>jar.exe jar包</li>
+<li>javadoc.exe 文档生成器</li>
+<li>Java.exe 解释器</li>
+<li>Javac.exe 编辑器</li>
+</ul>
+<h3 id="环境变量配置"><a href="#环境变量配置" class="headerlink" title="环境变量配置"></a>环境变量配置</h3><ul>
+<li>我的电脑 –&gt; 环境配置</li>
+<li>环境变量的目的：在任何路径下都能识别java, javac命令</li>
+<li>需要配置<code>JAVA_HOME</code>,<code>classpath </code>,<code>path</code><ul>
+<li>path 环境变量 <code>%JAVA_HOME%\bin;</code></li>
+<li><code>JAVA_HOME</code> 指定JDK的安装路径</li>
+<li><code>classpath </code> ：在任何路径下都能找到.class文件 解释运行</li>
+</ul>
+</li>
+</ul>
+<h3 id="JVM的内存空间"><a href="#JVM的内存空间" class="headerlink" title="JVM的内存空间"></a>JVM的内存空间</h3><ul>
+<li>Heap 堆空间：分配对象 new Student（）</li>
+<li>Stack 栈空间：临时变量 Student stu</li>
+<li>Code 代码区 ：类的定义，静态资源 Student.class</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Student</span> <span class="variable">stu</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>（）； <span class="comment">//new 在内存的堆空间创建对象</span></span><br><span class="line">stu.study(); <span class="comment">//把对象的地址赋给stu引用变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上例实现步骤：</span></span><br><span class="line">a.JVM加载Student.class 到Code区</span><br><span class="line">b.<span class="keyword">new</span> <span class="title class_">Student</span>()在堆空间分配空间并创建一个Student实例</span><br><span class="line">c.将此实例的地址赋值给引用stu， 栈空间</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><h3 id="开发与运行Java程序过程"><a href="#开发与运行Java程序过程" class="headerlink" title="开发与运行Java程序过程"></a>开发与运行Java程序过程</h3><ul>
+<li>用工具编辑源程序，也就是写代码，保存</li>
+<li>用Java编辑器工具javac.exe编译源程序文件，生成字节码.class文件</li>
+<li>用Java解释器工具Java.exe解释运行生成.class文件</li>
+</ul>
+<h3 id="编写第一个程序"><a href="#编写第一个程序" class="headerlink" title="编写第一个程序"></a>编写第一个程序</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Hello</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">运行：在Dos窗口下，cd 到JDk的安装路径下\bin目录</span><br><span class="line">    <span class="number">1.</span>javac Hello.java</span><br><span class="line">        --&gt;生成Hello.class</span><br><span class="line">    <span class="number">2.</span>java Hello（类加载只能识别类名，不能带扩展名）</span><br><span class="line">        --&gt;控制台输出Hello World!</span><br><span class="line"></span><br><span class="line">    出现的问题：</span><br><span class="line">        找不到或无法加载主类Hello:</span><br><span class="line">        java -classpath d:\data Hello</span><br><span class="line">        （Hello.class的路径）</span><br><span class="line">    注意：</span><br><span class="line">        <span class="number">1.</span>java区分大小写</span><br><span class="line">        <span class="number">2.</span>符号 英文半角</span><br><span class="line">        <span class="number">3.</span>（）[] &#123;&#125; 成对出现</span><br><span class="line">        <span class="number">4.</span> 语句结束用分号；</span><br><span class="line">        <span class="number">5.</span>每行写一句代码，代码有缩进。</span><br></pre></td></tr></table></figure>
+
+<h2 id="转义序列"><a href="#转义序列" class="headerlink" title="转义序列"></a>转义序列</h2><h3 id="控制台打印输出"><a href="#控制台打印输出" class="headerlink" title="控制台打印输出"></a>控制台打印输出</h3><ul>
+<li><p>输出语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;字符串&quot;</span>)；<span class="comment">//输出后换行</span></span><br><span class="line">System.out.print(<span class="string">&quot;字符串&quot;</span>)；  <span class="comment">//输出后不换行</span></span><br><span class="line">System.out.println(<span class="string">&quot;c:\a.txt&quot;</span>);</span><br><span class="line">---------- javac ----------</span><br><span class="line">Hello.java:<span class="number">3</span>: 错误: 非法转义符</span><br><span class="line">System.out.println(<span class="string">&quot;c:\a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>a:用97表示</p>
+<ul>
+<li>八进制转义:<code>\000 - \7777</code></li>
+<li><code>System.out.println(&quot;\141&quot;) //a</code></li>
+</ul>
+</li>
+<li><p>十六进制转义:<code>\u0000 - \uffff</code></p>
+<ul>
+<li><code>System.out.println(&quot;\u0061&quot;) //a</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h3><ul>
+<li><p>区分，斜杠：<code>/</code> 与 反斜杠：<code>\ </code>,此处不可互换</p>
+<p>所有的转义字符和所对应的意义：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>意义</th>
+<th>ASCII码值（十进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>\b</code></td>
+<td>退格(BS) ，将当前位置移到前一列</td>
+<td>008</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>换页(FF)，将当前位置移到下页开头</td>
+<td>012</td>
+</tr>
+<tr>
+<td><strong><code>\n</code></strong></td>
+<td><strong>换行(LF) ，将当前位置移到下一行开头</strong></td>
+<td>010</td>
+</tr>
+<tr>
+<td><strong><code>\r</code></strong></td>
+<td><strong>回车(CR) ，将当前位置移到本行开头</strong></td>
+<td>013</td>
+</tr>
+<tr>
+<td><strong><code>\t</code></strong></td>
+<td><strong>水平制表(HT) （跳到下一个TAB位置）</strong></td>
+<td>009</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>垂直制表(VT)</td>
+<td>011</td>
+</tr>
+<tr>
+<td><strong><code>\\</code></strong></td>
+<td><strong>代表一个反斜线字符’’&#39;</strong></td>
+<td>092</td>
+</tr>
+<tr>
+<td><strong><code>\&#39;</code></strong></td>
+<td><strong>代表一个单引号（撇号）字符</strong></td>
+<td>039</td>
+</tr>
+<tr>
+<td><strong><code>\&quot;</code></strong></td>
+<td><strong>代表一个双引号字符</strong></td>
+<td>034</td>
+</tr>
+<tr>
+<td><code>\0</code></td>
+<td>空字符(NULL)</td>
+<td>000</td>
+</tr>
+<tr>
+<td><code>\ddd</code></td>
+<td>1到3位八进制数所代表的任意字符</td>
+<td>三位八进制</td>
+</tr>
+<tr>
+<td><code>\uhhhh</code></td>
+<td>1到2位十六进制所代表的任意字符</td>
+<td>二位十六进制</td>
+</tr>
+</tbody></table>
+<h2 id="进制"><a href="#进制" class="headerlink" title="进制"></a>进制</h2><ul>
+<li>二进制：<code>以0b开头。（b大小写都行）</code></li>
+<li>八进制：<code>0开头	0~7</code></li>
+<li>十六进制：<code>0x开头 0~9 a~f</code></li>
+</ul>
+<blockquote>
+<p>其他进制到十进制(位权展开求和)</p>
+</blockquote>
+<ul>
+<li><p>系数：每一位的数据</p>
+</li>
+<li><p>基数：x进制，基数就是几</p>
+</li>
+<li><p>权：从右往左，从0开始编号，对应位置的编号即为该位的权</p>
+</li>
+<li><p><code>结果：系数*基数的权次幂之和</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">0b1010 = 1 * 2^3 + 0 *2^2 + 1*2^1 + 0*2^0</span><br><span class="line">       = 8 + 0 + 2 + 0</span><br><span class="line">       = 10</span><br><span class="line"></span><br><span class="line">0123  = 1*8^2 + 2*8^1 + 3*8^0</span><br><span class="line">      = 64 + 16 + 3</span><br><span class="line">      = 83</span><br><span class="line"></span><br><span class="line">0x123 = 1*16^2 + 2*16^1 + 3*16^0</span><br><span class="line">      = 256 + 32 + 3</span><br><span class="line">      = 291</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>十进制到其他进制</p>
+</blockquote>
+<ul>
+<li><code>除基取余，直到商为0，余数反转</code></li>
+</ul>
+<blockquote>
+<p>有符号数据表示：</p>
+</blockquote>
+<ul>
+<li>原码：二进制定点表示法,最高位为符号位，**<em>0为正，1为负</em>**，其余位数表示数值的大小</li>
+<li>反码：<code>正数的反码与原码相同，负数的反码：符号位不变，其余按位取反</code></li>
+<li>补码：<code>正数的补码与原码相同；负数:反码加1;</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">5的二进制表示：</span><br><span class="line">    00000000 00000000 00000000 00000101</span><br><span class="line"></span><br><span class="line">-5的二进制表示：5的二进制取反+1</span><br><span class="line">        00000000 00000000 00000000 00000101</span><br><span class="line">取反：  11111111 11111111 11111111 11111010</span><br><span class="line"> +1 ：  00000000 00000000 00000000 00000001</span><br><span class="line"> ---------------------------------------------</span><br><span class="line">        11111111 11111111 11111111 11111011</span><br><span class="line"></span><br><span class="line">-5的变5的二进制：-5的二进制-1后取反（结果和-5求补码一样）</span><br><span class="line">        11111111 11111111 11111111 11111011</span><br><span class="line"> -1 ：  00000000 00000000 00000000 00000001</span><br><span class="line">  ---------------------------------------------</span><br><span class="line">        11111111 11111111 11111111 11111010</span><br><span class="line">取反：  00000000 00000000 00000000 00000101</span><br></pre></td></tr></table></figure>
+
+<h3 id="二进制到八进制"><a href="#二进制到八进制" class="headerlink" title="二进制到八进制"></a>二进制到八进制</h3><ul>
+<li>从右到左，3为一取，得到对应的8进制数。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">001111</span><br><span class="line">001 111  ---&gt;  1  7</span><br><span class="line">0b00111   ---&gt;  017</span><br></pre></td></tr></table></figure>
+
+<h3 id="二进制到16进制"><a href="#二进制到16进制" class="headerlink" title="二进制到16进制"></a>二进制到16进制</h3><ul>
+<li>从右到左，4为一取，得到对应的16进制数。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">001111</span><br><span class="line">0000 1111  ---&gt;  0  f</span><br><span class="line">0b001111   ---&gt;  0x0f</span><br></pre></td></tr></table></figure>
+
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><blockquote>
+<p>使用注释的地方？</p>
+</blockquote>
+<ol>
+<li>修改的代码</li>
+<li>表达不明确的地方</li>
+<li>算法</li>
+<li>分支语句，循环语句</li>
+<li>声明类，接口</li>
+</ol>
+<h3 id="注释写法"><a href="#注释写法" class="headerlink" title="注释写法"></a>注释写法</h3><ol>
+<li><p>单行注释：<code>//</code></p>
+</li>
+<li><p>多行注释:<code>/* 内容 */</code></p>
+<ul>
+<li>多行注释不能相互嵌套</li>
+</ul>
+</li>
+<li><p>文档注释： <code>/**   ……*/ </code>识别注释后会生成一个帮助文档</p>
+<ul>
+<li>使用时间：声明类 类中的成员，接口等</li>
+<li>第一段：概要描述，通常用一句话或者一段话<strong>简要描述该类的作用</strong>，以英文句号结束<ul>
+<li>详细描述和概要描述要求要空一行</li>
+</ul>
+</li>
+<li>第二段：详细描述，通常用一段或者多段话来<strong>详细描述该类的作用</strong>，一般每段话都以英文句号作为结束<ul>
+<li>详细描述中可以使用html标签，如<code>&lt;p&gt;、&lt;pre&gt;、&lt;a&gt;、&lt;ul&gt;、&lt;i&gt;</code>等标签，</li>
+<li>通常详细描述都以段落p标签开始。<code>&lt;a&gt;</code>一般用于标注出现的组织的链接</li>
+</ul>
+</li>
+<li>第三段：文档标注，用于标注作者，创建时间，参阅类等信息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* show 方法的简述.</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* &lt;p&gt;show 方法的详细说明第一行&lt;br&gt;</span></span><br><span class="line"><span class="comment">* show 方法的详细说明第二行</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> b true 表示显示，false 表示隐藏</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 没有返回值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">(<span class="type">boolean</span> b)</span> &#123;</span><br><span class="line">    frame.show(b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="生成帮助文档"><a href="#生成帮助文档" class="headerlink" title="生成帮助文档"></a>生成帮助文档</h3><ul>
+<li>不识别作者，版本：<code>javadoc -encoding UTF-8 -charset UTF-8 -d 输出的文件夹 类.class</code><ul>
+<li><code>javadoc -d doc Hello.java</code></li>
+</ul>
+</li>
+<li>识别作者，版本号：<ul>
+<li><code>javadoc -d 存储的文件夹 -author -version 类.class</code></li>
+<li><code>javadoc -d doc -author -version Hello.java</code></li>
+</ul>
+</li>
+<li>了解的选项：<ul>
+<li><code>-public</code>     <em>访问权限是public</em></li>
+<li><code>-protected</code>   <em>访问权限是public和protected</em></li>
+<li><code>-package</code>    <em>访问权限是public、protected和默认</em></li>
+<li><code>-private</code> <em>访问权限是public、protected、默认 private</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="常见的javadoc标记"><a href="#常见的javadoc标记" class="headerlink" title="常见的javadoc标记"></a>常见的javadoc标记</h3><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@author</td>
+<td>作者标识</td>
+</tr>
+<tr>
+<td>@version</td>
+<td>版本号</td>
+</tr>
+<tr>
+<td>@return</td>
+<td>对函数返回值的描述</td>
+</tr>
+<tr>
+<td>@deprecated</td>
+<td>标识过期API（为了保证兼容性，仍可用，但不推荐用）</td>
+</tr>
+<tr>
+<td>@throws</td>
+<td>构造函数或方法会抛出的异常</td>
+</tr>
+<tr>
+<td>@exception</td>
+<td>同@throws</td>
+</tr>
+<tr>
+<td>@see</td>
+<td>引用，查看相关的内容，如类，方法，变量等，必须顶头写</td>
+</tr>
+<tr>
+<td>{@link 包.类#成员}</td>
+<td>引用，同@see，但可写在任意位置</td>
+</tr>
+<tr>
+<td>{@value}</td>
+<td>对常量注释，如果其值包含在文档中，通过改标签引用常量的值</td>
+</tr>
+<tr>
+<td>{@code}}</td>
+<td>{@code text}将文本标记为code，会被解析成<code>text</code>} ,在Javadoc成只要涉及到类名或者方法名，都需要使用@code进行标记</td>
+</tr>
+<tr>
+<td>@param</td>
+<td>说明方法的参数</td>
+</tr>
+<tr>
+<td>@inheritDoc</td>
+<td>用于继承父类中的Javadoc，父类的文档注释，被继承到了子类</td>
+</tr>
+</tbody></table>
+<h4 id="javap反编译"><a href="#javap反编译" class="headerlink" title="javap反编译"></a>javap反编译</h4><ul>
+<li><p>javap 主要用于帮助开发者深入了解 Java 编译器的机制，反编译Java代码，查看Java字节码</p>
+</li>
+<li><p>用法：<code>javap &lt;options&gt; &lt;classes&gt;</code></p>
+</li>
+<li><p>主要选项有：</p>
+<ul>
+<li>-version：版本信息</li>
+<li>-v：输出附加信息</li>
+<li>-l：输出行号和本地变量表</li>
+<li>-public：仅显示公共类和成员</li>
+<li>-protected：显示受保护的&#x2F;公共类和成员</li>
+<li>-package：显示程序包&#x2F;受保护的&#x2F;公共类和成员 (默认)</li>
+<li>-p或-private：显示所有类和成员</li>
+<li><strong>-c</strong>：对代码进行反汇编</li>
+<li>-s：输出内部类型签名</li>
+<li>-sysinfo：显示正在处理的类的系统信息 (路径, 大小, 日期, MD5 散列)</li>
+<li>-constants：显示最终常量</li>
+<li><code>-classpath &lt;path&gt;</code>：指定查找用户类文件的位置</li>
+<li><code>-cp &lt;path&gt;</code>：指定查找用户类文件的位置</li>
+<li><code>-bootclasspath &lt;path&gt;</code>：覆盖引导类文件的位置</li>
+<li>-c：分解方法代码，即显示每个方法具体的字节码</li>
+<li>-verbose：指定显示更进一步的详细信息</li>
+</ul>
+</li>
+<li><p>除此之外，目前有很多的反编译工具可以用，来查看Java编译后的代码</p>
+<ul>
+<li><strong>JD-GUI：</strong>一个用 C++ 开发的 Java 反编译工具</li>
+</ul>
+</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ul>
+<li><p>代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TestJavap</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">		<span class="type">int</span> i=<span class="number">3</span>;</span><br><span class="line">        i++;</span><br><span class="line">		<span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;lily&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">javap -c TestJavap</span><br><span class="line">Compiled from <span class="string">&quot;TestJavap.java&quot;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestJavap</span> &#123;</span><br><span class="line">  TestJavap();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: invokespecial #<span class="number">1</span>                  <span class="comment">// Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String[])</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: iconst_3	<span class="comment">//常量0压入操作数栈</span></span><br><span class="line">       <span class="number">1</span>: istore_1	<span class="comment">//把栈顶的值放到局部变量1中，即i中</span></span><br><span class="line">       <span class="comment">//这个个指令，把局部变量1，也就是i，增加1，这个指令不会导致栈的变化，i此时变成4了</span></span><br><span class="line">       <span class="number">2</span>: iinc          <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">       <span class="number">5</span>: ldc           #<span class="number">7</span>                  <span class="comment">// String lily</span></span><br><span class="line">       <span class="number">7</span>: astore_2</span><br><span class="line">       <span class="number">8</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span>&#123;</span><br><span class="line">    <span class="type">int</span> c=<span class="number">0</span>;</span><br><span class="line">    c=a+b;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反编译<code>Desktop&gt;javap -c TestJavap</code></p>
+<ul>
+<li>局部变量表单额index是从0开始</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>: iconst_0        <span class="comment">//常量0压入操作数栈</span></span><br><span class="line"><span class="number">1</span>: istore_2        <span class="comment">//弹出操作数栈栈顶元素，保存到局部变量表第2个位置</span></span><br><span class="line"><span class="number">2</span>: iload_0         <span class="comment">//第0个变量压入操作数栈</span></span><br><span class="line"><span class="number">3</span>: iload_1         <span class="comment">//第1个变量压入操作数栈</span></span><br><span class="line"><span class="number">4</span>: iadd            <span class="comment">//操作数栈中的前两个int相加，并将结果压入操作数栈顶</span></span><br><span class="line"><span class="number">5</span>: istore_2        <span class="comment">//弹出操作数栈栈顶元素，保存到局部变量表第2个位置</span></span><br><span class="line"><span class="number">6</span>: iload_2         <span class="comment">//加载局部变量表的第2个变量到操作数栈顶</span></span><br><span class="line"><span class="number">7</span>: ireturn         <span class="comment">//返回</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h2><h3 id="Linux下安装"><a href="#Linux下安装" class="headerlink" title="Linux下安装"></a>Linux下安装</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /usr/local/java/</span><br><span class="line">wget https://d6.injdk.cn/openjdk/openjdk/17/openjdk-17.0.1_linux-x64_bin.tar.gz</span><br><span class="line">tar -xzvf openjdk-17.0.1_linux-x64_bin.tar.gz  -C /usr/local/java/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; /etc/profile &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"><span class="comment">#java环境变量</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/java/jdk-17.0.1</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment">#验证</span></span><br><span class="line">java -version</span><br><span class="line">openjdk version <span class="string">&quot;17.0.5&quot;</span> 2022-10-18</span><br><span class="line">OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5+8-jvmci-22.3-b08)</span><br><span class="line">OpenJDK 64-Bit Server VM GraalVM CE 22.3.0 (build 17.0.5+8-jvmci-22.3-b08, mixed mode, sharing)</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/dac3fb32">https://fulsun.github.io/p/dac3fb32</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/003.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/p/c40f9f0e" title="Java变量,数据类型,运算符"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java变量,数据类型,运算符</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dos%E5%91%BD%E4%BB%A4"><span class="toc-text">Dos命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2"><span class="toc-text">java 的发展史</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E8%AF%AD%E8%A8%80%E5%88%86%E7%B1%BB"><span class="toc-text">高级语言分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-%E8%AF%AD%E8%A8%80%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">Java 语言的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0"><span class="toc-text">Java语言概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%B7%A8%E5%B9%B3%E5%8F%B0"><span class="toc-text">Java是如何实现跨平台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK%E4%B8%8EJRE%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">JDK与JRE的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jdk%E5%B7%A5%E5%85%B7%E9%83%A8%E5%88%86exe%E8%A7%A3%E9%87%8A"><span class="toc-text">jdk工具部分exe解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE"><span class="toc-text">环境变量配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JVM%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-text">JVM的内存空间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hello-World"><span class="toc-text">Hello World</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%90%E8%A1%8CJava%E7%A8%8B%E5%BA%8F%E8%BF%87%E7%A8%8B"><span class="toc-text">开发与运行Java程序过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F"><span class="toc-text">编写第一个程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%BA%8F%E5%88%97"><span class="toc-text">转义序列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%89%93%E5%8D%B0%E8%BE%93%E5%87%BA"><span class="toc-text">控制台打印输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-text">转义字符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E5%88%B6"><span class="toc-text">进制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%85%AB%E8%BF%9B%E5%88%B6"><span class="toc-text">二进制到八进制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B016%E8%BF%9B%E5%88%B6"><span class="toc-text">二进制到16进制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E9%87%8A"><span class="toc-text">注释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E9%87%8A%E5%86%99%E6%B3%95"><span class="toc-text">注释写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3"><span class="toc-text">生成帮助文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84javadoc%E6%A0%87%E8%AE%B0"><span class="toc-text">常见的javadoc标记</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#javap%E5%8F%8D%E7%BC%96%E8%AF%91"><span class="toc-text">javap反编译</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK%E5%AE%89%E8%A3%85"><span class="toc-text">JDK安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-text">Linux下安装</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Slf4j的运行原理 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="使用门面模式的日志框架，有利于维护和各个类的日志处理方式的统一。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Slf4j的运行原理">
+<meta property="og:url" content="https://fulsun.github.io/p/cf904808">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="使用门面模式的日志框架，有利于维护和各个类的日志处理方式的统一。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/001.jpg">
+<meta property="article:published_time" content="2023-06-15T20:47:02.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.334Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="Java日志">
+<meta property="article:tag" content="Slf4j">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/001.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/cf904808"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Slf4j的运行原理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/001.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Slf4j的运行原理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-15T20:47:02.000Z" title="发表于 2023-06-15 20:47:02">2023-06-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.334Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java%E6%97%A5%E5%BF%97/">Java日志</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Slf4j的运行原理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="Slf4j类与接口"><a href="#Slf4j类与接口" class="headerlink" title="Slf4j类与接口"></a>Slf4j类与接口</h2><table>
+<thead>
+<tr>
+<th><strong>类与接口</strong></th>
+<th><strong>用途</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>org.slf4j.LoggerFactory(class)</td>
+<td>给调用方提供的创建Logger的工厂类，在编译时绑定具体的日志实现组件</td>
+</tr>
+<tr>
+<td>org.slf4j.Logger(interface)</td>
+<td>给调用方提供的日志记录抽象方法，例如debug(String msg),info(String msg)等方法</td>
+</tr>
+<tr>
+<td>org.slf4j.ILoggerFactory(interface)</td>
+<td>获取的Logger的工厂接口，具体的日志组件实现此接口</td>
+</tr>
+<tr>
+<td>org.slf4j.helpers.NOPLogger(class)</td>
+<td>对org.slf4j.Logger接口的一个没有任何操作的实现，也是Slf4j的默认日志实现</td>
+</tr>
+<tr>
+<td>org.slf4j.impl.StaticLoggerBinder(class)</td>
+<td>与具体的日志实现组件实现的桥接类，具体的日志实现组件需要定义org.slf4j.impl包，并在org.slf4j.impl包下提供此类，注意在slf4j-api-version.jar中不存在org.slf4j.impl.StaticLoggerBinder，在源码包slf4j-api-version-source.jar中才存在此类</td>
+</tr>
+</tbody></table>
+<h2 id="Slf4j调用过程源码分析"><a href="#Slf4j调用过程源码分析" class="headerlink" title="Slf4j调用过程源码分析"></a>Slf4j调用过程源码分析</h2><p>只加入slf4j-api-version.jar，不加入任何实现包, pom配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--只有slf4j-api依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;<span class="number">1.7</span><span class="number">.35</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>程序入口类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> pers.fulsun;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Logger</span> <span class="variable">logger</span> <span class="operator">=</span> LoggerFactory.getLogger(App.class);</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        logger.info(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="源码追踪分析"><a href="#源码追踪分析" class="headerlink" title="源码追踪分析"></a>源码追踪分析</h3><blockquote>
+<p>slf4j的用法就是LoggerFactory去拿slf4j提供的一个Logger接口的具体实现。</p>
+<p>“<code>Logger logger = LoggerFactory.getLogger(Object.class);</code>“</p>
+</blockquote>
+<ol>
+<li><p>调用LoggerFactory的getLogger()方法创建Logger</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title function_">getLogger</span><span class="params">(Class&lt;?&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="type">Logger</span> <span class="variable">logger</span> <span class="operator">=</span> getLogger(clazz.getName());</span><br><span class="line">    <span class="keyword">if</span> (DETECT_LOGGER_NAME_MISMATCH) &#123;</span><br><span class="line">        Class&lt;?&gt; autoComputedCallingClass = Util.getCallingClass();</span><br><span class="line">        <span class="keyword">if</span> (autoComputedCallingClass != <span class="literal">null</span> &amp;&amp; nonMatchingClasses(clazz, autoComputedCallingClass)) &#123;</span><br><span class="line">            Util.report(String.format(<span class="string">&quot;Detected logger name mismatch. Given name: \&quot;%s\&quot;; computed name: \&quot;%s\&quot;.&quot;</span>, logger.getName(),</span><br><span class="line">                            autoComputedCallingClass.getName()));</span><br><span class="line">            Util.report(<span class="string">&quot;See &quot;</span> + LOGGER_NAME_MISMATCH_URL + <span class="string">&quot; for an explanation&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> logger;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用LoggerFactory的getILoggerFactory方法来创建ILoggerFactory</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return a logger named according to the name parameter using the</span></span><br><span class="line"><span class="comment"> * statically bound &#123;<span class="doctag">@link</span> ILoggerFactory&#125; instance.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment"> *            The name of the logger.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> logger</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title function_">getLogger</span><span class="params">(String name)</span> &#123;</span><br><span class="line">    <span class="type">ILoggerFactory</span> <span class="variable">iLoggerFactory</span> <span class="operator">=</span> getILoggerFactory();</span><br><span class="line">    <span class="keyword">return</span> iLoggerFactory.getLogger(name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用LoggerFactory的performInitialization方法来进行初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ILoggerFactory <span class="title function_">getILoggerFactory</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="keyword">if</span> (INITIALIZATION_STATE == UNINITIALIZED) &#123;</span><br><span class="line">           <span class="keyword">synchronized</span> (LoggerFactory.class) &#123;</span><br><span class="line">               <span class="keyword">if</span> (INITIALIZATION_STATE == UNINITIALIZED) &#123;</span><br><span class="line">                   INITIALIZATION_STATE = ONGOING_INITIALIZATION;</span><br><span class="line">                   performInitialization();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">switch</span> (INITIALIZATION_STATE) &#123;</span><br><span class="line">       <span class="keyword">case</span> SUCCESSFUL_INITIALIZATION:</span><br><span class="line">           <span class="keyword">return</span> StaticLoggerBinder.getSingleton().getLoggerFactory();</span><br><span class="line">       <span class="keyword">case</span> NOP_FALLBACK_INITIALIZATION:</span><br><span class="line">           <span class="keyword">return</span> NOP_FALLBACK_FACTORY;</span><br><span class="line">       <span class="keyword">case</span> FAILED_INITIALIZATION:</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(UNSUCCESSFUL_INIT_MSG);</span><br><span class="line">       <span class="keyword">case</span> ONGOING_INITIALIZATION:</span><br><span class="line">           <span class="comment">// support re-entrant behavior.</span></span><br><span class="line">           <span class="comment">// See also http://jira.qos.ch/browse/SLF4J-97</span></span><br><span class="line">           <span class="keyword">return</span> SUBST_FACTORY;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;Unreachable code&quot;</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进行绑定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">performInitialization</span><span class="params">()</span> &#123;</span><br><span class="line">    bind();</span><br><span class="line">    <span class="keyword">if</span> (INITIALIZATION_STATE == SUCCESSFUL_INITIALIZATION) &#123;</span><br><span class="line">        versionSanityCheck();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/709c7a285f47dc774327ed6924a47ae8.png"></p>
+</li>
+<li><p>调用LoggerFactory的findPossibleStaticLoggerBinderPathSet()方法获取StaticLoggerBinderPath集合</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/13ebc5fd0dc8c8912f4d167dc7330524.png"></p>
+</li>
+<li><p>回到第四步，Classpath下没有StaticLoggerBinderPath，集合元素为空，调用LoggerFactory的reportMultipleBindingAmbiguity()方法，记录绑定的StaticLoggerBinder信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/89d7da3dc6ed454deccb04cd9acf1f8a.png"></p>
+</li>
+<li><p>LoggerFactory的bind()方法找不到StaticLoggerBinder，抛出NoClassDefFoundError异常</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/2408a3c8154ac8895a3d1ffb642a5bd6.png"></p>
+</li>
+<li><p>LoggerFactory的bind()方法捕获NoClassDefFoundError异常，匹配到StaticLoggerBinder关键词记录信息到控制台</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/54d33fc85656ce91f4ec51a1b49c81ed.png"></p>
+</li>
+<li><p>LoggerFactory的performInitialization()方法内部调用bind()方法结束, 此时INITIALIZATION_STATE 不等于SUCCESSFUL_INITIALIZATION</p>
+</li>
+<li><p>LoggerFactory的getLogger()方法内部getILoggerFactory()方法调用完成，创建出NOPLoggerFactory，然后由NOPLoggerFactory调用内部的getLogger()方法，创建出NOPLogger</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/f27209c5f05227dfc23d17a497853ce0.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/d173c3ca6986e7c92d7c5adf9b01e86f.png"></p>
+</li>
+<li><p>调用NOPLoggerFactory的 getLogger() 创建NOPLogger</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/1edf3f45c035c87b00890c05361939a6.png"></p>
+</li>
+<li><p>App类内部的logger实际为NOPLogger,调用logger.info()方法实际调用的是NOPLogger的info方法</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/8a79c61e164541f6350ae9e3452d2a97.png"></p>
+</li>
+</ol>
+<h3 id="加入Logback组件源码分析"><a href="#加入Logback组件源码分析" class="headerlink" title="加入Logback组件源码分析"></a>加入Logback组件源码分析</h3><blockquote>
+<p>Slf4j作为门面采用Logback作为实现或者采用其它上面提到过的组件作为实现类似，这里只分析采用Logback组件作为实现</p>
+</blockquote>
+<p>pom配置如下，程序入口类同上</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.35<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--logback-classic依赖logback-core，会自动级联引入--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>1、2、3、4步同上</p>
+</li>
+<li><p>调用LoggerFactory的findPossibleStaticLoggerBinderPathSet()方法获取StaticLoggerBinderPath集合，此时staticLoggerBinderPathSet 集合有一个元素</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/500a976d93389fea07777219548cd833.png"></p>
+</li>
+<li><p>reportMultipleBindingAmbiguity 判断元素是否&gt;1,不满足</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/fed0878942901d467d5aa36de9f69672.png"></p>
+</li>
+<li><p>在LoggerFactory的bind()方法中调用loback包下的StaticLoggerBinder创建单例对象</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/71c8b2e17b20cf190fb510c7fa7346ff.png"></p>
+</li>
+<li><p>在LoggerFactory的bind()方法中调用reportActualBinding()记录日志加载的真实绑定信息</p>
+</li>
+<li><p>LoggerFactory中INITIALIZATION_STATE的值为SUCCESSFUL_INITIALIZATION，调用StaticLoggerBinder的单例对象获取ILoggerFactory</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/c5a57283bb5f384cca634ece5261c09d.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/84a9ffa5e1d5cd69f714ea9506da1497.png"></p>
+</li>
+<li><p>此时LoggerFactory中的getLogger()方法中获取到的ILoggerFactory实际上是logback jar下的LoggerContext</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/75afe42685cbdc5e3d8fdd48d825e6dc.png"></p>
+</li>
+<li><p>此时LoggerFactory调用getLogger()方法获取到的Logger实际上是logback jar下的Logger</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/caab54b4dd2ed7865b08e3e9cf06300a.png"></p>
+</li>
+<li><p>最后输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">21</span>:<span class="number">58</span>:<span class="number">15.868</span> [main] INFO pers.fulsun.App - Hello World</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="加入多种日志实现组件"><a href="#加入多种日志实现组件" class="headerlink" title="加入多种日志实现组件"></a>加入多种日志实现组件</h3><p>pom.xml 配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.35<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--logback-classic依赖logback-core，会自动级联引入--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-log4j12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.35<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-jcl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.30<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-jdk14<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.30<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>基本步骤同上，这里只追踪主要不同点</p>
+<ul>
+<li><p>追踪LoggerFactory的bind()方法内部调用findPossibleStaticLoggerBinderPathSet()方法后，从classpath下4个jar包内找到StaticLoggerBinder</p>
+</li>
+<li><p>此时LoggerFactory的bind()方法内部调用reportMultipleBindingAmbiguity()方法，给出警告信息classpath下同时存在多个StaticLoggerBinder,JVM会随机选择一个StaticLoggerBinder</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/c2ca7d5fc094e0dcc0b90d1bdfa7f14a.png"></p>
+</li>
+<li><p>此时LoggerFactory的bind()方法内部调用reportMultipleBindingAmbiguity()方法，给出警告信息classpath下同时存在多个StaticLoggerBinder,</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/48369dee7efd3df6575522ab98ad4235.png"></p>
+</li>
+<li><p>JVM会随机选择一个StaticLoggerBinder，这个地方sfl4j也在reportActualBinding方法中报告了绑定的是哪个日志框架：</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/f77662b042967b0c162627d67f951fb7.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">reportActualBinding</span><span class="params">(Set&lt;URL&gt; binderPathSet)</span> &#123;</span><br><span class="line">    <span class="comment">// binderPathSet can be null under Android</span></span><br><span class="line">    <span class="keyword">if</span> (binderPathSet != <span class="literal">null</span> &amp;&amp; isAmbiguousStaticLoggerBinderPathSet(binderPathSet)) &#123;</span><br><span class="line">    Util.report(<span class="string">&quot;Actual binding is of type [&quot;</span> + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr() + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="StaticLoggerBinder"><a href="#StaticLoggerBinder" class="headerlink" title="StaticLoggerBinder"></a>StaticLoggerBinder</h3><ul>
+<li>getLogger的时候会去classpath下找<code>STATIC_LOGGER_BINDER_PATH</code>，<code>STATIC_LOGGER_BINDER_PATH</code>值为”<code>org/slf4j/impl/StaticLoggerBinder.class</code>“，即<strong>所有slf4j的实现，在提供的jar包路径下，一定是有”org&#x2F;slf4j&#x2F;impl&#x2F;StaticLoggerBinder.class”存在的</strong>，我们可以看一下：</li>
+</ul>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/65891f8f48b4ba3ab8ca52db8c90a5ba.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/fea9299ca1f0cd071f2a547f8fee43b2.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/cf904808/a240b1580f7a65d9f7593b4f54ad0234.png"></p>
+<h2 id="Slf4j时如何桥接遗留的api"><a href="#Slf4j时如何桥接遗留的api" class="headerlink" title="Slf4j时如何桥接遗留的api"></a>Slf4j时如何桥接遗留的api</h2><p>在实际环境中我们经常会遇到不同的组件使用的日志框架不同的情况，例如Spring Framework使用的是日志组件是Commons Logging，XSocket依赖的则是Java Util Logging。当我们在同一项目中使用不同的组件时应该如果解决不同组件依赖的日志组件不一致的情况呢？现在我们需要统一日志方案，统一使用Slf4j，把他们的日志输出重定向到Slf4j，然后Slf4j又会根据绑定器把日志交给具体的日志实现工具。Slf4j带有几个桥接模块，可以重定向Log4j，JCL和java.util.logging中的Api到Slf4j。</p>
+<table>
+<thead>
+<tr>
+<th><strong>log4j-over-slf4j-version.jar</strong></th>
+<th>将Log4j重定向到Slf4j</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>jcl-over-slf4j-version.jar</strong></td>
+<td>将Commons Logging里的Simple Logger重定向到slf4j</td>
+</tr>
+<tr>
+<td><strong>jul-to-slf4j-version.jar</strong></td>
+<td>将Java Util Logging重定向到Slf4j</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/cf904808">https://fulsun.github.io/p/cf904808</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java%E6%97%A5%E5%BF%97/">Java日志</a><a class="post-meta__tags" href="/tags/Slf4j/">Slf4j</a></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/001.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/1779db1f" title="logback节点配置"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/010.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">logback节点配置</div></div></a></div><div class="next-post pull-right"><a href="/p/5ad1720d" title="Slf4j的使用"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/003.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Slf4j的使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/5ad1720d" title="Slf4j的使用"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/003.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-14</div><div class="title">Slf4j的使用</div></div></a></div><div><a href="/p/b41723d6" title="Java日志体系"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-14</div><div class="title">Java日志体系</div></div></a></div><div><a href="/p/1779db1f" title="logback节点配置"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/010.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-16</div><div class="title">logback节点配置</div></div></a></div><div><a href="/p/9d3b5342" title="封装Log4j日志思路"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/002.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-18</div><div class="title">封装Log4j日志思路</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Slf4j%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="toc-text">Slf4j类与接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Slf4j%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">Slf4j调用过程源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E8%BF%BD%E8%B8%AA%E5%88%86%E6%9E%90"><span class="toc-text">源码追踪分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5Logback%E7%BB%84%E4%BB%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">加入Logback组件源码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5%E5%A4%9A%E7%A7%8D%E6%97%A5%E5%BF%97%E5%AE%9E%E7%8E%B0%E7%BB%84%E4%BB%B6"><span class="toc-text">加入多种日志实现组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#StaticLoggerBinder"><span class="toc-text">StaticLoggerBinder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Slf4j%E6%97%B6%E5%A6%82%E4%BD%95%E6%A1%A5%E6%8E%A5%E9%81%97%E7%95%99%E7%9A%84api"><span class="toc-text">Slf4j时如何桥接遗留的api</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

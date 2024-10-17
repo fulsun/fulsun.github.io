@@ -1,0 +1,378 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hash和HashCode | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Hash的作用介绍Hash的定义 散列（哈希）函数 把任意长度的输入（又叫做预映射pre-image）通过散列算法变换成固定长度的输出，该输出就是散列值，是一种压缩映射。 或者说一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。    Hash函数特性 h(k1)≠h(k2)则k1≠k2，即散列值不相同，则输入值即预映射不同 如果k1≠k2，h(k1)&#x3D;h(k2) 则发生碰撞；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hash和HashCode">
+<meta property="og:url" content="https://fulsun.github.io/p/fc60e9c4">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="Hash的作用介绍Hash的定义 散列（哈希）函数 把任意长度的输入（又叫做预映射pre-image）通过散列算法变换成固定长度的输出，该输出就是散列值，是一种压缩映射。 或者说一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。    Hash函数特性 h(k1)≠h(k2)则k1≠k2，即散列值不相同，则输入值即预映射不同 如果k1≠k2，h(k1)&#x3D;h(k2) 则发生碰撞；">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/010.jpg">
+<meta property="article:published_time" content="2018-08-31T11:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.382Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="凉月">
+<meta property="article:tag" content="凉月文">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="web网站">
+<meta property="article:tag" content="经验分享">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="生活记录等">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/010.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/fc60e9c4"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hash和HashCode',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/010.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hash和HashCode</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-08-31T11:00:00.000Z" title="发表于 2018-08-31 11:00:00">2018-08-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.382Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaSE/">JavaSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hash和HashCode"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="Hash的作用介绍"><a href="#Hash的作用介绍" class="headerlink" title="Hash的作用介绍"></a>Hash的作用介绍</h2><h3 id="Hash的定义"><a href="#Hash的定义" class="headerlink" title="Hash的定义"></a>Hash的定义</h3><ul>
+<li>散列（哈希）函数<ul>
+<li>把任意长度的输入（又叫做预映射pre-image）通过散列算法变换成固定长度的输出，该输出就是散列值，是一种压缩映射。</li>
+<li>或者说一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hash函数特性"><a href="#Hash函数特性" class="headerlink" title="Hash函数特性"></a>Hash函数特性</h3><ul>
+<li>h(k1)≠h(k2)则k1≠k2，即散列值不相同，则输入值即预映射不同<ul>
+<li>如果k1≠k2，h(k1)&#x3D;h(k2) 则发生碰撞；</li>
+<li>如果h(k1)&#x3D;h(k2)，k1不一定等于k2；</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hash的使用场景"><a href="#Hash的使用场景" class="headerlink" title="Hash的使用场景"></a>Hash的使用场景</h3><ul>
+<li>比如说我们下载一个文件，文件的下载过程中会经过很多网络服务器、路由器的中转，如何保证这个文件就是我们所需要的呢？我们不可能去一一检测这个文件的每个字节，也不能简单地利用文件名、文件大小这些极容易伪装的信息，这时候，就需要一种指纹一样的标志来检查文件的可靠性，这种指纹就是我们现在所用的Hash算法(也叫散列算法)。</li>
+<li>散列算法就是一种以较短的信息来保证文件唯一性的标志，这种标志与文件的每一个字节都相关，而且难以找到逆向规律。因此，当原有文件发生改变时，其标志值也会发生改变，从而告诉文件使用者当前的文件已经不是你所需求的文件。</li>
+<li>这种标志有何意义呢？之前文件下载过程就是一个很好的例子，事实上，现在大部分的网络部署和版本控制工具都在使用散列算法来保证文件可靠性。</li>
+</ul>
+<h2 id="如何判断两个对象相等"><a href="#如何判断两个对象相等" class="headerlink" title="如何判断两个对象相等"></a>如何判断两个对象相等</h2><h3 id="判断两个字符串"><a href="#判断两个字符串" class="headerlink" title="判断两个字符串"></a>判断两个字符串</h3><ul>
+<li><p>使用equals方法判断两个字符串是否相等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;yc1&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;yc2&quot;</span>;</span><br><span class="line"><span class="type">boolean</span> <span class="variable">isEqual</span> <span class="operator">=</span> a.equals(b);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当然Object的子类可以通过重写equals的方法，实现子类自身的对象是否相等的逻辑；String是Object的子类，查看下它的equals方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在Object类中</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object obj)</span> &#123;</span><br><span class="line">    <span class="comment">//直接比较的是地址</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="built_in">this</span> == obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在String类中</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object anObject)</span> &#123;</span><br><span class="line">    <span class="comment">//直接比较的是地址</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> == anObject) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//盘旋是否是字符串String类型</span></span><br><span class="line">    <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">anotherString</span> <span class="operator">=</span> (String) anObject;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> count;</span><br><span class="line">        <span class="keyword">if</span> (n == anotherString.count) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="comment">//循环判断每个字符是否相等</span></span><br><span class="line">            <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (charAt(i) != anotherString.charAt(i))</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="判断两个int数值"><a href="#判断两个int数值" class="headerlink" title="判断两个int数值"></a>判断两个int数值</h3><ul>
+<li><p>Integer类的equals方法又是如何实现的呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> Integer.valueOf(<span class="string">&quot;1&quot;</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> Integer.valueOf(<span class="string">&quot;2&quot;</span>);</span><br><span class="line"><span class="type">boolean</span> <span class="variable">ab</span> <span class="operator">=</span> a.equals(b);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object obj)</span> &#123;</span><br><span class="line">    <span class="comment">//先判断是否是Integer类型</span></span><br><span class="line">    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">        <span class="comment">//转为int值后进行比较</span></span><br><span class="line">        <span class="keyword">return</span> value == ((Integer)obj).intValue();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="其他基本类型"><a href="#其他基本类型" class="headerlink" title="其他基本类型"></a>其他基本类型</h3><ul>
+<li><p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//short类型</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Short.hashCode(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">(<span class="type">short</span> value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>)value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Byte类型</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Byte.hashCode(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">(<span class="type">byte</span> value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>)value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Long类型</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Long.hashCode(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">(<span class="type">long</span> value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>)(value ^ (value &gt;&gt;&gt; <span class="number">32</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//long类型作为索引范围太大，需要转为int类型。这里简单的获取低32位容易导致散列不均，因为高位部分没有被利用。所以这里采用逻辑右移32位，让高32位和低32位进行XOR操作，导致高位低位都能被利用到</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Boolean类型</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Boolean.hashCode(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">(<span class="type">boolean</span> value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> value ? <span class="number">1231</span> : <span class="number">1237</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//采用两个质数作为true或false的索引。这两个质数足够大，用来作为索引时，出现碰撞的可能性低。</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="HashCode深入分析"><a href="#HashCode深入分析" class="headerlink" title="HashCode深入分析"></a>HashCode深入分析</h2><h3 id="HashCode是什么"><a href="#HashCode是什么" class="headerlink" title="HashCode是什么"></a>HashCode是什么</h3><ul>
+<li>HashCode是Object的一个方法，hashCode方法返回一个hash code值，且这个方法是为了更好的支持hash表，比如String，Set，HashTable、HashMap等;</li>
+</ul>
+<h3 id="为什么要重写HashCode"><a href="#为什么要重写HashCode" class="headerlink" title="为什么要重写HashCode"></a>为什么要重写HashCode</h3><ul>
+<li>如果用 equal 去比较的话，如果存在1000个元素，你 new 一个新的元素出来，需要去调用1000次equal去逐个和他们比较是否是同一个对象，这样会大大降低效率。hashcode实际上是返回对象的存储地址，如果这个位置上没有元素，就把元素直接存储在上面，如果这个位置上已经存在元素，这个时候才去调用equal方法与新元素进行比较，相同的话就不存了，散列到其他地址上</li>
+</ul>
+<h3 id="HashCode源代码分析"><a href="#HashCode源代码分析" class="headerlink" title="HashCode源代码分析"></a>HashCode源代码分析</h3><ul>
+<li><p>在Object中的HashCode源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public int hashCode() &#123;</span><br><span class="line">    int lockWord = shadow$_monitor_;</span><br><span class="line">    final int lockWordStateMask = 0xC0000000; // Top 2 bits.</span><br><span class="line">    final int lockWordStateHash = 0x80000000; // Top 2 bits are value 2 (kStateHash).</span><br><span class="line">    final int lockWordHashMask = 0x0FFFFFFF; // Low 28 bits.</span><br><span class="line">    if ((lockWord &amp; lockWordStateMask) == lockWordStateHash) &#123;</span><br><span class="line">        return lockWord &amp; lockWordHashMask;</span><br><span class="line">    &#125;</span><br><span class="line">    //返回的是对象引用地址</span><br><span class="line">    return System.identityHashCode(this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在String中的HashCode源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public int hashCode() &#123;</span><br><span class="line">    int h = hash;</span><br><span class="line">    if (h == 0 &amp;&amp; count &gt; 0) &#123;</span><br><span class="line">        for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            h = 31 * h + charAt(i);</span><br><span class="line">        &#125;</span><br><span class="line">        hash = h;</span><br><span class="line">    &#125;</span><br><span class="line">    return h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在Integer中的HashCode源代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//int值</span></span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="HashCode的作用"><a href="#HashCode的作用" class="headerlink" title="HashCode的作用"></a>HashCode的作用</h3><ul>
+<li>减少查找次数，提高程序效率<ul>
+<li>例如查找是否存在重复值<ul>
+<li>h(k1)≠h(k2)则k1≠k2</li>
+<li>首先查看h(k2)输出值（内存地址），查看该内存地址是否存在值；</li>
+<li>如果无，则表示该值不存在重复值；</li>
+<li>如果有，则进行值比较，相同则表示该值已经存在散列列表中，如果不相同则再进行一个一个值比较；而无需一开始就一个一个值的比较，减少了查找次数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="HashMap中的HashCode"><a href="#HashMap中的HashCode" class="headerlink" title="HashMap中的HashCode"></a>HashMap中的HashCode</h2><ul>
+<li><p>在Java中也一样，hashCode方法的主要作用是为了配合基于散列的集合一起正常运行，这样的散列集合包括HashSet、HashMap以及HashTable。</p>
+</li>
+<li><p>为什么这么说呢？考虑一种情况，当向集合中插入对象时，如何判别在集合中是否已经存在该对象了？<strong>（注意：集合中不允许重复的元素存在）</strong></p>
+<ul>
+<li>也许大多数人都会想到调用equals方法来逐个进行比较，这个方法确实可行。但是如果集合中已经存在一万条数据或者更多的数据，如果采用equals方法去逐一比较，效率必然是一个问题。</li>
+<li>此时hashCode方法的作用就体现出来了，当集合要添加新的对象时，先调用这个对象的hashCode方法，得到对应的hashcode值，实际上在HashMap的具体实现中会用一个table保存已经存进去的对象的hashcode值，如果table中没有该hashcode值，它就可以直接存进去，不用再进行任何比较了；如果存在该hashcode值， 就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址，所以这里存在一个冲突解决的问题，这样一来实际调用equals方法的次数就大大降低了，说通俗一点：Java中的hashCode方法就是根据一定的规则将与对象相关的信息（比如对象的存储地址，对象的字段等）映射成一个数值，这个数值称作为散列值。下面这段代码是java.util.HashMap的中put方法的具体实现：</li>
+</ul>
+</li>
+<li><p>put方法是用来向HashMap中添加新的元素，从put方法的具体实现可知，会先调用hashCode方法得到该元素的hashCode值，然后查看table中是否存在该hashCode值，如果存在则调用equals方法重新确定是否存在该元素，如果存在，则更新value值，否则将新的元素添加到HashMap中。从这里可以看出，hashCode方法的存在是为了减少equals方法的调用次数，从而提高程序效率。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">put</span><span class="params">(K key, V value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> V <span class="title function_">putVal</span><span class="params">(<span class="type">int</span> hash, K key, V value, <span class="type">boolean</span> onlyIfAbsent,<span class="type">boolean</span> evict)</span> &#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="type">int</span> n, i;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="literal">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="literal">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="literal">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="built_in">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">binCount</span> <span class="operator">=</span> <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="literal">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="literal">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="literal">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            <span class="type">V</span> <span class="variable">oldValue</span> <span class="operator">=</span> e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="literal">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="不可直接用hashcode判断两个对象相等"><a href="#不可直接用hashcode判断两个对象相等" class="headerlink" title="不可直接用hashcode判断两个对象相等"></a>不可直接用hashcode判断两个对象相等</h2><p>可直接用hashcode判断两个对象是否相等？</p>
+<ul>
+<li>肯定是不可以的，因为不同的对象可能会生成相同的hashcode值。虽然不能根据hashcode值判断两个对象是否相等</li>
+<li>但是可以直接根据hashcode值判断两个对象不等，如果两个对象的hashcode值不等，则必定是两个不同的对象。如果要判断两个对象是否真正相等，必须通过equals方法。</li>
+<li>也就是说对于两个对象，如果调用equals方法得到的结果为true，则两个对象的hashcode值必定相等；<ul>
+<li>如果equals方法得到的结果为false，则两个对象的hashcode值不一定不同；</li>
+<li>如果两个对象的hashcode值不等，则equals方法得到的结果必定为false；</li>
+<li>如果两个对象的hashcode值相等，则equals方法得到的结果未知。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hash表是什么"><a href="#Hash表是什么" class="headerlink" title="Hash表是什么"></a>Hash表是什么</h2><h3 id="Hash表定义"><a href="#Hash表定义" class="headerlink" title="Hash表定义"></a>Hash表定义</h3><ul>
+<li>根据关键码值（KEY-VALUE）而直接进行访问的数据结构；它通过把关键码值（KEY-VALUE）映射到表中一个位置来访问记录，以加快查找的速度。这个映射函数叫做散列函数，存放记录的数组叫做散列表。</li>
+</ul>
+<h3 id="Hash表简单介绍"><a href="#Hash表简单介绍" class="headerlink" title="Hash表简单介绍"></a>Hash表简单介绍</h3><ul>
+<li>将k作为输入值，h(k)输出值作为内存地址，该内存地址用来存放value，然后可以通过k获取到value存放的地址，从而获取value信息。</li>
+</ul>
+<h2 id="Hash中的算法应用"><a href="#Hash中的算法应用" class="headerlink" title="Hash中的算法应用"></a>Hash中的算法应用</h2><h3 id="基础算法"><a href="#基础算法" class="headerlink" title="基础算法"></a>基础算法</h3><ul>
+<li><p>比如，Java中的String.hashCode使用乘法和加法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> hash;</span><br><span class="line">    <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            <span class="comment">//乘法与加法</span></span><br><span class="line">            h = <span class="number">31</span> * h + charAt(i);</span><br><span class="line">        &#125;</span><br><span class="line">        hash = h;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="经典算法-摘自网络"><a href="#经典算法-摘自网络" class="headerlink" title="经典算法[摘自网络]"></a>经典算法[摘自网络]</h3><ul>
+<li>MD4，MD5，SHA-1或SHA-2等其他</li>
+</ul>
+<h3 id="Hash碰撞-摘自网络"><a href="#Hash碰撞-摘自网络" class="headerlink" title="Hash碰撞[摘自网络]"></a>Hash碰撞[摘自网络]</h3><ul>
+<li>hash是存在碰撞的，如果k1≠k2，h(k1)&#x3D;h(k2) 则发生碰撞；</li>
+</ul>
+<h2 id="Hash在Java中的应用场景"><a href="#Hash在Java中的应用场景" class="headerlink" title="Hash在Java中的应用场景"></a>Hash在Java中的应用场景</h2><h3 id="equals与hashCode有两个注意点"><a href="#equals与hashCode有两个注意点" class="headerlink" title="equals与hashCode有两个注意点"></a>equals与hashCode有两个注意点</h3><ul>
+<li>equals相同，则hashCode相同；而hashCode相同，equals不一定相同<ul>
+<li>如果equals相同，hashCode不相同，有可能会造成上述重复值等情况，这种情况是不允许的；</li>
+<li>而hasCode相同，但是equals不一定相同，有可能是因为发生了碰撞而碰撞是有可能性发生的</li>
+</ul>
+</li>
+</ul>
+<h3 id="以HashSet为例说明hashCode-的作用"><a href="#以HashSet为例说明hashCode-的作用" class="headerlink" title="以HashSet为例说明hashCode()的作用"></a>以HashSet为例说明hashCode()的作用</h3><ul>
+<li>假设，HashSet中已经有1000个元素。当插入第1001个元素时，需要怎么处理？<ul>
+<li>因为HashSet是Set集合，它允许有重复元素。“将第1001个元素逐个的和前面1000个元素进行比较”？</li>
+<li>显然，这个效率是相等低下的。散列表很好的解决了这个问题，它根据元素的散列码计算出元素在散列表中的位置，然后将元素插入该位置即可。对于相同的元素，自然是只保存了一个。</li>
+<li>由此可知，若两个元素相等，它们的散列码一定相等；但反过来确不一定。在散列表中，<ul>
+<li>1、如果两个对象相等，那么它们的hashCode()值一定要相同；</li>
+<li>2、如果两个对象hashCode()相等，它们并不一定相等。</li>
+<li>注意：这是在散列表中的情况。在非散列表中一定如此！</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="以HashMap为例说明Hash的作用"><a href="#以HashMap为例说明Hash的作用" class="headerlink" title="以HashMap为例说明Hash的作用"></a>以HashMap为例说明Hash的作用</h3><ul>
+<li><p>在HashMap中有许多地方用到了hash算法</p>
+<pre><code class="java">//put方法
+public V put(K key, V value) &#123;
+    return putVal(hash(key), key, value, false, true);
+&#125;
+
+//remove方法
+public V remove(Object key) &#123;
+    Node&lt;K,V&gt; e;
+    return (e = removeNode(hash(key), key, null, false, true)) == null ?
+        null : e.value;
+&#125;
+
+//get方法
+public V get(Object key) &#123;
+    Node&lt;K,V&gt; e;
+    return (e = getNode(hash(key), key)) == null ? null : e.value;
+&#125;
+
+//上面这几个方法都用到了这个方法
+static final int hash(Object key) &#123;
+    int h;
+    //计算hashCode，并无符号移动到低位
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+&#125;
+
+举个例子: h = 363771819^(363771819 &gt;&gt;&gt; 16)
+0001 0101 1010 1110 1011 0111 1010 1011(363771819)
+0000 0000 0000 0000 0001 0101 1010 1110(5550) XOR
+--------------------------------------- =
+0001 0101 1010 1110 1010 0010 0000 0101(363766277)
+这样做可以实现了高地位更加均匀地混到一起
+</code></pre>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/fc60e9c4">https://fulsun.github.io/p/fc60e9c4</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/010.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/638b4131" title="Jdk常见新特性"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Jdk常见新特性</div></div></a></div><div class="next-post pull-right"><a href="/p/515d78b5" title="Java虚拟机"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java虚拟机</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash%E7%9A%84%E4%BD%9C%E7%94%A8%E4%BB%8B%E7%BB%8D"><span class="toc-text">Hash的作用介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">Hash的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E5%87%BD%E6%95%B0%E7%89%B9%E6%80%A7"><span class="toc-text">Hash函数特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">Hash的使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9B%B8%E7%AD%89"><span class="toc-text">如何判断两个对象相等</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">判断两个字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AAint%E6%95%B0%E5%80%BC"><span class="toc-text">判断两个int数值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-text">其他基本类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashCode%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90"><span class="toc-text">HashCode深入分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HashCode%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">HashCode是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%87%8D%E5%86%99HashCode"><span class="toc-text">为什么要重写HashCode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashCode%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">HashCode源代码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashCode%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">HashCode的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap%E4%B8%AD%E7%9A%84HashCode"><span class="toc-text">HashMap中的HashCode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E7%9B%B4%E6%8E%A5%E7%94%A8hashcode%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9B%B8%E7%AD%89"><span class="toc-text">不可直接用hashcode判断两个对象相等</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash%E8%A1%A8%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">Hash表是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E8%A1%A8%E5%AE%9A%E4%B9%89"><span class="toc-text">Hash表定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E8%A1%A8%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">Hash表简单介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8"><span class="toc-text">Hash中的算法应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95"><span class="toc-text">基础算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95-%E6%91%98%E8%87%AA%E7%BD%91%E7%BB%9C"><span class="toc-text">经典算法[摘自网络]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E7%A2%B0%E6%92%9E-%E6%91%98%E8%87%AA%E7%BD%91%E7%BB%9C"><span class="toc-text">Hash碰撞[摘自网络]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash%E5%9C%A8Java%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">Hash在Java中的应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#equals%E4%B8%8EhashCode%E6%9C%89%E4%B8%A4%E4%B8%AA%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">equals与hashCode有两个注意点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5HashSet%E4%B8%BA%E4%BE%8B%E8%AF%B4%E6%98%8EhashCode-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">以HashSet为例说明hashCode()的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5HashMap%E4%B8%BA%E4%BE%8B%E8%AF%B4%E6%98%8EHash%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">以HashMap为例说明Hash的作用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

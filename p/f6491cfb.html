@@ -1,0 +1,574 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网络编程 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="网络模型概述和图解网络模型概述 计算机网络之间以何种规则进行通信，就是网络模型研究问题。  网络模型一般是指OSI（Open System Interconnection开放系统互连）七层参考模型  TCP&#x2F;IP四层参考模型主机至网络层(物理层 , 数据链路层) , 网际层 , 传输层 , 应用层(应用层 , 表示层 , 会话层)    网络模型7层概述 1.物理层：主要定义物理设备">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程">
+<meta property="og:url" content="https://fulsun.github.io/p/f6491cfb">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="网络模型概述和图解网络模型概述 计算机网络之间以何种规则进行通信，就是网络模型研究问题。  网络模型一般是指OSI（Open System Interconnection开放系统互连）七层参考模型  TCP&#x2F;IP四层参考模型主机至网络层(物理层 , 数据链路层) , 网际层 , 传输层 , 应用层(应用层 , 表示层 , 会话层)    网络模型7层概述 1.物理层：主要定义物理设备">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/012.jpg">
+<meta property="article:published_time" content="2018-08-29T11:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.374Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="凉月">
+<meta property="article:tag" content="凉月文">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="web网站">
+<meta property="article:tag" content="经验分享">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="生活记录等">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/012.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/f6491cfb"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络编程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/012.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络编程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-08-29T11:00:00.000Z" title="发表于 2018-08-29 11:00:00">2018-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.374Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaSE/">JavaSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>26分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络编程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="网络模型概述和图解"><a href="#网络模型概述和图解" class="headerlink" title="网络模型概述和图解"></a>网络模型概述和图解</h2><h3 id="网络模型概述"><a href="#网络模型概述" class="headerlink" title="网络模型概述"></a>网络模型概述</h3><ul>
+<li><p>计算机网络之间以何种规则进行通信，就是网络模型研究问题。</p>
+</li>
+<li><p>网络模型一般是指OSI（Open System Interconnection开放系统互连）七层参考模型</p>
+</li>
+<li><p>TCP&#x2F;IP四层参考模型主机至网络层(物理层 , 数据链路层) , 网际层 , 传输层 , 应用层(应用层 , 表示层 , 会话层)</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/f6491cfb/c4aea87d1a3332af54c705897456f2d4.png"></p>
+</li>
+</ul>
+<h3 id="网络模型7层概述"><a href="#网络模型7层概述" class="headerlink" title="网络模型7层概述"></a>网络模型7层概述</h3><ul>
+<li>1.物理层：主要定义物理设备标准，如网线的接口类型、光纤的接口类型、各种传输介质的传输速率等。它的主要作用是传输比特流（就是由1、0转化为电流强弱来进行传输,到达目的地后在转化为1、0）。这一层的数据叫做比特。</li>
+<li>2.数据链路层：主要将从物理层接收的数据进行MAC地址（网卡的地址）的封装与解封装。常把这一层的数据叫做帧。在这一层工作的设备是交换机，数据通过交换机来传输。</li>
+<li>3.网络层：主要将从下层接收到的数据进行IP地址（例192.168.0.1)的封装与解封装。在这一层工作的设备是路由器，常把这一层的数据叫做数据包。</li>
+<li>4.传输层：定义了一些传输数据的协议和端口号（WWW端口80等），如：TCP（传输控制协议，传输效率低，可靠性强，用于传输可靠性要求高，数据量大的数据），UDP（用户数据报协议，与TCP特性恰恰相反，用于传输可靠性要求不高，数据量小的数据，如QQ聊天数据就是通过这种方式传输的）.主要是将从下层接收的数据进行分段和传输，到达目的地址后再进行重组。常常把这一层数据叫做段。</li>
+<li>5.会话层：通过传输层（端口号：传输端口与接收端口）建立数据传输的通路。<ul>
+<li>主要在你的系统之间发起会话或者接受会话请求（设备之间需要互相认识可以是IP也可以是MAC或者是主机名）</li>
+</ul>
+</li>
+<li>6.表示层：主要是进行对接收的数据进行解释、加密与解密、压缩与解压缩等（也就是把计算机能够识别的东西转换成人能够能识别的东西（如图片、声音等）。</li>
+<li>7.应用层： 主要是一些终端的应用，比如说FTP（各种文件下载），WEB（IE浏览），QQ之类的（可以把它理解成我们在电脑屏幕上可以看到的东西．就是终端应用）。</li>
+</ul>
+<h2 id="网络编程三要素"><a href="#网络编程三要素" class="headerlink" title="网络编程三要素"></a>网络编程三要素</h2><ul>
+<li>A:IP地址:InetAddress: 网络中设备的标识，不易记忆，可用主机名</li>
+<li>B:端口号: 用于标识进程的逻辑地址，不同进程的标识</li>
+<li>C:传输协议: 通讯的规则常见协议：TCP，UDP</li>
+</ul>
+<h3 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h3><ul>
+<li>物理端口 网卡口</li>
+<li>逻辑端口 我们指的就是逻辑端口<ul>
+<li>a:每个网络程序都会有一个逻辑端口</li>
+<li>b:用于标识进程的逻辑地址，不同进程的标识</li>
+<li>c:有效端口：0<del>65535，其中0</del>1024系统使用或保留端口。</li>
+</ul>
+</li>
+</ul>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
+<li>UDP<ul>
+<li>将数据源和目的封装成数据包中，不需要建立连接；</li>
+<li>每个数据报的大小在限制在64k；</li>
+<li>因无连接，是不可靠协议；</li>
+<li>不需要建立连接，速度快</li>
+</ul>
+</li>
+<li>TCP<ul>
+<li>建立连接，形成传输数据的通道；</li>
+<li>在连接中进行大数据量传输；</li>
+<li>需要连接所以是可靠协议；</li>
+<li>必须建立连接，效率会稍低</li>
+</ul>
+</li>
+</ul>
+<h3 id="Socket通信原理图解"><a href="#Socket通信原理图解" class="headerlink" title="Socket通信原理图解"></a>Socket通信原理图解</h3><ul>
+<li>A:Socket套接字概述：<ul>
+<li>网络上具有唯一标识的IP地址和端口号组合在一起才能构成唯一能识别的标识符套接字。</li>
+</ul>
+</li>
+<li>B:Socket原理机制：<ul>
+<li>通信的两端都有Socket。</li>
+<li>网络通信其实就是Socket间的通信。</li>
+<li>数据在两个Socket间通过IO传输。</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络体系结构"><a href="#网络体系结构" class="headerlink" title="网络体系结构"></a>网络体系结构</h2><ul>
+<li><p>即经常看到的计算机网络体系的分层结构，理清这个还是有必要的，防止对Http和Tcp两个根本不在同一层的协议纠缠不清。根据不同的参考模型，分层结构有几个不同的版本，如OSI模型以及TCP&#x2F;IP模型，下面就以比较经常看到的的5层结构为例</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">分层</span><br><span class="line">应用层      （HTTP、FTP、DNS、SMTP等等）</span><br><span class="line">运输层      （TCP、UDP）</span><br><span class="line">网络层      （IP等）</span><br><span class="line">数据链路层  （ARP等）</span><br><span class="line">物理层</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>五层的体系结构至上往下，最终可以实现端对端之间的数据传输与通信，他们各自负责一些什么，最终如何实现端对端之间的通信？</p>
+<ul>
+<li><p>1.应用层：如http协议，它实际上是定义了如何包装和解析数据，应用层是http协议的话，则会按照协议规定包装数据，如按照请求行、请求头、请求体包装，包装好数据后将数据传至运输层。</p>
+</li>
+<li><p>2.运输层：运输层有TCP和UDP两种协议，分别对应可靠的运输和不可靠的运输，如TCP因为要提供可靠的传输，所以内部要解决如何建立连接、如何保证传输是可靠的不丢数据、如何调节流量控制和拥塞控制。关于这一层，我们平常一般都是和Socket打交道，Socket是一组封装的编程调用接口，通过它，我们就能操作TCP、UDP进行连接的建立等。我们平常使用Socket进行连接建立的时候，一般都要指定端口号,所以这一层指定了把数据送到对应的端口号。</p>
+</li>
+<li><p>3.网络层：这一层IP协议，以及一些路由选择协议等等，所以这一层的指定了数据要传输到哪个IP地址。中间涉及到一些最优线路，路由选择算法等等。</p>
+</li>
+<li><p>4.数据链路层：印象比较深的就是ARP协议，负责把IP地址解析为MAC地址，即硬件地址，这样就找到了对应的唯一的机器。</p>
+</li>
+<li><p>5.物理层：这一层就是最底层了，提供二进制流传输服务，也就是也就是真正开始通过传输介质（有线、无线）开始进行数据的传输了。</p>
+</li>
+<li><p>所以通过上面五层的各司其职，实现物理传输介质–MAC地址–IP地址–端口号–获取到数据根据应用层协议解析数据最终实现了网络通信和数据传输。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Http相关知识点"><a href="#Http相关知识点" class="headerlink" title="Http相关知识点"></a>Http相关知识点</h2><h3 id="无连接与无状态"><a href="#无连接与无状态" class="headerlink" title="无连接与无状态"></a>无连接与无状态</h3><ul>
+<li>无连接并不是说不需要连接，Http协议只是一个应用层协议，最终还是要靠运输层的如TCP协议向上提供的服务进行连接。</li>
+<li>无连接的含义是：<strong>http约定了每次连接只处理一个请求，一次请求完成后就断开连接</strong>，这样主要是为了缓解服务器的压力，减小连接对服务器资源的占用。我的理解是，建立连接实际上是运输层的事，面向应用层的http来说的话，它就是无连接的，因为上层对下层无感知。</li>
+<li>无状态的指：每个请求之间都是独立的，对于之前的请求事务没有记忆的能力。所以就出现了像Cookie这种，用来保存一些状态的东西。</li>
+</ul>
+<h3 id="HTTP的缓存机制"><a href="#HTTP的缓存机制" class="headerlink" title="HTTP的缓存机制"></a>HTTP的缓存机制</h3><ul>
+<li><p><strong>Http的缓存主要利用header里的两个字段来控制</strong></p>
+</li>
+<li><p><strong>Cache-control主要包含以及几个字段：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">private:则只有客户端可以缓存</span><br><span class="line">public:客户端和代理服务器都可以缓存</span><br><span class="line">max-age:缓存的过期时间</span><br><span class="line">no-cache:需要使用对比缓存来验证缓存数据</span><br><span class="line">no-store:所有内存都不会进行缓存</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实际上就是在这里面设置了一个缓存策略，由服务端第一次通过header下发给客户端，可以看到：</p>
+</li>
+<li><p>max-age即缓存过期的时间，则之后再次请求，如果没有超过缓存失效的时间则可以直接使用缓存。</p>
+</li>
+<li><p>no-cache:表示需要使用对比缓存来验证缓存数据，如果这个字段是打开的，则就算max-age缓存没有失效，则还是需要发起一次请求向服务端确认一下资源是否有更新，是否需要重新请求数据，至于怎么做对比缓存，就是下面要说的Etag的作用。如果服务端确认资源没有更新，则返回304，取本地缓存即可，如果有更新，则返回最新的资源。</p>
+</li>
+<li><p>no-store:这个字段打开，则不会进行缓存，也不会取缓存。</p>
+</li>
+<li><p><strong>ETag:即用来进行对比缓存，Etag是服务端资源的一个标识码</strong></p>
+</li>
+<li><p>当客户端发送第一次请求时服务端会下发当前请求资源的标识码Etag，下次再请求时，客户端则会通过header里的If-None-Match将这个标识码Etag带上，服务端将客户端传来的Etag与最新的资源Etag做对比，如果一样，则表示资源没有更新，返回304。</p>
+</li>
+<li><p>通过Cache-control和Etag的配合来实现Http的缓存机制。</p>
+</li>
+</ul>
+<h3 id="短连接与长连接"><a href="#短连接与长连接" class="headerlink" title="短连接与长连接"></a>短连接与长连接</h3><ul>
+<li>当浏览器访问一个包含多张图片的 HTML 页面时，除了请求访问 HTML 页面资源，还会请求图片资源。如果每进行一次 HTTP 通信就要新建一个 TCP 连接，那么开销会很大。</li>
+<li>长连接只需要建立一次 TCP 连接就能进行多次 HTTP 通信。</li>
+<li>从 HTTP&#x2F;1.1 开始默认是长连接的，如果要断开连接，需要由客户端或者服务器端提出断开，使用 <code>Connection : close</code>；</li>
+<li>在 HTTP&#x2F;1.1 之前默认是短连接的，如果需要使用长连接，则使用 <code>Connection : Keep-Alive</code>。</li>
+</ul>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<li><p>优点</p>
+<ul>
+<li>缓解服务器压力；</li>
+<li>降低客户端获取资源的延迟：缓存通常位于内存中，读取缓存的速度更快。并且缓存在地理位置上也有可能比源服务器来得近，例如浏览器缓存。</li>
+</ul>
+</li>
+<li><p>实现方法</p>
+</li>
+<li><p>让代理服务器进行缓存；</p>
+</li>
+<li><p>让客户端浏览器进行缓存。</p>
+</li>
+<li><p>Cache-Control</p>
+<ul>
+<li>HTTP&#x2F;1.1 通过 Cache-Control 首部字段来控制缓存。</li>
+</ul>
+</li>
+<li><p>禁止进行缓存</p>
+<ul>
+<li>no-store 指令规定不能对请求或响应的任何一部分进行缓存。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-store</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>强制确认缓存</p>
+<ul>
+<li>no-cache 指令规定缓存服务器需要先向源服务器验证缓存资源的有效性，只有当缓存资源有效才将能使用该缓存对客户端的请求进行响应。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-cache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>私有缓存和公共缓存</p>
+<ul>
+<li>private指令规定了将资源作为私有缓存，只能被单独用户所使用，一般存储在用户浏览器中。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: private</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>public 指令规定了将资源作为公共缓存，可以被多个用户所使用，一般存储在代理服务器中。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: public</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>缓存过期机制</p>
+<ul>
+<li>max-age指令出现在请求报文中，并且缓存资源的缓存时间小于该指令指定的时间，那么就能接受该缓存。</li>
+<li>max-age指令出现在响应报文中，表示缓存资源在缓存服务器中保存的时间。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: max-age=31536000</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Expires首部字段也可以用于告知缓存服务器该资源什么时候会过期。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Expires: Wed, 04 Jul 2012 08:26:05 GMT</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 HTTP&#x2F;1.1 中，会优先处理 max-age 指令；</li>
+<li>在 HTTP&#x2F;1.0 中，max-age 指令会被忽略掉。</li>
+</ul>
+</li>
+<li><p>缓存验证</p>
+<ul>
+<li>需要先了解ETag首部字段的含义，它是资源的唯一标识。URL 不能唯一表示资源，例如 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.google.com/">http://www.google.com/</a> 有中文和英文两个资源，只有 ETag 才能对这两个资源进行唯一标识。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETag: &quot;82e22293907ce725faf67773957acd12&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以将缓存资源的ETag值放入If-None-Match 首部，服务器收到该请求后，判断缓存资源的 ETag 值和资源的最新ETag值是否一致，如果一致则表示缓存资源有效，返回 304 Not Modified。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If-None-Match: &quot;82e22293907ce725faf67773957acd12&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Last-Modified首部字段也可以用于缓存验证，它包含在源服务器发送的响应报文中，指示源服务器对资源的最后修改时间。但是它是一种弱校验器，因为只能精确到一秒，所以它通常作为 ETag 的备用方案。如果响应首部字段里含有这个信息，客户端可以在后续的请求中带上 If-Modified-Since 来验证缓存。服务器只在所请求的资源在给定的日期时间之后对内容进行过修改的情况下才会将资源返回，状态码为 200 OK。如果请求的资源从那时起未经修改，那么返回一个不带有消息主体的 304 Not Modified 响应。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT</span><br><span class="line"></span><br><span class="line">If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Https相关知识点"><a href="#Https相关知识点" class="headerlink" title="Https相关知识点"></a>Https相关知识点</h2><h3 id="HTTPS为什么安全"><a href="#HTTPS为什么安全" class="headerlink" title="HTTPS为什么安全"></a>HTTPS为什么安全</h3><ul>
+<li><strong>Https&#x3D;Http+Ssl</strong></li>
+<li>Https保证了我们数据传输的安全，Https&#x3D;Http+Ssl</li>
+<li>之所以能保证安全主要的原理就是利用了非对称加密算法，平常用的对称加密算法之所以不安全，是因为双方是用统一的密匙进行加密解密的，只要双方任意一方泄漏了密匙，那么其他人就可以利用密匙解密数据。</li>
+<li>非对称加密算法之所以能实现安全传输的核心精华就是：公钥加密的信息只能用私钥解开，私钥加密的信息只能被公钥解开。</li>
+</ul>
+<h3 id="非对称加密算法为什么安全"><a href="#非对称加密算法为什么安全" class="headerlink" title="非对称加密算法为什么安全"></a>非对称加密算法为什么安全</h3><ul>
+<li>简述非对称加密算法为什么安全：</li>
+<li>服务端申请CA机构颁发的证书，则获取到了证书的公钥和私钥，私钥只有服务器端自己知道，而公钥可以告知其他人，如可以把公钥传给客户端，这样客户端通过服务端传来的公钥来加密自己传输的数据，而服务端利用私钥就可以解密这个数据了。由于客户端这个用公钥加密的数据只有私钥能解密，而这个私钥只有服务端有，所以数据传输就安全了。</li>
+<li>常用的对称加密算法有：DES、3DES、RC2、RC4、AES</li>
+<li>常用的非对称加密算法有：RSA、DSA、ECC、DSS</li>
+<li>使用单向散列函数的加密算法：MD5、SHA</li>
+<li>上面只是简单说了一下非对称加密算法是如何保证数据安全的，实际上Https的工作过程远比这要复杂</li>
+</ul>
+<h3 id="HTTPS问题答疑"><a href="#HTTPS问题答疑" class="headerlink" title="HTTPS问题答疑"></a>HTTPS问题答疑</h3><ul>
+<li><p><strong>问题1：客户端如何验证服务器证书的合法性的问题？</strong></p>
+</li>
+<li><p>一个是客户端还需要验证服务端传来的CA证书的合法性、有效性，因为存在传输过程CA证书被人调包的风险,涉及到客户端如何验证服务器证书的合法性的问题，保证通信双方的身份合法。</p>
+</li>
+<li><p>问题2：<strong>非对称算法虽然保证了数据的安全，但是效率相对于对称算法来说比较差，如何来优化，实现既保证了数据的安全，又提高了效率。</strong></p>
+<ul>
+<li>在正式的使用场景中一般都是对称加密和非对称加密结合使用，</li>
+<li>使用非对称加密完成秘钥的传递，然后使用对称秘钥进行数据加密和解密。</li>
+<li>二者结合既保证了安全性，又提高了数据传输效率。</li>
+<li>客户端请求后，服务端响应<ol>
+<li>客户端告诉服务端算法和对称密钥,用公钥加密(对称加密的算法和对称密钥)</li>
+<li>服务器收到信息后，用私钥解密，提取出对称加密算法和对称密钥后，服务器发消息(对称密钥加密)</li>
+<li>后续两者之间信息的传输就可以使用对称加密的方式了</li>
+<li>但是这种方式还是会存在一种安全性；<ul>
+<li>中间人虽然不知道服务器的私钥，但是可以做到偷天换日，将拦截服务器的公钥key;并将自己生成的一对公&#x2F;私钥的公钥发送给客户端；</li>
+<li>客户端并不知道公钥已经被偷偷换过；按照之前的流程，B通过公钥加密自己生成的对称加密秘钥key2;发送给服务器；</li>
+<li>这次通信再次被中间人拦截，尽管后面的通信，两者还是用key2通信，但是中间人已经掌握了Key2;可以进行轻松的加解密；还是存在被中间人攻击风险；</li>
+<li>解决困境：权威的证书颁发机构CA来解决；</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>问题3：客户端如何验证证书合法性</p>
+<ul>
+<li><p>现实生活中，政府发的身份证可以证明一个人的身份，对应到计算机世界里，也有类似政府的这么一个发证机构，它叫Certificate Authority，简称CA，CA为每个使用公钥的用户发放一个<code>数字证书</code>，<code>数字证书</code>可以证明公钥的合法性。</p>
+</li>
+<li><p>制作证书：</p>
+<ul>
+<li><p>CA对网站的资料和公钥使用hash函数得到摘要，再用CA的私钥将摘要加密生成<code>数字签名</code></p>
+</li>
+<li><p>CA将网站的资料和公钥以及<code>数字签名</code>再加上证书有效期，生成<code>数字证书</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/f6491cfb/794f29fa07f91d424fd7430fba1770d8.png"></p>
+</li>
+</ul>
+</li>
+<li><p>校验证书真伪：</p>
+<ul>
+<li>假设数字签名被篡改，数字签名就无法用CA的公钥解密；</li>
+<li>假设<code>数字证书</code>的公钥被篡改，将<code>数字证书</code>的公钥和网站信息使用相同的hash函数得到hash值A，然后用CA的公钥解密数字签名得到hash值B，对比A和B，如果不一样，说明公钥被篡改</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP协议Keep-Alive模式"><a href="#HTTP协议Keep-Alive模式" class="headerlink" title="HTTP协议Keep-Alive模式"></a>HTTP协议Keep-Alive模式</h2><h3 id="什么是Keep-Alive模式？"><a href="#什么是Keep-Alive模式？" class="headerlink" title="什么是Keep-Alive模式？"></a>什么是Keep-Alive模式？</h3><ul>
+<li>我们知道HTTP协议采用“请求-应答”模式，当使用普通模式，即非KeepAlive模式时，每个请求&#x2F;应答客户和服务器都要新建一个连接，完成 之后立即断开连接（HTTP协议为无连接的协议）；当使用Keep-Alive模式（又称持久连接、连接重用）时，Keep-Alive功能使客户端到服 务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive功能避免了建立或者重新建立连接。</li>
+<li>http 1.0中默认是关闭的，需要在http头加入”Connection: Keep-Alive”，才能启用Keep-Alive；http 1.1中默认启用Keep-Alive，如果加入”Connection: close “，才关闭。目前大部分浏览器都是用http1.1协议，也就是说默认都会发起Keep-Alive的连接请求了，所以是否能完成一个完整的Keep- Alive连接就看服务器设置情况。</li>
+</ul>
+<h3 id="启用Keep-Alive的优点"><a href="#启用Keep-Alive的优点" class="headerlink" title="启用Keep-Alive的优点"></a>启用Keep-Alive的优点</h3><ul>
+<li>启用Keep-Alive模式肯定更高效，性能更高。因为避免了建立&#x2F;释放连接的开销。</li>
+</ul>
+<h3 id="Keep-Alive方式下如何判断消息内容-长度的大小？"><a href="#Keep-Alive方式下如何判断消息内容-长度的大小？" class="headerlink" title="Keep-Alive方式下如何判断消息内容&#x2F;长度的大小？"></a>Keep-Alive方式下如何判断消息内容&#x2F;长度的大小？</h3><ul>
+<li>Keep-Alive模式，客户端如何判断请求所得到的响应数据已经接收完成（或者说如何知道服务器已经发生完了数据）？我们已经知道 了，Keep-Alive模式发送玩数据HTTP服务器不会自动断开连接，所有不能再使用返回EOF（-1）来判断（当然你一定要这样使用也没有办法，可 以想象那效率是何等的低）！下面我介绍两种来判断方法。</li>
+<li>使用消息首部字段Conent-Length<ul>
+<li>Conent-Length表示实体内容长度，客户端（服务器）可以根据这个值来判断数据是否接收完成。但是如果消息中没有Conent-Length，那该如何来判断呢？又在什么情况下会没有Conent-Length呢？请继续往下看……</li>
+</ul>
+</li>
+<li>使用消息首部字段Transfer-Encoding<ul>
+<li>当客户端向服务器请求一个静态页面或者一张图片时，服务器可以很清楚的知道内容大小，然后通过Content-length消息首部字段告诉客户端 需要接收多少数据。但是如果是动态页面等时，服务器是不可能预先知道内容大小，这时就可以使用Transfer-Encoding：chunk模式来传输 数据了。即如果要一边产生数据，一边发给客户端，服务器就需要使用”Transfer-Encoding: chunked”这样的方式来代替Content-Length。</li>
+<li>chunk编码将数据分成一块一块的发生。Chunked编码将使用若干个Chunk串连而成，由一个标明长度为0 的chunk标示结束。每个Chunk分为头部和正文两部分，头部内容指定正文的字符总数（十六进制的数字 ）和数量单位（一般不写），正文部分就是指定长度的实际内容，两部分之间用回车换行(CRLF) 隔开。在最后一个长度为0的Chunk中的内容是称为footer的内容，是一些附加的Header信息（通常可以直接忽略）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="url特性"><a href="#url特性" class="headerlink" title="url特性"></a>url特性</h2><h3 id="拼接url链接字符串工具类"><a href="#拼接url链接字符串工具类" class="headerlink" title="拼接url链接字符串工具类"></a>拼接url链接字符串工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拼接字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> url                       url</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> map                       map集合</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">getUrl</span><span class="params">(String url, HashMap&lt;String, String&gt; map)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(TextUtils.isEmpty(url))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//解析一个url</span></span><br><span class="line">    <span class="type">Uri</span> <span class="variable">uri</span> <span class="operator">=</span> Uri.parse(url);</span><br><span class="line">    Uri.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span> uri.buildUpon();</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="literal">null</span> &amp;&amp; map.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//使用迭代器进行遍历</span></span><br><span class="line">        <span class="keyword">for</span> (Object o : map.entrySet()) &#123;</span><br><span class="line">            Map.<span class="type">Entry</span> <span class="variable">entry</span> <span class="operator">=</span> (Map.Entry) o;</span><br><span class="line">            <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> (String) entry.getKey();</span><br><span class="line">            <span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> (String) entry.getValue();</span><br><span class="line">            <span class="comment">//对键和值进行编码，然后将参数追加到查询字符串中。</span></span><br><span class="line">            builder.appendQueryParameter(key, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> builder.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取Uri对象的各种属性"><a href="#获取Uri对象的各种属性" class="headerlink" title="获取Uri对象的各种属性"></a>获取Uri对象的各种属性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//解析一个url</span></span><br><span class="line"><span class="type">Uri</span> <span class="variable">uri</span> <span class="operator">=</span> Uri.parse(url);</span><br><span class="line"><span class="comment">// 完整的url信息</span></span><br><span class="line"><span class="type">String</span> <span class="variable">urlStr</span> <span class="operator">=</span> uri.toString();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;url: &quot;</span> + urlStr);</span><br><span class="line"><span class="comment">// scheme部分</span></span><br><span class="line"><span class="type">String</span> <span class="variable">scheme</span> <span class="operator">=</span> uri.getScheme();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;scheme: &quot;</span> + scheme);</span><br><span class="line"><span class="comment">// host部分</span></span><br><span class="line"><span class="type">String</span> <span class="variable">host</span> <span class="operator">=</span> uri.getHost();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;host: &quot;</span> + host);</span><br><span class="line"><span class="comment">//port部分</span></span><br><span class="line"><span class="type">int</span> <span class="variable">port</span> <span class="operator">=</span> uri.getPort();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;port: &quot;</span> + port);</span><br><span class="line"><span class="comment">// 访问路劲</span></span><br><span class="line"><span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> uri.getPath();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;path: &quot;</span> + path);</span><br><span class="line">List&lt;String&gt; pathSegments = uri.getPathSegments();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;pathSegments: &quot;</span> + pathSegments.toString());</span><br><span class="line"><span class="comment">// Query部分</span></span><br><span class="line"><span class="type">String</span> <span class="variable">query</span> <span class="operator">=</span> uri.getQuery();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;query: &quot;</span> + query);</span><br><span class="line"><span class="comment">//获取此URI的解码权限部分。对于服务器地址，权限的结构如下：Examples: &quot;google.com&quot;, &quot;bob@google.com:80&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">authority</span> <span class="operator">=</span> uri.getAuthority();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;authority: &quot;</span> + authority);</span><br><span class="line"><span class="comment">//从权限获取已解码的用户信息。例如，如果权限为“任何人@google.com”，此方法将返回“任何人”。</span></span><br><span class="line"><span class="type">String</span> <span class="variable">userInfo</span> <span class="operator">=</span> uri.getUserInfo();</span><br><span class="line">Log.e( <span class="string">&quot;UrlUtils&quot;</span>,<span class="string">&quot;userInfo: &quot;</span> + userInfo);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//UrlUtils: url: https://m.dev.haowumc.com/app/financialManagement</span></span><br><span class="line"><span class="comment">//UrlUtils: scheme: https</span></span><br><span class="line"><span class="comment">//UrlUtils: host: m.dev.haowumc.com</span></span><br><span class="line"><span class="comment">//UrlUtils: port: -1</span></span><br><span class="line"><span class="comment">//UrlUtils: path: /app/financialManagement</span></span><br><span class="line"><span class="comment">//UrlUtils: pathSegments: [app, financialManagement]</span></span><br><span class="line"><span class="comment">//UrlUtils: query: null</span></span><br><span class="line"><span class="comment">//UrlUtils: authority: m.dev.haowumc.com</span></span><br><span class="line"><span class="comment">//UrlUtils: userInfo: null</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h2><h4 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h4><ul>
+<li><p>http协议中请求的url不支持中文和特殊字符(如&amp;?)，所以需要对url进行编码和解码，编码使用的是URLEncoder，解码使用的是URLDecoder；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//进行url编码</span></span><br><span class="line">URLEncoder.encode(url)</span><br><span class="line"><span class="comment">//进行url解码</span></span><br><span class="line">URLDecoder.decode(encodeUrl)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Http-2-0"><a href="#Http-2-0" class="headerlink" title="Http 2.0"></a>Http 2.0</h4><ul>
+<li>Okhttp支持配置使用Http 2.0协议</li>
+<li>Http2.0相对于Http1.x来说提升是巨大的，主要有以下几点：</li>
+<li>二进制格式:http1.x是文本协议，而http2.0是二进制以帧为基本单位，是一个二进制协议，一帧中除了包含数据外同时还包含该帧的标识：StreamIdentifier，即标识了该帧属于哪个request,使得网络传输变得十分灵活。多路复用:一个很大的改进，原先http1.x一个连接一个请求的情况有比较大的局限性，也引发了很多问题，如建立多个连接的消耗以及效率问题。</li>
+<li>http1.x为了解决效率问题，可能会尽量多的发起并发的请求去加载资源，然而浏览器对于同一域名下的并发请求有限制，而优化的手段一般是将请求的资源放到不同的域名下来突破这种限制。</li>
+<li>而http2.0支持的多路复用可以很好的解决这个问题，多个请求共用一个TCP连接，多个请求可以同时在这个TCP连接上并发，一个是解决了建立多个TCP连接的消耗问题，一个也解决了效率的问题。</li>
+<li>那么是什么原理支撑多个请求可以在一个TCP连接上并发呢？基本原理就是上面的二进制分帧，因为每一帧都有一个身份标识，所以多个请求的不同帧可以并发的无序发送出去，在服务端会根据每一帧的身份标识，将其整理到对应的request中。</li>
+<li>header头部压缩:主要是通过压缩header来减少请求的大小，减少流量消耗，提高效率。因为之前存在一个问题是，每次请求都要带上header，而这个header中的数据通常是一层不变的。<br>支持服务端推送</li>
+</ul>
+<h2 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h2><h4 id="TCP和UDP的区别-1"><a href="#TCP和UDP的区别-1" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h4><ul>
+<li>①UDP协议：<ul>
+<li>面向无连接</li>
+<li>每个数据报的大小在限制在64k内</li>
+<li>因为是面向无连接，所以是不可靠协议</li>
+<li>不需要建立连接，速度快</li>
+</ul>
+</li>
+<li>②TCP协议：<ul>
+<li>必须建立连接，形成传输数据的通道</li>
+<li>在连接中可进行大数据量传输</li>
+<li>通过三次握手完成连接，是可靠协议</li>
+<li>必须建立连接，效率会稍低</li>
+</ul>
+</li>
+<li>注：三次握手：<ul>
+<li>第一次：我问你：在么？</li>
+<li>第二次：你回答：在。</li>
+<li>第三次：我反馈：哦，我知道你在。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Socket介绍"><a href="#Socket介绍" class="headerlink" title="Socket介绍"></a>Socket介绍</h2><ul>
+<li>ocket简单介绍<ul>
+<li>Socket就是为网络服务提供的一种机制</li>
+<li>通信的两端都有Socket</li>
+<li>网络通信其实就是Socket间的通信</li>
+<li>数据在两个Socket间通过IO传输</li>
+<li>玩Socket主要就是记住流程，代码查文档就行</li>
+<li>Socket的简单使用的话应该都会，两个端各建立一个Socket，服务端的叫ServerSocket，然后建立连接即可。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Socket工作图解"><a href="#Socket工作图解" class="headerlink" title="Socket工作图解"></a>Socket工作图解</h2><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/f6491cfb/29016e5b109a247bf01858a5c2c8df78.png"></p>
+<h2 id="UDP协议传输数据"><a href="#UDP协议传输数据" class="headerlink" title="UDP协议传输数据"></a>UDP协议传输数据</h2><h3 id="客户端发送数据"><a href="#客户端发送数据" class="headerlink" title="客户端发送数据"></a>客户端发送数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 端口号</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">PORT</span> <span class="operator">=</span> <span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * UDP协议发送数据：</span></span><br><span class="line"><span class="comment"> * 1.创建发送端Socket对象</span></span><br><span class="line"><span class="comment"> * 2.创建数据，并把数据打包</span></span><br><span class="line"><span class="comment"> * 3.调用Socket对象发送方法发送数据包</span></span><br><span class="line"><span class="comment"> * 4.释放资源</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">udpSendMessage</span><span class="params">(String serverAddress)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="string">&quot;yang&quot;</span>;</span><br><span class="line">    <span class="comment">// 创建发送端Socket对象</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 创建发送端Socket对象</span></span><br><span class="line">        <span class="type">DatagramSocket</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramSocket</span>();</span><br><span class="line">        <span class="comment">// 创建数据，并把数据打包</span></span><br><span class="line">        <span class="type">byte</span>[] bys = content.getBytes();</span><br><span class="line">        <span class="type">InetAddress</span> <span class="variable">byName</span> <span class="operator">=</span> InetAddress.getByName(serverAddress);</span><br><span class="line">        <span class="type">DatagramPacket</span> <span class="variable">dp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(bys, bys.length,byName ,PORT);</span><br><span class="line">        <span class="comment">// 调用Socket对象发送方法发送数据包</span></span><br><span class="line">        ds.send(dp);</span><br><span class="line">        <span class="comment">// 释放资源</span></span><br><span class="line">        ds.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端接收数据"><a href="#服务端接收数据" class="headerlink" title="服务端接收数据"></a>服务端接收数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">     * UDP协议接收数据：</span></span><br><span class="line"><span class="comment">     * 1.创建接收端Socket对象</span></span><br><span class="line"><span class="comment">     * 2.创建一个数据包(接收容器)</span></span><br><span class="line"><span class="comment">     * 3.调用Socket对象接收方法接收数据包</span></span><br><span class="line"><span class="comment">     * 4.解析数据包</span></span><br><span class="line"><span class="comment">     * 5.释放资源</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">receive_udp</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 创建接收端Socket对象</span></span><br><span class="line">        <span class="type">DatagramSocket</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramSocket</span>(PORT);</span><br><span class="line">        <span class="comment">// 创建一个数据包(接收容器)</span></span><br><span class="line">        <span class="type">byte</span>[] bys = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">        <span class="type">DatagramPacket</span> <span class="variable">dp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(bys, bys.length);</span><br><span class="line">        <span class="comment">// 调用Socket对象接收方法接收数据包</span></span><br><span class="line">        ds.receive(dp);</span><br><span class="line">        <span class="comment">// 获取对方的ip</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> dp.getAddress().getHostAddress();</span><br><span class="line">        <span class="comment">// 解析数据</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(dp.getData(), <span class="number">0</span>, dp.getLength());</span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Message</span>();</span><br><span class="line">        message.obj = data;</span><br><span class="line">        message.what = <span class="number">2</span>;</span><br><span class="line">        handler.sendMessage(message);</span><br><span class="line">        <span class="comment">// 关闭数据库</span></span><br><span class="line">        ds.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="TCP协议传输数据"><a href="#TCP协议传输数据" class="headerlink" title="TCP协议传输数据"></a>TCP协议传输数据</h2><h3 id="客户端发送数据-1"><a href="#客户端发送数据-1" class="headerlink" title="客户端发送数据"></a>客户端发送数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 端口号</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">PORT</span> <span class="operator">=</span> <span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> serverAddress 要发送到服务端的ip</span></span><br><span class="line"><span class="comment"> * 1.创建socket并指定ip和端口号</span></span><br><span class="line"><span class="comment"> * 2.获取输出流，写数据</span></span><br><span class="line"><span class="comment"> * 3.释放资源</span></span><br><span class="line"><span class="comment"> * 4.Tcp一定要先开接收端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send_tcp</span><span class="params">(String serverAddress)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">Socket</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(serverAddress, PORT);</span><br><span class="line">        <span class="comment">//为了发送数据，应该获得socket流中的输出流</span></span><br><span class="line">        <span class="type">OutputStream</span> <span class="variable">out</span> <span class="operator">=</span> s.getOutputStream();</span><br><span class="line">        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> <span class="string">&quot;yang&quot;</span>;</span><br><span class="line">        out.write(content.getBytes());</span><br><span class="line">        s.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnknownHostException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="服务端接收数据-1"><a href="#服务端接收数据-1" class="headerlink" title="服务端接收数据"></a>服务端接收数据</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TCP协议接收数据</span></span><br><span class="line"><span class="comment"> * 1.创建接收端的Socket对象</span></span><br><span class="line"><span class="comment"> * 2.监听客户端接收，返回一个Socket对象</span></span><br><span class="line"><span class="comment"> * 3.获取输入流，读取数据显示在控制台</span></span><br><span class="line"><span class="comment"> * 4.释放资源</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">receive_tcp</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//1.建立连接，监听端口</span></span><br><span class="line">        <span class="type">ServerSocket</span> <span class="variable">ss</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(PORT);</span><br><span class="line">        <span class="comment">//2.连接客户端对象</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="comment">//阻塞式方法，只有客户端连接了才会继续往下运行</span></span><br><span class="line">            <span class="type">Socket</span> <span class="variable">accept</span> <span class="operator">=</span> ss.accept();</span><br><span class="line">            <span class="comment">//获取ip</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> accept.getInetAddress().getHostAddress();</span><br><span class="line">            <span class="comment">//3.获取客户端发送过来的数据</span></span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> accept.getInputStream();</span><br><span class="line">            <span class="comment">//4.开始读取,获取输入信息</span></span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">bff</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(in));</span><br><span class="line">            <span class="comment">//读取信息</span></span><br><span class="line">            String line;</span><br><span class="line">            <span class="keyword">final</span> <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">            <span class="keyword">while</span> ((line = bff.readLine()) != <span class="literal">null</span>) &#123;</span><br><span class="line">                sb.append(line);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Message</span>();</span><br><span class="line">            message.obj = sb.toString();</span><br><span class="line">            handler.sendMessage(message);</span><br><span class="line">            <span class="comment">//5.关闭</span></span><br><span class="line">            <span class="comment">//ss.close();</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三次握手建立连接"><a href="#三次握手建立连接" class="headerlink" title="三次握手建立连接"></a>三次握手建立连接</h2><h3 id="三次握手原理图"><a href="#三次握手原理图" class="headerlink" title="三次握手原理图"></a>三次握手原理图</h3><ul>
+<li>第一次：发送SNY&#x3D;1表示此次握手是请求建立连接的，然后seq生成一个客户端的随机数X</li>
+<li>第二次：发送SNY&#x3D;1,ACK&#x3D;1表示是回复请求建立连接的，然后ack&#x3D;客户端的seq+1（这样客户端收到后就能确认是之前想要连接的那个服务端），然后把服务端也生成一个代表自己的随机数seq&#x3D;Y发给客户端。</li>
+<li>第三次：ACK&#x3D;1。 seq&#x3D;客户端随机数+1，ack&#x3D;服务端随机数+1（这样服务端就知道是刚刚那个客户端了）<br><img src= "/medias/detail/load.gif" data-lazy-src="/p/f6491cfb/8b88586d4ceb0b22a5dc64fb0eaea2cf.jpg"></li>
+</ul>
+<h3 id="为什么建立连接需要三次握手"><a href="#为什么建立连接需要三次握手" class="headerlink" title="为什么建立连接需要三次握手"></a>为什么建立连接需要三次握手</h3><ul>
+<li>首先非常明确的是两次握手是最基本的，<ul>
+<li>第一次握手，C端发了个连接请求消息到S端，S端收到后S端就知道自己与C端是可以连接成功的</li>
+<li>但是C端此时并不知道S端是否接收到这个消息，所以S端接收到消息后得应答，C端得到S端的回复后，才能确定自己与S端是可以连接上的，这就是第二次握手。</li>
+</ul>
+</li>
+<li>C端只有确定了自己能与S端连接上才能开始发数据。所以两次握手肯定是最基本的。</li>
+<li>那么为什么需要第三次握手呢？假设一下如果没有第三次握手，而是两次握手后我们就认为连接建立，那么会发生什么？</li>
+<li><strong>第三次握手是为了防止已经失效的连接请求报文段突然又传到服务端，因而产生错误</strong></li>
+<li>具体情况就是：</li>
+<li>C端发出去的第一个网络连接请求由于某些原因在网络节点中滞留了，导致延迟，直到连接释放的某个时间点才到达S端，这是一个早已失效的报文，但是此时S端仍然认为这是C端的建立连接请求第一次握手，于是S端回应了C端，第二次握手。</li>
+<li>如果只有两次握手，那么到这里，连接就建立了，但是此时C端并没有任何数据要发送，而S端就会傻傻的等待着，造成很大的资源浪费。所以需要第三次握手，只有C端再次回应一下，就可以避免这种情况。</li>
+</ul>
+<h2 id="四次握手断开连接"><a href="#四次握手断开连接" class="headerlink" title="四次握手断开连接"></a>四次握手断开连接</h2><ul>
+<li>如图所示：<br><img src= "/medias/detail/load.gif" data-lazy-src="/p/f6491cfb/1cb9504c9e49292d3e9a0dc5911cc9ba.jpg"></li>
+<li>经过上面的建立连接图的解析，这个图应该不难看懂，这里主要有一个问题：为什么比建立连接时多了一次握手？</li>
+<li>可以看到这里服务端的ACK(回复客户端)和FIN(终止)消息并不是同时发出的，而是先ACK，然后再FIN，这也很好理解，当客户端要求断开连接时，此时服务端可能还有未发送完的数据，所以先ACK，然后等数据发送完再FIN。这样就变成了四次握手了。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/f6491cfb">https://fulsun.github.io/p/f6491cfb</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/012.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/515d78b5" title="Java虚拟机"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java虚拟机</div></div></a></div><div class="next-post pull-right"><a href="/p/eda3d9a6" title="注解的使用"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/007.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">注解的使用</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0%E5%92%8C%E5%9B%BE%E8%A7%A3"><span class="toc-text">网络模型概述和图解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="toc-text">网络模型概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B7%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="toc-text">网络模型7层概述</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-text">网络编程三要素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3"><span class="toc-text">端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE"><span class="toc-text">协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Socket%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86%E5%9B%BE%E8%A7%A3"><span class="toc-text">Socket通信原理图解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-text">网络体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Http%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">Http相关知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无连接与无状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="toc-text">HTTP的缓存机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%AD%E8%BF%9E%E6%8E%A5%E4%B8%8E%E9%95%BF%E8%BF%9E%E6%8E%A5"><span class="toc-text">短连接与长连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98"><span class="toc-text">缓存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Https%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">Https相关知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPS%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%89%E5%85%A8"><span class="toc-text">HTTPS为什么安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%89%E5%85%A8"><span class="toc-text">非对称加密算法为什么安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPS%E9%97%AE%E9%A2%98%E7%AD%94%E7%96%91"><span class="toc-text">HTTPS问题答疑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AEKeep-Alive%E6%A8%A1%E5%BC%8F"><span class="toc-text">HTTP协议Keep-Alive模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFKeep-Alive%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="toc-text">什么是Keep-Alive模式？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E7%94%A8Keep-Alive%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">启用Keep-Alive的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Keep-Alive%E6%96%B9%E5%BC%8F%E4%B8%8B%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E6%B6%88%E6%81%AF%E5%86%85%E5%AE%B9-%E9%95%BF%E5%BA%A6%E7%9A%84%E5%A4%A7%E5%B0%8F%EF%BC%9F"><span class="toc-text">Keep-Alive方式下如何判断消息内容&#x2F;长度的大小？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#url%E7%89%B9%E6%80%A7"><span class="toc-text">url特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%BC%E6%8E%A5url%E9%93%BE%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-text">拼接url链接字符串工具类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96Uri%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%90%84%E7%A7%8D%E5%B1%9E%E6%80%A7"><span class="toc-text">获取Uri对象的各种属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-text">其他知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URL%E7%BC%96%E7%A0%81"><span class="toc-text">URL编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Http-2-0"><span class="toc-text">Http 2.0</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">TCP和UDP的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB-1"><span class="toc-text">TCP和UDP的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket%E4%BB%8B%E7%BB%8D"><span class="toc-text">Socket介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket%E5%B7%A5%E4%BD%9C%E5%9B%BE%E8%A7%A3"><span class="toc-text">Socket工作图解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP%E5%8D%8F%E8%AE%AE%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE"><span class="toc-text">UDP协议传输数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE"><span class="toc-text">客户端发送数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE"><span class="toc-text">服务端接收数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE"><span class="toc-text">TCP协议传输数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE-1"><span class="toc-text">客户端发送数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE-1"><span class="toc-text">服务端接收数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="toc-text">三次握手建立连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="toc-text">三次握手原理图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E9%9C%80%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">为什么建立连接需要三次握手</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E6%AC%A1%E6%8F%A1%E6%89%8B%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-text">四次握手断开连接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

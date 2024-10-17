@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /fonts/
+Disallow: /lib/
+Disallow: /live2d-widget/
+Disallow: /love/
+Disallow: /dist/
+Disallow: /img/
+Disallow: /images/
+
+Sitemap: https://fulsun.github.io/sitemap.xml
+Sitemap: https://fulsun.github.io//baidusitemap.xml

@@ -1,0 +1,468 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Spring简介 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Spring 是轻量级的开源的 J2EE 框架，可以解决企业应用开发的复杂性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring简介">
+<meta property="og:url" content="https://fulsun.github.io/p/bda15789">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="Spring 是轻量级的开源的 J2EE 框架，可以解决企业应用开发的复杂性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/003.jpg">
+<meta property="article:published_time" content="2024-07-11T18:14:28.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.386Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/003.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/bda15789"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring简介',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/003.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring简介</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-11T18:14:28.000Z" title="发表于 2024-07-11 18:14:28">2024-07-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.386Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Spring/">Spring</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring简介"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="官网"><a href="#官网" class="headerlink" title="官网"></a>官网</h2><ul>
+<li><p>Spring官网：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://spring.io/projects/spring-framework#learn">Spring Framework</a></p>
+<ul>
+<li><p>GA（General Availability，普遍可用）为稳定版本</p>
+</li>
+<li><p>SNAPSHOT 为快照版本，不稳定</p>
+</li>
+</ul>
+</li>
+<li><p>Github源码：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/spring-projects/spring-framework">GitHub - spring-projects&#x2F;spring-framework: Spring Framework</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://springdoc.cn/spring/">Spring Framework 中文文档 (springdoc.cn)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.spring.io/spring-framework/docs/5.2.25.RELEASE/spring-framework-reference/">Spring Framework Documentation</a></p>
+</li>
+<li><p>Spring Framework历史版本网址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.spring.io/spring-framework/docs/">https://docs.spring.io/spring-framework/docs/</a></p>
+</li>
+<li><p>Spring依赖下载路径：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://repo.spring.io/ui/repos/tree/General/libs-milestone">repo.spring.io</a></p>
+</li>
+</ul>
+<h2 id="Spring简介"><a href="#Spring简介" class="headerlink" title="Spring简介"></a>Spring简介</h2><p><code>J2EE</code>作为一种企业级应用开发平台，其优异表现是我们有目共睹的。但纵使是最为强大的军队，如果没有一个好的指挥官，不知道如何发挥这支军队的强大战斗力，那这支军队也不可能取得太多辉煌的战果。在<code>J2EE</code>平台的一些早期实践中，就出现了对<code>J2EE</code>平台所提供的各项服务的滥用，将基于<code>J2EE</code> 平台的企业级开发带入了窘境。</p>
+<p><code>Spring</code>是于2003年兴起的一个轻量级的<code>Java</code>开发框架，由Rod Johnson在其著作 《<a target="_blank" rel="noopener external nofollow noreferrer" href="https://book.douban.com/subject/1483761/">Expert One-on-One J2EE Design and Development</a>》 中阐述的部分理念和原型衍生而来。它的最初目的主要是为了 <strong>简化Java EE的企业级应用开发</strong>，相对于过去EJB1时代 <strong>重量级</strong> 的企业应用开发而言，Spring框架的出现为曾经阴霾的天空带来了灿烂的阳光。</p>
+<p>Spring 是一套分层的 <code>full-stack</code>（全栈） 轻量级开源框架，以 <code>IoC</code> 和 <code>AOP</code> 为内核，提供了展现层 <code>Spring MVC</code> 和业务层事务管理等众多的企业级应⽤技术，还能整合开源世界众多著名的第三⽅框架和类库，已经成为使⽤最多的 <code>Java EE</code> 企业应⽤开源框架。在 <code>Java</code> 社区中特别流行，基本上完全代替了企业级<code>JavaBeans</code>（EJB）模型。</p>
+<h3 id="Spring特性"><a href="#Spring特性" class="headerlink" title="Spring特性"></a>Spring特性</h3><p>核心技术：依赖注入，AOP，事件，资源，i18n国际化，数据验证，数据绑定, 类型转换, SpEL。</p>
+<p>测试支持：mock数据, TestContext框架, Spring MVC 测试, WebTestClient。</p>
+<p>数据访问：事务管理, DAO层支持, JDBC, ORM, Marshalling XML。</p>
+<p>Web框架：Spring MVC ，Spring WebFlux。</p>
+<p>集成能力：远程处理, JMS, JCA, JMX, 邮件, 任务, 调度, 缓存。</p>
+<p>语言支持：Kotlin, Groovy, 其他动态语言。</p>
+<h3 id="核心结构"><a href="#核心结构" class="headerlink" title="核心结构"></a>核心结构</h3><p>Spring是⼀个分层⾮常清晰并且依赖关系、职责定位⾮常明确的轻量级框架，主要包括⼏个⼤模块：数据处理模块、Web模块、AOP（Aspect Oriented Programming）&#x2F;Aspects模块、Core Container模块和 Test 模块，如下图所示，Spring依靠这些基本模块，实现了⼀个令⼈愉悦的融合了现有解决⽅案的零侵⼊的轻量级框架。</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/bda15789/2e275cb826d217904bbdeb2ec1777349.png"></p>
+<ul>
+<li><strong>核⼼容器</strong>（<code>Core Container</code>） 容器是<code>Spring</code>框架最核⼼的部分，它管理着<code>Spring</code>应⽤中<code>bean</code>的创建、配置和管理。在该模块中，包括了<code>Spring bean</code>⼯⼚，它为<code>Spring</code>提供了<code>DI</code>的功能。基于<code>bean</code>⼯⼚，我们还会发现有多种<code>Spring</code>应⽤上下⽂的实现。所有的<code>Spring</code>模块都构建于核⼼容器之上。</li>
+<li><strong>⾯向切⾯</strong>（<code>AOP</code>）&#x2F;<code>Aspects</code> <code>Spring</code>对⾯向切⾯编程提供了丰富的⽀持。这个模块是<code>Spring</code>应⽤系统中开发切⾯的基础，与<code>DI</code>⼀样，<code>AOP</code>可以帮助应⽤对象解耦。</li>
+<li><strong>数据访问</strong>（<code>Data Access</code>&#x2F;<code>Integration</code>）<code>Spring</code>的<code>JDBC</code>和<code>DAO</code>模块封装了⼤量样板代码，这样可以使得数据库代码变得简洁，也可以更专注于我们的业务，还可以避免数据库资源释放失败⽽引起的问题。 另外，<code>Spring AOP</code>为数据访问提供了事务管理服务，同时<code>Spring</code>还对<code>ORM</code>进⾏了集成，如<code>Hibernate</code>、<code>MyBatis</code>等。该模块由<code>JDBC</code>、<code>Transactions</code>、<code>ORM</code>、<code>OXM</code> 和 <code>JMS</code> 等模块组成。</li>
+<li><strong>网页支持</strong> 该模块提供了<code>SpringMVC</code>框架给<code>Web</code>应⽤，还提供了多种构建和其它应⽤交互的远程调⽤⽅案。 <code>SpringMVC</code>框架在<code>Web</code>层提升了应⽤的松耦合⽔平。</li>
+<li><strong>测试支持</strong> 为了使得开发者能够很⽅便的进⾏测试，<code>Spring</code>提供了测试模块以致⼒于<code>Spring</code>应⽤的测试。 通过该模块，<code>Spring</code>为使⽤<code>Servlet</code>、<code>JNDI</code>等编写单元测试提供了⼀系列的<code>mock</code>对象实现。<code>Test模块</code>支持使用 <code>JUnit</code> 或 <code>TestNG</code> 测试 <code>Spring</code> 组件。它提供一致的 <code>Spring</code> <code>ApplicationContexts</code> 加载和这些上下文的缓存。它还提供了可用于单独测试代码的模拟对象。</li>
+</ul>
+<h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><blockquote>
+<p>Core核心 : <strong>整个Spring框架构建在Core核心模块之上，它是整个框架的基础。</strong></p>
+</blockquote>
+<p>组成整个Spring框架的各种服务实现被划分到了多个相互独立却又相互依赖的模块当中。这些模块组成了Spring生命之树的枝和干，说白了也就是它们组成了Spring框架的核心骨架。抓住了这副骨架，也就抓住了Spring框架的学习主线。</p>
+<blockquote>
+<p>依赖注入（Dependency Injection Containers）</p>
+</blockquote>
+<p>IoC是轻量级容器（Lightweight Container)兴起而逐渐被很多人提起的一个名词，它的全称为 Inversion of Control，中文通常翻译为“控制反转”，它还有一个别名叫做依赖注入（Dependency Injection）。《Expert Spring MVC and Web Flow》 和 《Expert One-on-One J2EE without EJB》 等书中都将依赖注入看作是IoC的一种方式。</p>
+<blockquote>
+<p>面向切面编程（Aspect-Oriented Programming）</p>
+</blockquote>
+<p>OOP：Object Oriented Programming，OOP作为面向对象编程的模式，获得了巨大的成功，OOP的主要功能是数据封装、继承和多态。</p>
+<p>而AOP是一种新的编程方式，它和OOP不同，OOP把系统看作多个对象的交互，AOP把系统分解为不同的关注点，或者称之为切面（Aspect）。</p>
+<blockquote>
+<p>AOP织入</p>
+</blockquote>
+<p>在Java平台上，对于AOP的织入，有3种方式：</p>
+<ul>
+<li><p>编译期：在编译时，由编译器把切面调用编译进字节码，这种方式需要定义新的关键字并扩展编译器，AspectJ就扩展了Java编译器，使用关键字aspect来实现织入；</p>
+</li>
+<li><p>类加载器：在目标类被装载到JVM时，通过一个特殊的类加载器，对目标类的字节码重新“增强”；</p>
+</li>
+<li><p>运行期：目标对象和切面都是普通Java类，通过JVM的动态代理功能或者第三方库实现运行期动态织入。</p>
+</li>
+<li><p>Spring的AOP实现就是基于JVM的动态代理。由于JVM的动态代理要求必须实现接口，如果一个普通类没有业务接口，就需要通过CGLIB或者Javassist这些第三方库实现。</p>
+</li>
+</ul>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><h3 id="Spring各模块的依赖关系"><a href="#Spring各模块的依赖关系" class="headerlink" title="Spring各模块的依赖关系"></a>Spring各模块的依赖关系</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/bda15789/2ddae41aae4b0e89953b0017abd98ec3.png"></p>
+<blockquote>
+<p>核心容器模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-core</td>
+<td>提供IoC和DI等功能</td>
+</tr>
+<tr>
+<td>spring-beans</td>
+<td>提供Bean容器等功能</td>
+</tr>
+<tr>
+<td>spring-context</td>
+<td>基于core和beans模块构建，扩展了功能</td>
+</tr>
+<tr>
+<td>spring-expression</td>
+<td>提供SpEL表达式支持</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>AOP模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-aop</td>
+<td>提供AOP（面向切面编程）支持</td>
+</tr>
+<tr>
+<td>spring-aspects</td>
+<td>提供AspectJ的集成</td>
+</tr>
+<tr>
+<td>spring-instrument</td>
+<td>提供类植入和类加载器的实现</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>数据访问模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-jdbc</td>
+<td>提供JDBC抽象层来代替原生JDBC功能</td>
+</tr>
+<tr>
+<td>spring-orm</td>
+<td>提供主流的ORM框架API支持</td>
+</tr>
+<tr>
+<td>spring-oxm</td>
+<td>提供支持对象和XML映射抽象层</td>
+</tr>
+<tr>
+<td>spring-tx</td>
+<td>提供编程式和声明式事务管理</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Web模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-web</td>
+<td>提供Web功能支持</td>
+</tr>
+<tr>
+<td>spring-webmvc</td>
+<td>提供Web应用程序的MVC和REST Web Services支持</td>
+</tr>
+<tr>
+<td>spring-webflux</td>
+<td>提供基于响应式编程的Web框架</td>
+</tr>
+<tr>
+<td>spring-websocket</td>
+<td>提供Web Socket支持</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>测试模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-test</td>
+<td>提供JUnit或TestNG等主流单元测试框架的集成</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>集成模块</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-context-support</td>
+<td>支持整合第三方工具</td>
+</tr>
+<tr>
+<td>spring-messaging</td>
+<td>提供消息功能支持</td>
+</tr>
+<tr>
+<td>spring-jms</td>
+<td>提供支持JMS消息功能支持</td>
+</tr>
+<tr>
+<td>spring-jcl</td>
+<td>提供日志框架适配器</td>
+</tr>
+</tbody></table>
+<h3 id="Spring优势"><a href="#Spring优势" class="headerlink" title="Spring优势"></a>Spring优势</h3><ul>
+<li><strong>⽅便解耦，简化开发</strong></li>
+</ul>
+<p>通过<code>Spring</code>提供的<code>IoC</code>容器，可以将对象间的依赖关系交由<code>Spring</code>进⾏控制，避免硬编码所造成的过度程序耦合。⽤户也不必再为单例模式类、属性⽂件解析等这些很底层的需求编写代码，可以更专注于上层的应⽤。</p>
+<ul>
+<li><strong>AOP编程的⽀持</strong></li>
+</ul>
+<p>通过Spring的AOP功能，⽅便进⾏⾯向切⾯的编程，许多不容易⽤传统<code>OOP</code>实现的功能可以通过<code>AOP</code>轻松应付。</p>
+<ul>
+<li><strong>声明式事务的⽀持 @Transactional</strong></li>
+</ul>
+<p>可以将我们从单调烦闷的事务管理代码中解脱出来，通过声明式⽅式灵活的进⾏事务的管理，提⾼开发效率和质量。</p>
+<ul>
+<li><strong>⽅便程序的测试</strong></li>
+</ul>
+<p>可以⽤⾮容器依赖的编程⽅式进⾏⼏乎所有的测试⼯作，测试不再是昂贵的操作，⽽是随⼿可做的事情。</p>
+<ul>
+<li><strong>⽅便集成各种优秀框架</strong></li>
+</ul>
+<p><code>Spring</code>可以降低各种框架的使⽤难度，提供了对各种优秀框架（<code>Struts</code>、<code>Hibernate</code>、<code>Hessian</code>、<code>Quartz</code>等）的直接⽀持。</p>
+<ul>
+<li><strong>降低JavaEE API的使⽤难度</strong></li>
+</ul>
+<p><code>Spring</code>对JavaEE API（如<code>JDBC</code>、<code>JavaMail</code>、<code>远程调⽤</code>等）进⾏了薄薄的封装层，使这些<code>API</code>的使⽤难度⼤为降低。</p>
+<ul>
+<li><strong>源码是经典的 Java 学习范例</strong></li>
+</ul>
+<p><code>Spring</code>的源代码设计精妙、结构清晰、匠⼼独⽤，处处体现着⼤师对Java设计模式灵活运⽤以及对<code>Java</code>技术的⾼深造诣。它的源代码⽆意是<code>Java</code>技术的最佳实践的范例。</p>
+<h2 id="Spring-入门案例"><a href="#Spring-入门案例" class="headerlink" title="Spring 入门案例"></a>Spring 入门案例</h2><h3 id="下载-Spring5-依赖"><a href="#下载-Spring5-依赖" class="headerlink" title="下载 Spring5 依赖"></a>下载 Spring5 依赖</h3><p>访问<a target="_blank" rel="noopener external nofollow noreferrer" href="https://repo.spring.io/ui/repos/tree/General/libs-spring-framework-build">repo.spring.io</a> ， 右侧选择<code>release-com-org-springframework-spring</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/bda15789/822d91f20e35d0d2e2970ba70c9bef83.png"></p>
+<h3 id="创建普通-Maven-工程"><a href="#创建普通-Maven-工程" class="headerlink" title="创建普通 Maven 工程"></a>创建普通 Maven 工程</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 使用cmd 或 git bash</span></span><br><span class="line">mvn archetype:generate -DgroupId=pers.fulsun -DartifactId=springstudy-project -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=<span class="literal">false</span> -DarchetypeCatalog=http://maven.aliyun.com/nexus/content/groups/public/</span><br></pre></td></tr></table></figure>
+
+<p>pom.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>pers.fulsun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springstudy-project<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>springstudy-project<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">spring.version</span>&gt;</span>5.3.37<span class="tag">&lt;/<span class="name">spring.version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="创建普通类和方法"><a href="#创建普通类和方法" class="headerlink" title="创建普通类和方法"></a>创建普通类和方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> pers.fulsun.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World: User.add()方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Spring配置创建的对象"><a href="#Spring配置创建的对象" class="headerlink" title="Spring配置创建的对象"></a>Spring配置创建的对象</h3><p>创建beans的配置文件spring-bean.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;user01&quot;</span> <span class="attr">class</span>=<span class="string">&quot;pers.fulsun.pojo.User&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="测试代码的编写"><a href="#测试代码的编写" class="headerlink" title="测试代码的编写"></a>测试代码的编写</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.FileSystemXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloWorldTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="comment">// 1、加载自定义的Spring配置文件</span></span><br><span class="line">        <span class="comment">// FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(&quot;C:\\workspace\\.xml&quot;);</span></span><br><span class="line">        <span class="type">FileSystemXmlApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileSystemXmlApplicationContext</span>(<span class="string">&quot;classpath:spring-bean.xml&quot;</span>);</span><br><span class="line">        <span class="comment">// 2、获取配置的User对象</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) context.getBean(<span class="string">&quot;user01&quot;</span>);</span><br><span class="line">        <span class="comment">// 3、操作User对象</span></span><br><span class="line">        user.add();</span><br><span class="line">        context.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id><a href="#" class="headerlink" title></a></h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/bda15789">https://fulsun.github.io/p/bda15789</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring/">Spring</a></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/003.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/2f25bc43" title="Spring-IOC容器"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/010.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Spring-IOC容器</div></div></a></div><div class="next-post pull-right"><a href="/p/9d3b5342" title="封装Log4j日志思路"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/002.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">封装Log4j日志思路</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/2f25bc43" title="Spring-IOC容器"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/010.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-11</div><div class="title">Spring-IOC容器</div></div></a></div><div><a href="/p/92933cdb" title="Spring-AOP编程"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-14</div><div class="title">Spring-AOP编程</div></div></a></div><div><a href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-14</div><div class="title">JdbcTemplate与声明式事务</div></div></a></div><div><a href="/p/65826306" title="Spring5新功能"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-14</div><div class="title">Spring5新功能</div></div></a></div><div><a href="/p/a0c53761" title="Configuration Bean 注册组件"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-15</div><div class="title">Configuration Bean 注册组件</div></div></a></div><div><a href="/p/94e3914c" title="Import 注册组件"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-15</div><div class="title">Import 注册组件</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%98%E7%BD%91"><span class="toc-text">官网</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring%E7%AE%80%E4%BB%8B"><span class="toc-text">Spring简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E7%89%B9%E6%80%A7"><span class="toc-text">Spring特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84"><span class="toc-text">核心结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB"><span class="toc-text">Spring各模块的依赖关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E4%BC%98%E5%8A%BF"><span class="toc-text">Spring优势</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">Spring 入门案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD-Spring5-%E4%BE%9D%E8%B5%96"><span class="toc-text">下载 Spring5 依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%99%AE%E9%80%9A-Maven-%E5%B7%A5%E7%A8%8B"><span class="toc-text">创建普通 Maven 工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%99%AE%E9%80%9A%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-text">创建普通类和方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E9%85%8D%E7%BD%AE%E5%88%9B%E5%BB%BA%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-text">Spring配置创建的对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text">测试代码的编写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"></span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

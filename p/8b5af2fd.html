@@ -1,0 +1,655 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>IDEA+Github+自建GitLab | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="WSL2 在 Windows 上提供 Linux 环境，利用 Hyper-V 和完整的 Linux 内核。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA+Github+自建GitLab">
+<meta property="og:url" content="https://fulsun.github.io/p/8b5af2fd">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="WSL2 在 Windows 上提供 Linux 环境，利用 Hyper-V 和完整的 Linux 内核。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/006.jpg">
+<meta property="article:published_time" content="2022-03-18T22:17:31.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.246Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="GitLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/006.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/8b5af2fd"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IDEA+Github+自建GitLab',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/006.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">IDEA+Github+自建GitLab</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-18T22:17:31.000Z" title="发表于 2022-03-18 22:17:31">2022-03-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.246Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Git/">Git</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="IDEA+Github+自建GitLab"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="GitHub-操作"><a href="#GitHub-操作" class="headerlink" title="GitHub 操作"></a>GitHub 操作</h2><ul>
+<li>Git 官网：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/">https://github.com/</a>  PS：全球最大同性交友网站，技术宅男的天堂，新世界的大门，你还在等什么？</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">账号</th>
+<th align="left">姓名</th>
+<th align="left">验证邮箱</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>atguiguyuebuqun</code></td>
+<td align="left"><code>岳不群</code></td>
+<td align="left"><code>atguiguyuebuqun@aliyun.com</code></td>
+</tr>
+<tr>
+<td align="left"><code>atguigulinghuchong</code></td>
+<td align="left"><code>令狐冲</code></td>
+<td align="left"><code>atguigulinghuchong@163.com</code></td>
+</tr>
+<tr>
+<td align="left"><code>atguigudongfang1</code></td>
+<td align="left"><code>东方不败</code></td>
+<td align="left"><code>atguigudongfang1@163.com</code></td>
+</tr>
+</tbody></table>
+<h3 id="创建远程仓库"><a href="#创建远程仓库" class="headerlink" title="创建远程仓库"></a>创建远程仓库</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/30b7069d8ae484d0f74e25d8a0760610.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/1657dd9e97ec7359085b6687b8ed86c0.png"></p>
+<h3 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h3><table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>git remote add 别名 远程地址</code></td>
+<td align="left">起别名</td>
+</tr>
+<tr>
+<td align="left"><code>git remote -v</code></td>
+<td align="left">查看当前所有远程别名</td>
+</tr>
+<tr>
+<td align="left"><code>git clone 远程地址</code></td>
+<td align="left">将远程仓库的内容克隆到本地</td>
+</tr>
+<tr>
+<td align="left"><code>git pull 远程地址别名 远程分支名</code></td>
+<td align="left">将远程仓库对于分支最新内容拉下来后与当前本地分支直接合并</td>
+</tr>
+<tr>
+<td align="left"><code>git push 别名 分支</code></td>
+<td align="left">推送本地分支上的内容到远程仓库</td>
+</tr>
+</tbody></table>
+<h4 id="创建远程仓库别名"><a href="#创建远程仓库别名" class="headerlink" title="创建远程仓库别名"></a>创建远程仓库别名</h4><p>1）基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote add 别名 远程地址</span><br></pre></td></tr></table></figure>
+
+<p>2）案例实操</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/8f03ec632ca1758adecb9d445a6107c5.png"></p>
+<h4 id="推送本地分支到远程仓库"><a href="#推送本地分支到远程仓库" class="headerlink" title="推送本地分支到远程仓库"></a>推送本地分支到远程仓库</h4><p>1）基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push 别名 分支</span><br></pre></td></tr></table></figure>
+
+<p>2）案例实操</p>
+<p>由于 GitHub 外网的特殊原因，会有网络延迟，等待时间可能较长，属于正常现象。可能要多尝试几次，需要点耐心。当然你有工具除外</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push git-demo master</span><br></pre></td></tr></table></figure>
+
+<p>如果本地还没有过 SSH 免密登录操作（下面内容会详细介绍），则在执行命令后会弹出一个<code>Connect to GitHub</code>的提示框</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/79ce7cc76b0b5f080554a9ac9b7c29d5.png"></p>
+<p>点击<code>Sign in with your browser</code>后会自动打开系统默认浏览器</p>
+<p>如果你的 GitHub 尚未进行过任何 Git 相关授权，则会给出确认授权提示信息，点击<code>Authorize GitCredentialManager</code>进行授权即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/b8a3faa60a70797f836b99f85b59e6d0.png"></p>
+<p>接着会提示授权成功（如果在此之前已经对<code>Git Credential Manager</code>进行过授权，则直接提示此信息）</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/2b7e5e08e0e663c3a0138b257cc3a76d.png"></p>
+<p>成功推送本地分支至远程库</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/78d578d05621fab04d3c02ecf81742c7.png"></p>
+<p><strong>凭据管理器</strong></p>
+<p>在上述操作过程中，点击<code>Authorize GitCredentialManager</code>进行授权后，在 GitHub 设置页面的<code>Application</code>选项—<code>Authorized OAuth Apps</code>中可以查看到 <code>Git Credential Manager</code>的授权信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/13df6341fe438863b95ef6f2b6407dd1.png"></p>
+<p>在上述过程前，本地凭据管理器中还没有任何身份凭证信息（没有 Git 和 GitHub 相关的凭据信息）</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/427f37e5de8197df28ab5250dfd43398.png"></p>
+<p>执行过上述命令等操作后，本地凭据管理器中会出现 Git 相关凭据信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a9b8b6542fa824cf91fc7d208895e093.png"></p>
+<h4 id="拉取远程仓库到本地"><a href="#拉取远程仓库到本地" class="headerlink" title="拉取远程仓库到本地"></a>拉取远程仓库到本地</h4><p>1）基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull 别名 分支</span><br></pre></td></tr></table></figure>
+
+<p>2）案例实操</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/fafc1a20d0c119f9ab35c36f5e2b09cb.png"></p>
+<h4 id="克隆远程仓库到本地"><a href="#克隆远程仓库到本地" class="headerlink" title="克隆远程仓库到本地"></a>克隆远程仓库到本地</h4><p>1）基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 远程库地址</span><br></pre></td></tr></table></figure>
+
+<p>2）案例实操</p>
+<p>首先获取需要克隆的远程库地址</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/069f06eee7d5ab19111ef811e4f6a350.png"></p>
+<p>由于<code>workspace</code>下面已经存在一个同名的仓库地址，所以直接在<code>workspace</code>中键入命令会有错误提示信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c3bca6e0d549b5f0db451ca690f535f2.png"></p>
+<p>这是因为，<code>clone</code>命令默认帮我们创建的一个远程仓库名称同名的文件夹，所以这里我删除了<code>git-demo</code>目录</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/329464770baf265ac2f21ee84d8235ab.png"></p>
+<p>小结：<code>clone</code> 会做如下操作</p>
+<ul>
+<li>1、拉取代码</li>
+<li>2、初始化本地仓库</li>
+<li>3、创建别名（默认<code>origin</code>）</li>
+</ul>
+<h3 id="团队内协作"><a href="#团队内协作" class="headerlink" title="团队内协作"></a>团队内协作</h3><p>如果项目之外成员想要将自己编写的代码推送至远程库，则会提示<code>unable to access...403</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0e31b2470d2184d3f5df30efd0a268a0.png"></p>
+<p>要想获取推送的权限，则需要该项目管理员对该成员进行邀请，将其添加至该项目中</p>
+<p>1）邀请合作者，输入用户名，复制地址并发送给合作者</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/90fe09e86fd8b89eb53a8d30368ea5aa.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/6479fbcd68ada6940b4e4c9bb40dffbe.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/778c0af7d5c0199c75c37b2ef372b53e.png"></p>
+<p>2）合作者访问该链接，点击接受邀请，可以在其账号上看到该远程仓库</p>
+<ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/atguiguvueyue/git-demo/invitations">https://github.com/atguiguvueyue/git-demo/invitations</a></li>
+</ul>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/89515f531cfe6db819650d4dad21ac90.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bb8f4e62a5315873aa33a19be1f34a8e.png"></p>
+<p>接下来，就可以通过<code>git</code>命令对远程库进行克隆、拉取、提交、推送等操作了</p>
+<h3 id="跨团队协作"><a href="#跨团队协作" class="headerlink" title="跨团队协作"></a>跨团队协作</h3><p>1）合作者视角</p>
+<p>点击<code>Fork</code>，将其他项目“叉”到自己账号上</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/662d7f93b4376654a18b1d3dc3017547.png"></p>
+<p>自己账号上就有了该项目，可以清楚地看到该项目<code>forked from xxx</code>，即可对代码进行修改</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/f92f3effef420ef13dfe7f6b300e5e75.png"></p>
+<p>修改代码后，点击<code>Pull requests</code>—<code>New pull request</code>，发起拉取请求</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/32885e2cb29b6e4470fc9ac272908ba5.png"></p>
+<p>查看修改内容，点击<code>Create pull request</code>，创建拉取请求</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/5d62d099c8e7353acc195e2d08cc3844.png"></p>
+<p>填写请求信息及评论内容，点击<code>Create pull request</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/806e9eb6c41537d0bac3d653caddd818.png"></p>
+<p>创建完成</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3cf55099d16cf8903fd4637a61c3a86b.png"></p>
+<p>2）项目管理员视角</p>
+<p>可以在该项目中查看到<code>Pull requests</code>有一条新的记录，可以点击下方提交信息进行查看</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bf71f935c4316483114c3bde7a2e7753.png"></p>
+<p>想要看到合作者修改的具体内容，可以点击提交记录进行查看</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/9e70efbc93b766d08f474c9c6fe2835e.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/727e73f4c179152b04d22a4dac05ad4c.png"></p>
+<p>同时，可以对拉取请求进行审查和评论</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/b4a5110533e1e91c2c0118bb12429808.png"></p>
+<p>最后，审查通过就可以对拉取请求进行合并了，点击<code>Merge pull request</code>进行合并</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/13c3694dcef32e9e52bf6f9ed647c5dd.png"></p>
+<p>点击<code>Confirm merge</code>，确认合并</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/96d5e006851d79fb9f0876d239fe6639.png"></p>
+<p>合并成功之后，项目成员就可以看到修改的相关内容了</p>
+<h3 id="SSH-免密登录"><a href="#SSH-免密登录" class="headerlink" title="SSH 免密登录"></a>SSH 免密登录</h3><p>1）基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -t指定加密算法，-C添加注释</span></span><br><span class="line">ssh-keygen -t rsa -C 描述</span><br></pre></td></tr></table></figure>
+
+<p>2）案例实操</p>
+<p><strong>本地生成 SSH 密钥</strong></p>
+<p>键入命令，连敲三次回车即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/07e4c20b3c427fe28aff594fbaefee92.png"></p>
+<p>进入<code>~/.ssh</code>目录，复制公钥信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c302ecefdba706de8816955d8f51d2b7.png"></p>
+<p><strong>GitHub 上添加公钥</strong></p>
+<p>未添加任何公钥之前，<code>Code</code>—<code>SSH</code>会有警告提示信息，表示目前 SSH 方式是没有权限的</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/2bc4b945403e4d1d15e9eda04e89bce9.png"></p>
+<p>在 GitHub 的<code>settings</code>—<code>SSH and GPG keys</code>中，点击<code>New SSH key</code>添加一个公钥</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d91947aa2a4932e1fbe4862cc5add3fa.png"></p>
+<p>将<code>id_rsa.pub</code>即公钥信息粘贴至<code>Key</code>中，<code>Title</code>随意，点击<code>Add SSH key</code>进行添加</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e64f49f0528f39b0818a3e0e8fd02499.png"></p>
+<p>出现下列信息，说明添加成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c90d046813d3607d114dfa86dc16a127.png"></p>
+<p><strong>验证 SSH免密登录 是否可用</strong></p>
+<p>进入<code>git-demo</code>项目，点开<code>Code</code>—<code>SSH</code>，发现已经没有警告提示信息了，表示可用</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/5843388f853268b5c26f4f2592788e1b.png"></p>
+<p>复制 SSH 协议地址，使用<code>clone</code>命令克隆到本地，键入<code>yes</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/f78d5911e2ebda8b22a7c2c8eb0d5529.png"></p>
+<p>接下来就是修改内容、添加暂存区、提交本地库、推送远程库的操作了</p>
+<p>这时候我们发现已经不再弹出登录授权的提示信息，就可以推送过去了</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/6cd8738638c87a2aa5803b0937e7c441.png"></p>
+<p>查看远程库历史版本信息，确认推送成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/2516e9bd0a591c4fffd7edce1ce9879f.png"></p>
+<p>至此，SSH 免密登录配置成功！</p>
+<h2 id="IDEA-集成-Git"><a href="#IDEA-集成-Git" class="headerlink" title="IDEA 集成 Git"></a>IDEA 集成 Git</h2><h3 id="配置-Git-忽略文件"><a href="#配置-Git-忽略文件" class="headerlink" title="配置 Git 忽略文件"></a>配置 Git 忽略文件</h3><p>问题1:为什么要忽略他们？答：与项目的实际功能无关，不参与服务器上部署运行。把它们忽略掉能够屏蔽 IDE 工具之间的差异。</p>
+<p>问题2：怎么忽略？</p>
+<p><strong>1）创建忽略规则文件 xxxx.ignore（前缀名随便起，建议是 git.ignore）</strong></p>
+<p>这个文件的存放位置原则上在哪里都可以，为了便于让<code>~/.gitconfig</code>文件引用，建议也放在用户家目录下</p>
+<p><code>git.ignore</code>文件模版内容</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Compiled class file</span></span><br><span class="line"><span class="attr">*.class</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Log file</span></span><br><span class="line"><span class="attr">*.log</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># BlueJ files</span></span><br><span class="line"><span class="attr">*.ctxt</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Mobile Tools for Java (J2ME)</span></span><br><span class="line"><span class="attr">.mtj.tmp/</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Package Files #</span></span><br><span class="line"><span class="attr">*.jar</span></span><br><span class="line"><span class="attr">*.war</span></span><br><span class="line"><span class="attr">*.nar</span></span><br><span class="line"><span class="attr">*.ear</span></span><br><span class="line"><span class="attr">*.zip</span></span><br><span class="line"><span class="attr">*.tar.gz</span></span><br><span class="line"><span class="attr">*.rar</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml</span></span><br><span class="line"><span class="attr">hs_err_pid*</span></span><br><span class="line"><span class="attr">.classpath</span></span><br><span class="line"><span class="attr">.project</span> <span class="string">.settings target .idea</span></span><br><span class="line"><span class="attr">*.iml</span> 	<span class="string">crash 	logs,  	see</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2）在 .gitconfig 文件中引用忽略配置文件（此文件在 Windows 的家目录中）</strong></p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[core]</span></span><br><span class="line">	<span class="attr">excludesfile</span> = <span class="string">C:/Users/Archimedes/git.ignore</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：这里要使用正斜线（<code>/</code>），不要使用反斜线（<code>\</code>）</p>
+<h3 id="定位-Git-程序"><a href="#定位-Git-程序" class="headerlink" title="定位 Git 程序"></a>定位 Git 程序</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/68f193ee0fb8f674545a48a32d73de8a.png"></p>
+<h3 id="初始化本地库"><a href="#初始化本地库" class="headerlink" title="初始化本地库"></a>初始化本地库</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/8169618b408169442b23e5753d1152d8.png"></p>
+<p>明显看到，文件颜色变红了，代表着未被追踪。说明 Git 已经检测到 git-test 下文件，但是文件尚未被添加至暂存区</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/75982e3825cea87cec600c1423cf214e.png"></p>
+<h3 id="添加至暂存区"><a href="#添加至暂存区" class="headerlink" title="添加至暂存区"></a>添加至暂存区</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/20a9458104b0387438a7ea81a66ed1eb.png"></p>
+<p>添加完毕之后，可以看到文件颜色变绿了，代表文件被追踪。说明 Git 已将文件添加至暂存区，但是尚未提交本地库</p>
+<p>在<code>src</code>—<code>main</code>—<code>java</code>下创建一个<code>com.test.Test.java</code>文件</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/de705ce910bd6990aa04d9dca33f947b.png"></p>
+<p>这是 IDEA 会自动检测到该文件，并提示是否需要将<code>Test.java</code>添加至暂存区</p>
+<p>这里先<code>Cancel</code>，不直接<code>Add</code>单个文件，取而代之的是在整个项目上进行<code>Add</code>操作，这样整个项目下文件都可以被添加至暂存区</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0eec2c49bb5aedd91dfbba872b652c03.png"></p>
+<p>这时会发现，<code>Test.java</code>文件变成绿色了，说明添加成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bfe84bdce859012e53ed6055e114d464.png"></p>
+<h3 id="提交到本地库"><a href="#提交到本地库" class="headerlink" title="提交到本地库"></a>提交到本地库</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c71f2a46cf8cc99a40e5a4e82c8f9b6d.png"></p>
+<p>点击<code>Commit Diretory...</code>之后，就可以看到暂存区的文件，输入日志信息就可以进行提交了</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/1a6addf46bf97ef61149db694dee0c13.png"></p>
+<p>提交完毕之后，文件颜色也随之发生改变，说明 Git 已将文件提交至本地库</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ba9273f6cc4b7fa8ef5c54b332abf7f9.png"></p>
+<h3 id="切换版本"><a href="#切换版本" class="headerlink" title="切换版本"></a>切换版本</h3><p>首先修改文件，观察到修改的文件颜色为蓝色，表示已修改状态，可以直接进行<code>commit</code>操作</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/fbd5c24d36a02cc8e0289fc68cef1349.png"></p>
+<p>点击 IDEA 左下角 <code>Git</code>，可以查看历史版本</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/2e6740a6efeff21e3c9b6f9fb23281af.png"></p>
+<p>选定某一版本，点击<code>Checkout Reversion xxx</code>，可以进行版本穿梭</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/528bddee98088e7c3ae85a70cb00599c.png"></p>
+<p>可以看到每次版本穿梭，<code>HEAD</code>指针的变化</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/51d6b7de570849b7a04d2af70b82ff8b.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/8ac9a092c3727f7f48ad54a4e91b52e3.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/da181a16e6fe6af6a63d2f3092b5948e.png"></p>
+<h3 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h3><p>点击 IDEA 右下角<code>master</code>—<code>New Branch</code>就可以创建分支了</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/6dc8b7c9756ddf21433966076df6a4ce.png"></p>
+<p>输入分支名，点击<code>Create</code>进行创建</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/39989738fa3ae4c6681a7e82223b9b68.png"></p>
+<p>当然，也通过项目上<code>右键</code>—<code>Git</code>—<code>New Branch</code>，或者<code>右键</code>—<code>Git</code>—<code>Branches</code>—<code>New Branch</code>同理</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/176f7303e357f2c9fb7bdf3526eeb0c1.png"></p>
+<p>切换分支同理，右键或是右下角均可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/cc9a4ffdff345d1b790f026280a43bc9.png"></p>
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><p>首先切换到<code>hot-fix</code>分支，修改内容后提交，再切换回<code>master</code>分支，同样在右下角选择我们需要合并的分支<code>hot-fix</code>，选择<code>Merge Selected into Current</code>，将<code>hot-fix</code>分支合并至<code>master</code>分支上</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/9c4e7f73a1a503a515b861fbe1a8a712.png"></p>
+<p>发现内容已发生改变，并且查看历史版本也发生了变化</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/77cf2e40f0b8d8ef9d05855409c7d658.png"></p>
+<h3 id="冲突合并"><a href="#冲突合并" class="headerlink" title="冲突合并"></a>冲突合并</h3><p>首先，分别切换<code>master</code>和<code>hot-fix</code>都对<code>Test.java</code>内容进行修改并提交</p>
+<p><code>master</code>版本信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0668c9a5428f11915ad6ed250a26bc7a.png"></p>
+<p><code>hot-fix</code>版本信息</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c2940fef01dba9b37efcf8780259f6f2.png"></p>
+<p>可以观察到，历史版本发生了分叉。现在将<code>hot-fix</code>合并至<code>master</code>上，提示<code>Conflicts</code>，说明合并出现了冲突</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/083927f92b46baa6ec7eaf6e199cf189.png"></p>
+<p>点击<code>Merge</code>进行手动合并</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/90ca87fef1506bbe3449940413cae08f.png"></p>
+<p>解决完冲突后，会提示<code>All changes have been processed. Save changes and finish merging</code>，说明代码可以正常合并，点击<code>Apply</code>对手动合并的代码进行应用</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/4c15bfc16f777270cf06b7516236d524.png"></p>
+<p>会发现文件颜色变为正常颜色，并且历史版本发生了改变，原来的两个分支合并成了一个</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/41479f4d621055cb44e657098e0fe08f.png"></p>
+<h2 id="IDEA-集成-GitHub"><a href="#IDEA-集成-GitHub" class="headerlink" title="IDEA 集成 GitHub"></a>IDEA 集成 GitHub</h2><h3 id="设置-GitHub-账号"><a href="#设置-GitHub-账号" class="headerlink" title="设置 GitHub 账号"></a>设置 GitHub 账号</h3><p><strong>通过账号密码设置</strong></p>
+<p>打开<code>Settings</code>，点击<code>Log In via GitHub...</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/f22741bfc0ab9079ea50510a3e7e4c12.png"></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ad43e1bfe692b030a69699bc6e2dbc34.png"></p>
+<p>会自动打开浏览器，进行授权确认</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/fed66e5215e9233a672f10648fc3c468.png"></p>
+<p>点击<code>Authorize in GitHub</code>后，会提示授权成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/652842e331245d56119f2ac1dc6f0ba7.png"></p>
+<p>看到 IDEA 里新增了一条账号信息即为添加成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/98d424723d456f6630ba6aca19d8080d.png"></p>
+<p><strong>通过 Token 设置</strong></p>
+<p>点击<code>Log In with Token...</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d07ca06d60763b4a6259a78d675b97b0.png"></p>
+<p>会弹出<code>Add GitHubh Account</code>框，输入我们在 GitHub 上创建的 Token 信息即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bfb71f475e963ab04994451240b22168.png"></p>
+<p>如果还没有生成过或者丢失了之前创建的 Token，可以直接点击<code>Generate...</code>进行自动生成，默认已勾好权限</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/7df241ff563056c167be585c39d43bdd.png"></p>
+<p>修改并确认无误后，点击<code>Generate token</code>即可进行生成</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3412a4606de9e814cedd00f6976d2fa9.png"></p>
+<p>Token 生成之后，只会在当前页面显示一次，需要及时复制保存下来</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/319f3f205de16b8b20d9449415b410c2.png"></p>
+<p>将 Token 粘贴至输入框，点击<code>Add Account</code>即可添加</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/13671f55e6a81f94fb43d6d027b5f2d8.png"></p>
+<p>最后别忘了，一定要点击<code>Apply</code>和<code>OK</code>对设置进行保存</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/9c38212cd22b3b118a782e48702a45ee.png"></p>
+<h3 id="分享工程到-GitHub"><a href="#分享工程到-GitHub" class="headerlink" title="分享工程到 GitHub"></a>分享工程到 GitHub</h3><p>我们一般会先在远程库创建一个<code>Repository</code>，再将本地库通过<code>remote</code>关联到远程库，最后进行版本推送</p>
+<p>或者是先在远程库创建一个<code>Repository</code>，再通过<code>clone</code>将远程库克隆至本地，最后进行版本推送</p>
+<p>而在 IDEA 中，可以将上述步骤合成一个步骤，即通过<code>Share</code>将本地库分享至 GitHub 上，非常便捷</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/f55ebe1954e614df90f904af39e5bd78.png"></p>
+<p>填写完信息后，点击<code>Share</code>按钮，IDEA 会自动帮我们创建和初始化远程库，并将本地库推送至远程库</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ba53deaf77ce20112cd3efaa86ae0de7.png"></p>
+<p>查看 GitHub 是否存在该仓库，以验证是否分享成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a7f41403bf66082a4d3248ae32002c4c.png"></p>
+<p>在分享过程中，可能会出现如下报错：成功创建远程仓库，但是初始化推送失败。这时就需要进行手动<code>Push</code>的操作了</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a296310c7bad6c0e99ba1fe502f96896.png"></p>
+<h3 id="Push-推送本地分支到远程库"><a href="#Push-推送本地分支到远程库" class="headerlink" title="Push 推送本地分支到远程库"></a>Push 推送本地分支到远程库</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a682fc2e5729c7128ae30bc16856a75b.png"></p>
+<p>这里默认使用<code>https</code>协议进行推送，因为网络原因，很有可能推送失败</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e0c9558a09b39830f980f08487609092.png"></p>
+<p>这是可以修改远程连接方式，点击<code>Define remote</code>设置新的远程别名</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bbb819701793ea4babb632731bebad99.png"></p>
+<p>然后会弹出一个重新定义远程方式的界面，这里使用 SSH 协议的远程地址即可（注意：不要与原来的别名重复）</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0afd5d745955c2bb0ceb8d61c9f1c820.png"></p>
+<p>点击<code>OK</code>后，可以重新选择远程别名，这里改为我们刚刚定义的 SSH 协议的别名：<code>origin-ssh</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0c2b388f5514bfa08372d6b766e7ee20.png"></p>
+<p>查看 GitHub 上历史版本修改内容，推送成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/8faf7d9fe9c169db4fb9fb50062f1b62.png"></p>
+<p><strong>注意</strong>：<code>push</code>是将本地库代码推送到远程库，如果本地库代码跟远程库代码版本不一致， <code>push</code>的操作是会被拒绝的。也就是说，要想 <code>push</code>成功，一定要保证本地库的版本要比远程库的版本高！因此一个成熟的程序员在动手改本地代码之前，一定会先检查下远程库跟本地代码的区别！如果本地的代码版本已经落后，切记要先<code>pull</code>拉取一下远程库的代码，将本地代码更新到最新以后，然后再修改，提交，推送！</p>
+<h3 id="Pull-拉取远程库到本地"><a href="#Pull-拉取远程库到本地" class="headerlink" title="Pull 拉取远程库到本地"></a>Pull 拉取远程库到本地</h3><p>首先先修改远程库代码，然后进行如下操作</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d38dee5e8dc51da43fadf306ae02a16b.png"></p>
+<p>选择 SSH 协议的别名，点击<code>Pull</code>进行代码拉取</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/c119f716403b1833355b7ab07efb5850.png"></p>
+<p>查看本地库代码易发生变化，并且历史版本也有了相关记录，说明代码拉取成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/dcf176616fb9c78376318af6173dafec.png"></p>
+<h3 id="Clone-克隆远程库到本地"><a href="#Clone-克隆远程库到本地" class="headerlink" title="Clone 克隆远程库到本地"></a>Clone 克隆远程库到本地</h3><p>关闭项目，在 IDEA 选择页面，点击<code>Get From VCS</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/569d5d5a73b614a26ad7db0850d8ffbb.png"></p>
+<p>填写需要克隆的远程仓库地址和本地仓库地址，点击<code>Clone</code>进行克隆</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/71bda746cffea6c6597fff1e6851d8df.png"></p>
+<p>等待克隆完成</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ddf8bc12002b65b17957612b4aa3ac7a.png"></p>
+<p>初次进入项目，会提示是否信任并打开此 Maven 工程，一般选择<code>Trust Project</code></p>
+<p>如果勾选<code>Trust projects in xxx</code>，则在此工作空间下所有新增项目都将被信任，不会再提示</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/96207fb628c0be68c7dda4b887540d93.png"></p>
+<p>打开项目，确认<code>Test.java</code>内容无误，历史版本记录正常</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3eb26161d865f4a1b78d2beab9328b12.png"></p>
+<h2 id="国内代码托管中心-码云"><a href="#国内代码托管中心-码云" class="headerlink" title="国内代码托管中心**-**码云"></a>国内代码托管中心**-**码云</h2><p>众所周知，GitHub 服务器在国外，使用 GitHub 作为项目托管网站，如果网速不好的话，严重影响使用体验，甚至会出现登录不上的情况。针对这个情况，大家也可以使用国内的项目托管网站-码云</p>
+<p>码云是开源中国推出的基于 Git 的代码托管服务中心，网址是 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://gitee.com/">https://gitee.com/</a> ，使用方式跟 GitHub 一样，而且它还是一个中文网站，如果你英文不是很好它是最好的选择</p>
+<h3 id="创建远程库"><a href="#创建远程库" class="headerlink" title="创建远程库"></a>创建远程库</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d5dd0b529420ac767c1b97caba0b4097.png"></p>
+<p>输入仓库名称，路径会自动与仓库名称保持一致，一般不改。选择开源，点击<code>创建</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3a488cb0932baed7299f914386bc82b2.png"></p>
+<p>创建完毕会自动跳转到该项目界面，复制下列地址以备用</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/64bf577e9cfe946e040da4c45a994f37.png"></p>
+<h3 id="删除远程库"><a href="#删除远程库" class="headerlink" title="删除远程库"></a>删除远程库</h3><p>打开项目<code>管理</code>—<code>仓库设置</code>—<code>删除仓库</code>，点击<code>删除仓库</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a6ef579537fa4ea8b0e7caa57f70bbf9.png"></p>
+<p>输入确认信息，点击<code>确认删除</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/33836d984ac423bf3bfd0a651a350ad3.png"></p>
+<p>输入密码，进行二次确认，点击<code>验证</code>，即可删除成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/4843bc73391e39f51f98962246cd910a.png"></p>
+<h3 id="IDEA-集成码云"><a href="#IDEA-集成码云" class="headerlink" title="IDEA 集成码云"></a>IDEA 集成码云</h3><p>首先安装 Gitee 的插件</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/70f580c184e09e6a3ccfd1d2b31636ae.png"></p>
+<p>安装完成之后，点击<code>Apply</code>会刷新<code>Settings</code>选项，打开<code>Version Control</code>，多了一个<code>Gitee</code>选项</p>
+<p>这里同样有两种方式，可以通过账号密码登录，也可以通过<code>Token</code>登录，操作同 IDEA 集成 <code>GitHub</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ea121aa7f5db0712a4196a11c6037ec0.png"></p>
+<p>输入完账号密码，点击<code>Log In</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/8505ce7300de819755006d9015f3a3e5.png"></p>
+<p>如果输入无误，便会在界面中展示账号信息，点击<code>OK</code>保存</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a740e071ce74a63c015fef5abe3d3602.png"></p>
+<h3 id="分享工程到-Gitee"><a href="#分享工程到-Gitee" class="headerlink" title="分享工程到 Gitee"></a>分享工程到 Gitee</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e186d2fd97aa208cf5e3755f80a28a20.png"></p>
+<p>如果远程仓库已存在该名称的项目，则会提示存在同名仓库无法删除，需要先删除刚刚我们创建的<code>git-test</code>仓库</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/025271810391537ff45ca3daa2db338e.png"></p>
+<p>提示分享成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/442fb6b9e31b8501fbf69a83f9fb2612.png"></p>
+<p>查看 Gitee，确认仓库创建成功并且推送成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/9ba405dc53d0d09e8e5e40d5aecde469.png"></p>
+<h3 id="推送本地分支到远程库"><a href="#推送本地分支到远程库" class="headerlink" title="推送本地分支到远程库"></a>推送本地分支到远程库</h3><p>修改内容，可以在左侧导航栏<code>Commit</code>直接进行提交并推送</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/f4c621856a276d6146082ef83549b6dc.png"></p>
+<p>同样可以自定义远程地址别名，点击<code>Push</code>进行推送</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/1f743e42d9097ee7ecf751e4cca38176.png"></p>
+<p>查看 Gitee 仓库历史版本记录，确认推送成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/6e36e8d91077aca6bdef0146e19ef92b.png"></p>
+<h3 id="拉取远程库到本地"><a href="#拉取远程库到本地" class="headerlink" title="拉取远程库到本地"></a>拉取远程库到本地</h3><p>直接在 Gitee 上修改<code>Test.java</code>内容后，IDEA 中进行<code>Pull</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d38dee5e8dc51da43fadf306ae02a16b.png"></p>
+<p>选择我们指定的别名和分支，点击<code>Pull</code>进行拉取</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3ccd3a11b878e23f1cc7fef98609a4fe.png"></p>
+<p>查看<code>Test.java</code>即历史版本发生了变化，说明拉取成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/aaa8fcf21d55efdd8454128c4be4de42.png"></p>
+<h3 id="克隆远程库到本地"><a href="#克隆远程库到本地" class="headerlink" title="克隆远程库到本地"></a>克隆远程库到本地</h3><p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/718f53845efb7389880a1dcd2abac701.png"></p>
+<h3 id="码云复制-GitHub-项目"><a href="#码云复制-GitHub-项目" class="headerlink" title="码云复制 GitHub 项目"></a>码云复制 GitHub 项目</h3><p><strong>导入仓库</strong></p>
+<p>点击<code>从 GitHub / GitLab 导入仓库</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ddf51aed2cc43793e4f4437eb88a5fc4.png"></p>
+<p>输入 GitHub 仓库地址，Gitee 会自动帮我们反填仓库名称及路径信息，修改为开源或私有，点击<code>导入</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ebaad3bc32cfadf4049411d99afde73e.png"></p>
+<p>等待片刻</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e6e0e1ac62f9dad27cafc8e57f3f9918.png"></p>
+<p>导入成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/a0708056e15457951b7084d39eeecf72.png"></p>
+<p><strong>强制同步</strong></p>
+<p>如果后续该工程在 GitHub 上进行了修改，可以直接点击，刷新图标进行强制同步</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/afc2e3eda01c58d275a1defca1f5058e.png"></p>
+<p>需要注意的是强制更新会覆盖当前仓库，这里点击<code>确认</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/0fc178ff3b7e74703e48ac1d22ad3475.png"></p>
+<p>查看历史版本记录，确认同步成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e77774a29899a70782ae5133d6620646.png"></p>
+<h2 id="自建代码托管平台-GitLab"><a href="#自建代码托管平台-GitLab" class="headerlink" title="自建代码托管平台 - GitLab"></a>自建代码托管平台 - GitLab</h2><h3 id="GitLab-简介"><a href="#GitLab-简介" class="headerlink" title="GitLab 简介"></a>GitLab 简介</h3><p>GitLab 是由 GitLabInc. 开发，使用 MIT 许可证的基于 网络的 Git 仓库管理工具，且具有 wiki 和 issue 跟踪功能。使用 Git 作为代码管理工具，并在此基础上搭建起来的 web 服务</p>
+<p>GitLab 由乌克兰程序员 DmitriyZaporozhets 和 ValerySizov 开发，它使用 Ruby 语言写成。后来，一些部分用 Go 语言重写。截止 2018 年 5 月，该公司约有 290 名团队成员，以及 2000 多名开源贡献者。GitLab 被 IBM，Sony，JülichResearchCenter，NASA，Alibaba，Invincea，O’ReillyMedia，Leibniz-Rechenzentrum(LRZ)，CERN，SpaceX 等组织使用</p>
+<h3 id="GitLab-官网地址"><a href="#GitLab-官网地址" class="headerlink" title="GitLab 官网地址"></a>GitLab 官网地址</h3><ul>
+<li>官网地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://about.gitlab.com/">https://about.gitlab.com/</a></li>
+<li>安装说明：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://about.gitlab.com/installation/">https://about.gitlab.com/installation/</a></li>
+</ul>
+<h2 id="GitLab-安装"><a href="#GitLab-安装" class="headerlink" title="GitLab 安装"></a>GitLab 安装</h2><h3 id="服务器准备"><a href="#服务器准备" class="headerlink" title="服务器准备"></a>服务器准备</h3><p>准备一个系统为 CentOS7 以上版本的服务器，要求：内存 4G，磁盘 50G</p>
+<p>关闭防火墙，并且配置好主机名和 IP，保证服务器可以上网</p>
+<p>此教程使用虚拟机：主机名：<code>gitlab-server</code> IP 地址：<code>192.168.6.200</code></p>
+<h3 id="安装包准备"><a href="#安装包准备" class="headerlink" title="安装包准备"></a>安装包准备</h3><p><code>Yum</code> 在线安装 <code>gitlab-ce</code> 时，需要下载几百 M 的安装文件，非常耗时，所以最好提前把所需 <code>RPM</code> 包下载到本地，然后使用离线 <code>rpm</code> 的方式安装</p>
+<p>下载地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://packages.gitlab.com/gitlab">https://packages.gitlab.com/gitlab</a></li>
+</ul>
+<p>注：资料里提供了此 <code>rpm</code> 包，直接将此包上传到服务器<code>/opt/module</code>目录下即可</p>
+<h3 id="编写安装脚本"><a href="#编写安装脚本" class="headerlink" title="编写安装脚本"></a>编写安装脚本</h3><p>安装 GitLab 步骤比较繁琐，因此我们可以参考官网编写 GitLab 的安装脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim gitlab-install.sh</span><br></pre></td></tr></table></figure>
+
+<p>将下列脚本内容复制到创建的<code>gitlab-install.sh</code>文件中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> rpm -ivh /opt/module/gitlab-ce-13.10.2-ce.0.el7.x86_64.rpm</span><br><span class="line"><span class="built_in">sudo</span> yum install -y</span><br><span class="line">curl policycoreutils-python openssh-server cronie</span><br><span class="line"><span class="built_in">sudo</span> lokkit -s http -s ssh</span><br><span class="line"><span class="built_in">sudo</span> yum install -y postfix</span><br><span class="line"><span class="built_in">sudo</span> service postfix start</span><br><span class="line"><span class="built_in">sudo</span> chkconfig postfix on</span><br><span class="line">curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | <span class="built_in">sudo</span> bash</span><br><span class="line"><span class="built_in">sudo</span> EXTERNAL_URL=<span class="string">&quot;http://gitlab.example.com&quot;</span> yum -y install gitlab-ce</span><br></pre></td></tr></table></figure>
+
+<p>给脚本增加执行权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x gitlab-install.sh</span><br></pre></td></tr></table></figure>
+
+<p>执行脚本变绿，说明具备执行权限</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/14b854c070523e3fb43f1376c9aef651.png"></p>
+<p>然后执行该脚本，开始安装 <code>gitlab-ce</code>。注意一定要保证服务器可以上网</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gitlab-install.sh</span><br></pre></td></tr></table></figure>
+
+<p>耐心等待片刻</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/18ccdac1a66cb3d0dcfa1ab856c24223.png"></p>
+<p>脚本执行成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/fdb00f839f02b593fdff2fb08d86c28b.png"></p>
+<h3 id="初始化-GitLab-服务"><a href="#初始化-GitLab-服务" class="headerlink" title="初始化 GitLab 服务"></a>初始化 GitLab 服务</h3><p>执行以下命令初始化 GitLab 服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+
+<p>过程大概需要几分钟，耐心等待…</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/d2d519fa676a28ab21a42aa2f6252339.png"></p>
+<p>出现<code>gitlab Reconfigured!</code>说明 GitLab 服务初始化成功</p>
+<h3 id="启动-GitLab-服务"><a href="#启动-GitLab-服务" class="headerlink" title="启动 GitLab 服务"></a>启动 GitLab 服务</h3><p>执行以下命令启动 GitLab 服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gitlab-ctl start</span><br></pre></td></tr></table></figure>
+
+<p>如需停止，执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gitlab-ctl stop</span><br></pre></td></tr></table></figure>
+
+<p>服务启动成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e721bdab4d3586aa0365325b516680dd.png"></p>
+<h3 id="使用浏览器访问-GitLab"><a href="#使用浏览器访问-GitLab" class="headerlink" title="使用浏览器访问 GitLab"></a>使用浏览器访问 GitLab</h3><p>使用主机名或者 IP 地址即可访问 GitLab 服务，使用主机名访问需要提前配置一下 windows 的 hosts 文件</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e727b9a696fd554d50fbc53bc2b299e9.png"></p>
+<p>首次登陆之前，需要修改下 GitLab 提供的 root 账户的密码，要求 8 位以上，包含大小写子母和特殊符号。因此我们修改密码为 <code>Atguigu.123456</code>，然后使用修改后的密码登录 GitLab</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/9b68d19128115213d9f3c2a79a8823db.png"></p>
+<p>接下来，就可以用刚才修改的账号密码进行登录了</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/924e10858d16cb2e2018e86890436fe8.png"></p>
+<p>登录成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/12a6ef556c1a8de063ac549d2c70f5fe.png"></p>
+<h3 id="GitLab-创建远程库"><a href="#GitLab-创建远程库" class="headerlink" title="GitLab 创建远程库"></a>GitLab 创建远程库</h3><p>我这里以官网 GitLab 为例，官网地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://gitlab.com/">https://gitlab.com/</a></p>
+<p>官网还提供了 GitLab 自身的项目源码：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://gitlab.com/gitlab-org/gitlab">https://gitlab.com/gitlab-org/gitlab</a></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/87a23efc9e269cbce2e332a37675fe6b.png"></p>
+<p>点击<code>New project/repository</code>—<code>Create a project</code>进行 GitLab 仓库的创建</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/35f0d5333a9fc73ef73a270217c86a51.png"></p>
+<p>填写项目信息后，点击<code>Create project</code>即可</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/cce7ef340d4873b265e351dea066ca7d.png"></p>
+<p>创建成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/49ba3f4b79cc5b06020d864a45611520.png"></p>
+<h2 id="IDEA-集成-GitLab"><a href="#IDEA-集成-GitLab" class="headerlink" title="IDEA 集成 GitLab"></a>IDEA 集成 GitLab</h2><p>1）安装 GitLab 插件</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/bc98beb487d61f3cdc3a1a884a413843.png"></p>
+<p>2）设置 GitLab 插件</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/3a080cfc216de8fec3d738bd4fa5b031.png"></p>
+<p>出现相关信息，说明添加成功</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/e7135c4edbbb8d419efaf3f577471d99.png"></p>
+<p>3）push 本地代码到 GitLab 远程库</p>
+<p>我们首先添加一个远程库别名</p>
+<p>点击<code>Git</code>—<code>Manage Remotes</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/eddad074a83ac5184289f8d7f76e83fe.png"></p>
+<p>点击<code>+</code>号，自定义一个远程别名及对应远程库地址，点击<code>OK</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/aed5971ad2871432d88fec42cd35f91b.png"></p>
+<p>出现刚刚的记录，说明添加远程别名成功，点击<code>OK</code></p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/8b5af2fd/ee3823e1f526d3c8b4a7fedca5c9bbe1.png"></p>
+<p>只要 GitLab 的远程库连接定义好以后，对 GitLab 远程库进行 pull 和 clone 的操作和 Github、码云一致，此处不再赘述</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/8b5af2fd">https://fulsun.github.io/p/8b5af2fd</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a><a class="post-meta__tags" href="/tags/GitLab/">GitLab</a></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/006.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/7ebd23a0" title="深入 Git"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/011.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">深入 Git</div></div></a></div><div class="next-post pull-right"><a href="/p/ca675cd4" title="Git使用(带图)"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/003.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Git使用(带图)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/p/3969fd76" title="Git基本命令"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-18</div><div class="title">Git基本命令</div></div></a></div><div><a href="/p/7ebd23a0" title="深入 Git"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/011.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-19</div><div class="title">深入 Git</div></div></a></div><div><a href="/p/ca675cd4" title="Git使用(带图)"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/003.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-26</div><div class="title">Git使用(带图)</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-%E6%93%8D%E4%BD%9C"><span class="toc-text">GitHub 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-text">创建远程仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-text">远程仓库操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%88%AB%E5%90%8D"><span class="toc-text">创建远程仓库别名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-text">推送本地分支到远程仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">拉取远程仓库到本地</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">克隆远程仓库到本地</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A2%E9%98%9F%E5%86%85%E5%8D%8F%E4%BD%9C"><span class="toc-text">团队内协作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C"><span class="toc-text">跨团队协作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95"><span class="toc-text">SSH 免密登录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDEA-%E9%9B%86%E6%88%90-Git"><span class="toc-text">IDEA 集成 Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Git-%E5%BF%BD%E7%95%A5%E6%96%87%E4%BB%B6"><span class="toc-text">配置 Git 忽略文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D-Git-%E7%A8%8B%E5%BA%8F"><span class="toc-text">定位 Git 程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0%E5%BA%93"><span class="toc-text">初始化本地库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%87%B3%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="toc-text">添加至暂存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E5%88%B0%E6%9C%AC%E5%9C%B0%E5%BA%93"><span class="toc-text">提交到本地库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E7%89%88%E6%9C%AC"><span class="toc-text">切换版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="toc-text">切换分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF"><span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B2%E7%AA%81%E5%90%88%E5%B9%B6"><span class="toc-text">冲突合并</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDEA-%E9%9B%86%E6%88%90-GitHub"><span class="toc-text">IDEA 集成 GitHub</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-GitHub-%E8%B4%A6%E5%8F%B7"><span class="toc-text">设置 GitHub 账号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E4%BA%AB%E5%B7%A5%E7%A8%8B%E5%88%B0-GitHub"><span class="toc-text">分享工程到 GitHub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Push-%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF%E5%88%B0%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-text">Push 推送本地分支到远程库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pull-%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">Pull 拉取远程库到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Clone-%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">Clone 克隆远程库到本地</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BD%E5%86%85%E4%BB%A3%E7%A0%81%E6%89%98%E7%AE%A1%E4%B8%AD%E5%BF%83-%E7%A0%81%E4%BA%91"><span class="toc-text">国内代码托管中心**-**码云</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-text">创建远程库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-text">删除远程库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDEA-%E9%9B%86%E6%88%90%E7%A0%81%E4%BA%91"><span class="toc-text">IDEA 集成码云</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E4%BA%AB%E5%B7%A5%E7%A8%8B%E5%88%B0-Gitee"><span class="toc-text">分享工程到 Gitee</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF%E5%88%B0%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-text">推送本地分支到远程库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">拉取远程库到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">克隆远程库到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%81%E4%BA%91%E5%A4%8D%E5%88%B6-GitHub-%E9%A1%B9%E7%9B%AE"><span class="toc-text">码云复制 GitHub 项目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%BB%BA%E4%BB%A3%E7%A0%81%E6%89%98%E7%AE%A1%E5%B9%B3%E5%8F%B0-GitLab"><span class="toc-text">自建代码托管平台 - GitLab</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GitLab-%E7%AE%80%E4%BB%8B"><span class="toc-text">GitLab 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GitLab-%E5%AE%98%E7%BD%91%E5%9C%B0%E5%9D%80"><span class="toc-text">GitLab 官网地址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitLab-%E5%AE%89%E8%A3%85"><span class="toc-text">GitLab 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%86%E5%A4%87"><span class="toc-text">服务器准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85%E5%87%86%E5%A4%87"><span class="toc-text">安装包准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="toc-text">编写安装脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-GitLab-%E6%9C%8D%E5%8A%A1"><span class="toc-text">初始化 GitLab 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-GitLab-%E6%9C%8D%E5%8A%A1"><span class="toc-text">启动 GitLab 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE-GitLab"><span class="toc-text">使用浏览器访问 GitLab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GitLab-%E5%88%9B%E5%BB%BA%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-text">GitLab 创建远程库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDEA-%E9%9B%86%E6%88%90-GitLab"><span class="toc-text">IDEA 集成 GitLab</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

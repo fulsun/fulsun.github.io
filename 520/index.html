@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>给你的一封信</title>
+    <link type="text/css" rel="stylesheet" href="./file/default.css">
+    <script type="text/javascript" src="./file/jquery.min.js"></script>
+    <script type="text/javascript" src="./file/jscex.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-parser.js"></script>
+    <script type="text/javascript" src="./file/jscex-jit.js"></script>
+    <script type="text/javascript" src="./file/jscex-builderbase.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-async.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-async-powerpack.min.js"></script>
+    <script type="text/javascript" src="./file/functions.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
+    <link rel="icon" href="/img/favicon.png">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="error">本页面采用HTML5编辑，目前您的浏览器无法显示，请换成谷歌(<a
+                href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a
+                href="http://firefox.com.cn/download/">Firefox</a>)浏览器，或者其他游览器的最新版本。</div>
+        <audio autoplay="autoplay" height="100" width="100">
+            <source src="./szszlbz.mp3" type="audio/mp3" />
+            <embed height="100" width="100" src="szszlbz.mp3" />
+        </audio>
+        <div id="wrap">
+            <div id="text">
+
+
+                <div id="code">
+                    <span class="say"> 亲爱的X，我喜欢你。</span><br>
+                    <span class="say"> 遇见你是幸运的起点,</span><br>
+                    <span class="say"> 喜欢你是幸福的开始。</span><br>
+                    <span class="say"> 我喜欢你是以结婚为目的,</span><br>
+                    <span class="say"> 以幸福为目标的那种</span><br>
+                    <span class="say"> 我知道我不会甜言蜜语，</span><br>
+                    <span class="say"> 也不能保证不惹你生气。</span><br>
+                    <span class="say"> 但我能保证我的偏爱永远只属于你。</span><br>
+                    <span class="say"> 希望执子之手 与子偕老 往后余生 相伴到老</span><br>
+                    <span class="say"><span class="space">by: 富良</span> </span>
+<!-- 
+                        <del>
+                            <font color="#FF0000">
+                                console.log("亲爱的XX，我爱你")
+                                console.log("我知道我不会甜言蜜语，")
+                                console.log("但是我会用行动证明一切")
+                                console.log("你说我啰嗦，")
+                                console.log("有些东西因为越在乎所以越怕失去")
+                                console.log("因为我太爱你了，所以我害怕失去你")
+                                console.log("因为我太爱你了，所以我对你总啰嗦")
+                                console.log("希望可以执子之手，与子偕老")
+                                console.log("如果上天让我许三个愿望，")
+                                console.log("第一个是今生今世和你在一起，" )
+                                console.log(" 第二个是再生再世和你在一起，")
+                                console.log("第三个是永生永世和你不分离" )
+                                console.log(" -- 爱你的我")
+                            </font>
+                        </del>
+                        <br />
+                        console.log("2019.11.03后, 再无守护神")
+                        console.log("若无闲事挂心头，便是人间好时节。")
+                        console.log("不忘初心，方得始终。")
+                        console.log("--富良") -->
+                </div>
+            </div>
+            <div id="clock-box">
+                <span class="STYLE1"></span>
+                <font color="#33CC00">
+                    <!-- 亲爱的 -->X，我喜欢你
+                </font>
+                <span class="STYLE1">已经是……</span>
+                <div id="clock"></div>
+            </div>
+            <canvas id="canvas" width="1100" height="680"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+    </script>
+
+    <script>
+            (function () {
+                var canvas = $('#canvas');
+
+                if (!canvas[0].getContext) {
+                    $("#error").show();
+                    return false;
+                }
+
+                var width = canvas.width();
+                var height = canvas.height();
+                canvas.attr("width", width);
+                canvas.attr("height", height);
+                var opts = {
+                    seed: {
+                        x: width / 2 - 20,
+                        color: "rgb(190, 26, 37)",
+                        scale: 2
+                    },
+                    branch: [
+                        [535, 680, 570, 250, 500, 200, 30, 100, [
+                            [540, 500, 455, 417, 340, 400, 13, 100, [
+                                [450, 435, 434, 430, 394, 395, 2, 40]
+                            ]],
+                            [550, 445, 600, 356, 680, 345, 12, 100, [
+                                [578, 400, 648, 409, 661, 426, 3, 80]
+                            ]],
+                            [539, 281, 537, 248, 534, 217, 3, 40],
+                            [546, 397, 413, 247, 328, 244, 9, 80, [
+                                [427, 286, 383, 253, 371, 205, 2, 40],
+                                [498, 345, 435, 315, 395, 330, 4, 60]
+                            ]],
+                            [546, 357, 608, 252, 678, 221, 6, 100, [
+                                [590, 293, 646, 277, 648, 271, 2, 80]
+                            ]]
+                        ]]
+                    ],
+                    bloom: {
+                        num: 700,
+                        width: 1080,
+                        height: 650,
+                    },
+                    footer: {
+                        width: 1200,
+                        height: 5,
+                        speed: 10,
+                    }
+                }
+
+                var tree = new Tree(canvas[0], width, height, opts);
+                var seed = tree.seed;
+                var foot = tree.footer;
+                var hold = 1;
+
+                canvas.click(function (e) {
+                    var offset = canvas.offset(),
+                        x, y;
+                    x = e.pageX - offset.left;
+                    y = e.pageY - offset.top;
+                    if (seed.hover(x, y)) {
+                        hold = 0;
+                        canvas.unbind("click");
+                        canvas.unbind("mousemove");
+                        canvas.removeClass('hand');
+                    }
+                }).mousemove(function (e) {
+                    var offset = canvas.offset(),
+                        x, y;
+                    x = e.pageX - offset.left;
+                    y = e.pageY - offset.top;
+                    canvas.toggleClass('hand', seed.hover(x, y));
+                });
+
+                var seedAnimate = eval(Jscex.compile("async", function () {
+                    seed.draw();
+                    while (hold) {
+                        $await(Jscex.Async.sleep(10));
+                    }
+                    while (seed.canScale()) {
+                        seed.scale(0.95);
+                        $await(Jscex.Async.sleep(10));
+                    }
+                    while (seed.canMove()) {
+                        seed.move(0, 2);
+                        foot.draw();
+                        $await(Jscex.Async.sleep(10));
+                    }
+                }));
+
+                var growAnimate = eval(Jscex.compile("async", function () {
+                    do {
+                        tree.grow();
+                        $await(Jscex.Async.sleep(10));
+                    } while (tree.canGrow());
+                }));
+
+                var flowAnimate = eval(Jscex.compile("async", function () {
+                    do {
+                        tree.flower(2);
+                        $await(Jscex.Async.sleep(10));
+                    } while (tree.canFlower());
+                }));
+
+                var moveAnimate = eval(Jscex.compile("async", function () {
+                    tree.snapshot("p1", 240, 0, 610, 680);
+                    while (tree.move("p1", 500, 0)) {
+                        foot.draw();
+                        $await(Jscex.Async.sleep(10));
+                    }
+                    foot.draw();
+                    tree.snapshot("p2", 500, 0, 610, 680);
+
+                    // 会有闪烁不得意这样做, (＞﹏＜)
+                    canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+                    canvas.css("background", "#ffe");
+                    $await(Jscex.Async.sleep(300));
+                    canvas.css("background", "none");
+                }));
+
+                var jumpAnimate = eval(Jscex.compile("async", function () {
+                    var ctx = tree.ctx;
+                    while (true) {
+                        tree.ctx.clearRect(0, 0, width, height);
+                        tree.jump();
+                        foot.draw();
+                        $await(Jscex.Async.sleep(25));
+                    }
+                }));
+
+                var textAnimate = eval(Jscex.compile("async", function () {
+                    var together = new Date() //new Date(year,mon,day,hour,min,sec) mon从 0 开始
+
+                    console.log("2019.11.03 IG:FPX 1:3 ,不讲理的奇迹团也没能改变。 凤凰《涅槃》，浴火重生。但还是要说声IG 牛逼")
+                    console.log("也是这一天，我知道你有了喜欢的人") //之前还说你分手了，搞不懂有没有真话
+                    console.log("爱上一个人会变得自卑，可能从一开始就是错的")
+                    console.log("如果有下次，我希望能被直接拒绝") //希望不要再打扰我了
+                    console.log("现在明白似乎也不太慢，再见。")
+                    console.log("再见 我逝去的青春") //我TM就是个SB就酱
+                    console.log("建立在两个人互相喜欢前提下的关心叫暧昧，明明不喜欢人家还要做出越界的举动那就是渣了。")
+                    console.log("感情里的分寸感很重要，与异性保持合适的距离，是每个恋爱中的人都应该做到的，也是对双方感情的最大尊重。")
+                    together.setFullYear(2016, 10, 5); //时间年月日 2016年11月5号：删除QQ后又重新添加好友的时间，从这个时候就心动了^__QWQ__^
+                    together.setFullYear(2021, 5, 5); //时间年月日 2021年06月5号：第一顿饭
+                    together.setHours(0); //小时	
+                    together.setMinutes(0); //分钟
+                    together.setSeconds(0); //秒前一位
+                    together.setMilliseconds(2); //秒第二位
+                    $("#code").show().typewriter();
+                    $("#clock-box").fadeIn(500);
+                    while (true) {
+                        timeElapse(together);
+                        $await(Jscex.Async.sleep(1000));
+                    }
+                }));
+
+                var runAsync = eval(Jscex.compile("async", function () {
+                    $await(seedAnimate());
+                    $await(growAnimate());
+                    $await(flowAnimate());
+                    $await(moveAnimate());
+                    textAnimate().start();
+                    $await(jumpAnimate());
+                }));
+                runAsync().start();
+            })();
+    </script>
+</body>
+
+</html>

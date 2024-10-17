@@ -1,0 +1,763 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>类的加载 | 凉月の博客</title><meta name="author" content="凉月"><meta name="copyright" content="凉月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="类加载的过程包括了 加载——&gt;校验——&gt;准备——&gt;解析——&gt;初始化——&gt;使用——&gt;卸载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类的加载">
+<meta property="og:url" content="https://fulsun.github.io/p/807bd2a4">
+<meta property="og:site_name" content="凉月の博客">
+<meta property="og:description" content="类加载的过程包括了 加载——&gt;校验——&gt;准备——&gt;解析——&gt;初始化——&gt;使用——&gt;卸载。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fulsun.github.io/medias/featureimages/007.jpg">
+<meta property="article:published_time" content="2018-08-25T11:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-17T07:06:55.370Z">
+<meta property="article:author" content="凉月">
+<meta property="article:tag" content="类加载">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fulsun.github.io/medias/featureimages/007.jpg"><link rel="shortcut icon" href="/medias/favicon.png"><link rel="canonical" href="https://fulsun.github.io/p/807bd2a4"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"至上次更新后的","messageNext":"天,文章内容可能已过时。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 凉月","link":"链接: ","source":"来源: 凉月の博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '类的加载',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-17 07:06:55'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="onerror=null;src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/medias/featureimages/007.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="凉月の博客"><span class="site-name">凉月の博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-heartbeat"></i><span> 我的</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-camera-retro"></i><span> 相册</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> 联系</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 博主</span></a></li><li><a class="site-page child" href="/contact"><i class="fa-fw fas fa-comments"></i><span> 留言</span></a></li><li><a class="site-page child" href="/journal"><i class="fa-fw fas fa-cogs"></i><span> 日志</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fa fa-list"></i><span> JS动画</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/snake/"><i class="fa-fw fas fa-gamepad"></i><span> 贪吃蛇</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">类的加载</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-08-25T11:00:00.000Z" title="发表于 2018-08-25 11:00:00">2018-08-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-17T07:06:55.370Z" title="更新于 2024-10-17 07:06:55">2024-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaSE/">JavaSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">11.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>40分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="类的加载"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><span id="more"></span>
+
+<h2 id="类加载器分类"><a href="#类加载器分类" class="headerlink" title="类加载器分类"></a>类加载器分类</h2><h3 id="类加载器的概述"><a href="#类加载器的概述" class="headerlink" title="类加载器的概述"></a>类加载器的概述</h3><ul>
+<li>负责<strong>将.class文件加载到内存</strong>中，并为之生成对应的Class对象。那么有人会问.class文件是哪里来的，它是由javac编译器将java文件编译成.class文件的。</li>
+</ul>
+<h3 id="类加载器的分类"><a href="#类加载器的分类" class="headerlink" title="类加载器的分类"></a>类加载器的分类</h3><ul>
+<li>Bootstrap ClassLoader 根类加载器(引导类加载器)</li>
+<li>Extension ClassLoader 扩展类加载器</li>
+<li>System ClassLoader 系统类加载器</li>
+<li>Application ClassLoader 应用程序类加载器</li>
+</ul>
+<h3 id="类加载器的作用"><a href="#类加载器的作用" class="headerlink" title="类加载器的作用"></a>类加载器的作用</h3><ul>
+<li>Bootstrap ClassLoader 根类加载器<ul>
+<li>也被称为引导类加载器，负责Java核心类的加载；比如System,String等。在JDK中JRE的lib目录下rt.jar文件中</li>
+<li>由C++语言实现（针对HotSpot）,负责将存放在<JAVA_HOME>\lib目录或-Xbootclasspath参数指定的路径中的类库加载到内存中，即负责加载Java的核心类。</JAVA_HOME></li>
+</ul>
+</li>
+<li>Extension ClassLoader 扩展类加载器<ul>
+<li>负责JRE的扩展目录中jar包的加载。在JDK中JRE的lib目录下ext目录</li>
+</ul>
+</li>
+<li>Sysetm ClassLoader 系统类加载器<ul>
+<li>负责在JVM启动时加载来自java命令的class文件，以及classpath环境变量所指定的jar包和类路径</li>
+</ul>
+</li>
+<li>Application ClassLoader<ul>
+<li>负责加载用户类路径（classpath）上的指定类库，我们可以直接使用这个类加载器，通过ClassLoader.getSystemClassLoader()方法直接获取。一般情况，如果我们没有自定义类加载器默认就是用这个加载器。</li>
+</ul>
+</li>
+</ul>
+<h2 id="类的加载机制"><a href="#类的加载机制" class="headerlink" title="类的加载机制"></a>类的加载机制</h2><h3 id="类的加载定义"><a href="#类的加载定义" class="headerlink" title="类的加载定义"></a>类的加载定义</h3><ul>
+<li>当程序要使用某个类时，如果该类还未被加载到内存中，则系统会通过<strong>加载，连接，初始化</strong>三步来实现对这个类进行初始化。</li>
+<li>更加详细一点说，类的加载指的是<strong>将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个java.lang.Class对象，用来封装类在方法区内的数据结构。</strong>类的加载的最终产品是位于堆区中的Class对象，Class对象封装了类在方法区内的数据结构，并且向Java程序员提供了访问方法区内的数据结构的接口。</li>
+<li>在Java语言里，类型的加载、连接和初始化过程都是在程序运行期间完成的，这种策略虽然会令类加载时稍微增加一些性能开销，但是会为Java应用程序提供高度的灵活性，Java里天生可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点来实现的。</li>
+</ul>
+<h3 id="触发类加载条件"><a href="#触发类加载条件" class="headerlink" title="触发类加载条件"></a>触发类加载条件</h3><ul>
+<li>①.遇到new,getstatic,putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发初始化。生成这4条指令的最常见的Java代码场景是：使用new关键字实例化对象的时候，读取或设置一个类的静态字段的时候（被final修饰，已在编译期把结果放入常量池的静态字段除外），以及调用一个类的静态方法的时候。<ul>
+<li>调用一个类型的静态方法时（即在字节码中执行invokestatic指令）</li>
+<li>调用一个类型或接口的静态字段，或者对这些静态字段执行赋值操作时（即在字节码中，执行getstatic或者putstatic指令），不过用final修饰的静态字段除外，它被初始化为一个编译时常量表达式</li>
+</ul>
+</li>
+<li>②.使用java.lang.reflect包的方法对类进行反射调用的时候。</li>
+<li>③.当初始化一个类的时候，发现其父类还没有进行过初始化，则需要先出发父类的初始化。</li>
+<li>④.当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</li>
+<li>⑤.当使用JDK1.7的动态语言支持时，如果一个<code>java.lang.invoke.MethodHandle</code>实例最后的解析结果<code>REF_getStatic,REF_putStatic,REF_invokeStatic</code>的方法句柄，并且这个方法句柄所对应的类没有进行初始化，则需要先出发初始化。</li>
+</ul>
+<h2 id="类加载的具体过程"><a href="#类加载的具体过程" class="headerlink" title="类加载的具体过程(*)"></a>类加载的具体过程(*)</h2><ul>
+<li><p><strong>加载:</strong></p>
+<ul>
+<li>①.通过一个<strong>类的全限定名</strong>来获取定义此类的二进制字节流</li>
+<li>②.将这个字节流所代表的静态存储结构转换为方法区内的运行时数据结构</li>
+<li>③.在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。</li>
+</ul>
+</li>
+<li><p><strong>验证：</strong></p>
+<ul>
+<li>是连接阶段的第一步，目的是为了确保Class文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。包含四个阶段的校验动作</li>
+<li>a.文件格式验证<ul>
+<li>验证字节流是否符合Class文件格式的规范，并且能被当前版本的虚拟机处理。</li>
+</ul>
+</li>
+<li>b.元数据验证<ul>
+<li>对类的元数据信息进行语义校验，是否不存在不符合Java语言规范的元数据信息</li>
+</ul>
+</li>
+<li>c.字节码验证<ul>
+<li>最复杂的一个阶段，主要目的是通过数据流和控制流分析，确定程序语义是合法的，符合逻辑的。对类的方法体进行校验分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的事件。</li>
+</ul>
+</li>
+<li>d.符号引用验证<ul>
+<li>最后一个阶段的校验发生在虚拟机将符号引用转换为直接引用的时候，这个转换动作将在连接的第三个阶段——解析阶段中发生。</li>
+<li>符号验证的目的是确保解析动作能正常进行。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>准备：</strong></p>
+<ul>
+<li><p>准备阶段是正式为<strong>类变量分配内存</strong>并<strong>设置类变量初始值</strong>的阶段。这些变量所使用的内存都将在方法区中分配。只包括类变量。初始值“通常情况”下是数据类型的零值。而对于 static final 常量而言直接在准备阶段完成赋值，如 public static final a &#x3D; 10…那么它就是 10。</p>
+</li>
+<li><p>“特殊情况”下，如果类字段的字段属性表中存在ConstantValue属性，那么在准备阶段变量的值就会被初始化为ConstantValue属性所指定的值。</p>
+</li>
+<li><p>Java 中的变量有「类变量」和「类成员变量」两种类型，「类变量」指的是被 static 修饰的变量，而其他所有类型的变量都属于「类成员变量」。在准备阶段，JVM 只会为「类变量」分配内存，而不会为「类成员变量」分配内存。「类成员变量」的内存分配需要等到初始化阶段才开始。</p>
+</li>
+<li><p>在准备阶段，JVM 会为类变量分配内存，并为其初始化。但是这里的初始化指的是为变量赋予 Java 语言中该数据类型的零值，而不是用户代码里初始化的值。下面的代码在准备阶段之后，sector 的值将是 0，而不是 3。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">sector</span> <span class="operator">=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>但如果一个变量是常量（被 static final 修饰）的话，那么在准备阶段，属性便会被赋予用户希望的值。例如下面的代码在准备阶段之后，number 的值将是 3，而不是 0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">number</span> <span class="operator">=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>两个语句的区别是一个有 final 关键字修饰，另外一个没有。而 final 关键字在 Java 中代表不可改变的意思，意思就是说 number 的值一旦赋值就不会在改变了。既然一旦赋值就不会再改变，那么就必须一开始就给其赋予用户想要的值，因此被 final 修饰的类变量在准备阶段就会被赋予想要的值。而没有被 final 修饰的类变量，其可能在初始化阶段或者运行阶段发生变化，所以就没有必要在准备阶段对它赋予用户想要的值。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>解析：</strong></p>
+<ul>
+<li>JVM 针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符 7 类引用进行解析。这个阶段的主要任务是将其在常量池中的符号引用替换成直接其在内存中的直接引用。（符号引用替换为直接引用）</li>
+<li>“动态解析”的含义就是必须等到程序实际运行到这条指令的时候，解析动作才能进行。相对的，其余可触发解析的指令都是“静态”的，可以在刚刚完成加载阶段，还没有开始执行代码时就进行解析。</li>
+</ul>
+</li>
+<li><p><strong>初始化：</strong></p>
+<ul>
+<li>用户定义的 Java 程序代码才真正开始执行。在这个阶段，JVM 会根据语句执行顺序对类对象进行初始化</li>
+<li>初始化阶段是执行类构造器<code>&lt;clinit&gt;()</code>方法的过程。</li>
+<li><code>&lt;clinit&gt;()</code>方法是由编译器自动收集类中的<strong>所有类变量的赋值动作和静态语句块中的语句合并产生的</strong>。</li>
+<li><code>&lt;clinit&gt;()</code>与类的构造函数不同，它不需要显示地调用父类构造器，虚拟机会保证在子类的<code>&lt;clinit&gt;()</code>方法执行之前，父类的<code>&lt;clinit&gt;()</code>方法已经执行完毕。</li>
+<li><strong>简单地说，初始化就是对类变量进行赋值及执行静态代码块。</strong></li>
+</ul>
+</li>
+<li><p><strong>使用</strong></p>
+<p>当 JVM 完成初始化阶段之后，JVM 便开始从入口方法开始执行用户的程序代码。这个阶段也只是了解一下就可以。</p>
+</li>
+<li><p><strong>卸载</strong></p>
+<p>当用户程序代码执行完毕后，JVM 便开始销毁创建的 Class 对象，最后负责运行的 JVM 也退出内存。这个阶段也只是了解一下就可以。</p>
+</li>
+</ul>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><h3 id="什么是类的生命周期"><a href="#什么是类的生命周期" class="headerlink" title="什么是类的生命周期"></a>什么是类的生命周期</h3><ul>
+<li>类加载的过程包括了加载、验证、准备、解析、初始化五个阶段。严格来说的话那属于类到虚拟机内存这个阶段的生命周期，完整的是：加载——&gt;校验——&gt;准备——&gt;解析——&gt;初始化——&gt;使用——&gt;卸载。</li>
+<li>对于类变量（static 只能作用域）是在<strong>准备阶段</strong>完成初值填充，如 int &#x3D; 0， String &#x3D; null…，实际的值是在<strong>初始化阶段</strong>。</li>
+<li>在这七个阶段中，加载、验证、准备、使用和卸载这四个阶段发生的顺序是固定顺序，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持Java语言的运行时绑定（也成为动态绑定或晚期绑定）。</li>
+<li>另外注意这里的几个阶段<strong>是按顺序开始，而不是按顺序进行或完成</strong>，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。</li>
+</ul>
+<h3 id="如何理解解析"><a href="#如何理解解析" class="headerlink" title="如何理解解析"></a>如何理解解析</h3><ul>
+<li><p>解析阶段则不确定：它在某些情况下可以在初始化完成后在开始，这是为了支持Java语言的运行时绑定(运行时绑定也叫动态绑定)。</p>
+<ul>
+<li><p>后期绑定，是指在运行时根据对象的类型进行绑定，又叫动态绑定或运行时绑定。实现后期绑定，需要某种机制支持，以便在运行时能判断对象的类型，调用开销比前期绑定大。</p>
+</li>
+<li><p>运行时（动态）绑定的过程</p>
+<ul>
+<li>虚拟机提取对象的实际类型的方法表；</li>
+<li>虚拟机搜索方法签名；</li>
+<li>调用方法。</li>
+</ul>
+<p>注意，这里说的是对象的实际类型。即在多态的情况下，虚拟机可以找到所运行对象的真正类型。</p>
+</li>
+<li><p>Java中的static方法和final方法（private属于final方法，详细的解释见《Java编程思想》）属于前期绑定，子类无法重写final方法，成员变量（包括静态及非静态）也属于前期绑定。除了static方法和final方法（private属于final方法）之外的其他方法属于后期绑定，运行时能判断对象的类型进行绑定。</p>
+</li>
+</ul>
+</li>
+<li><p>其实解析就是符号引用到直接引用的转换过程，因为 Java 使用直接寻址而非句柄的方式。解析分为：类或接口的解析&#x2F;字段解析&#x2F;类方法解析&#x2F;接口方法解析</p>
+</li>
+</ul>
+<h3 id="例子一"><a href="#例子一" class="headerlink" title="例子一"></a>例子一</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Book</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello ShuYi.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Book()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;,amount=&quot;</span> + amount);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">price</span> <span class="operator">=</span> <span class="number">110</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">amount</span> <span class="operator">=</span> <span class="number">112</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//------执行结果--------------------</span></span><br><span class="line">书的静态代码块</span><br><span class="line">Hello ShuYi.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>首先根据上面说到的触发初始化的5种情况的第4种（当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类），我们会进行类的初始化。</p>
+</li>
+<li><p>Java代码编译成字节码之后，是没有构造方法的概念的，只有类初始化方法 和 对象初始化方法 。</p>
+<ul>
+<li><p>类初始化方法。编译器会按照其出现顺序，收集类变量的赋值语句、静态代码块，最终组成类初始化方法。<strong>类初始化方法一般在类初始化的时候执行。</strong>类初始化方法就是下面这段代码了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span></span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">static</span> <span class="type">int</span> <span class="variable">amount</span> <span class="operator">=</span> <span class="number">112</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象初始化方法。编译器会按照其出现顺序，收集成员变量的赋值语句、普通代码块，最后收集构造函数的代码，最终组成对象初始化方法。<strong>对象初始化方法一般在实例化类对象的时候执行。</strong>对象初始化方法就是下面这段代码了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="variable">price</span> <span class="operator">=</span> <span class="number">110</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;,amount=&quot;</span> + amount);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这里没有执行对象的初始化方法，先执行累的初始化方法后，执行输出语句。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="例子二"><a href="#例子二" class="headerlink" title="例子二"></a>例子二</h3><ul>
+<li><p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Grandpa</span> &#123;</span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;爷爷在静态代码块&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span> <span class="keyword">extends</span> <span class="title class_">Grandpa</span> &#123;</span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;爸爸在静态代码块&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">factor</span> <span class="operator">=</span> <span class="number">25</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span> &#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是爸爸~&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">	<span class="keyword">static</span></span><br><span class="line">	&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;儿子在静态代码块&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span></span><br><span class="line">	&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是儿子~&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InitializationDemo</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;爸爸的岁数:&quot;</span> + Son.factor);  <span class="comment">//入口</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//--------执行结果---------------</span></span><br><span class="line">最终的输出结果是：</span><br><span class="line"></span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">爸爸的岁数:<span class="number">25</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li><p>没有输出「儿子在静态代码块」这个字符串？</p>
+<p><strong>这是因为对于静态字段，只有直接定义这个字段的类才会被初始化（执行静态代码块）</strong>。因此通过其子类来引用父类中定义的静态字段，只会触发父类的初始化而不会触发子类的初始化。</p>
+</li>
+<li><p>首先程序到 main 方法这里，使用标准化输出 Son 类中的 factor 类成员变量，但是 Son 类中并没有定义这个类成员变量。于是往父类去找，我们在 Father 类中找到了对应的类成员变量，于是触发了 Father 的初始化。</p>
+</li>
+<li><p>但根据我们上面说到的初始化的 5 种情况中的第 3 种（当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化）。我们需要先初始化 Father 类的父类，也就是先初始化 Grandpa 类再初始化 Father 类。于是我们先初始化 Grandpa 类输出：<code>「爷爷在静态代码块」</code>，再初始化 Father 类输出：<code>「爸爸在静态代码块」</code>。</p>
+</li>
+<li><p>最后，所有父类都初始化完成之后，Son 类才能调用父类的静态变量，从而输出：<code>「爸爸的岁数：25」</code>。</p>
+</li>
+</ol>
+<h3 id="例子三"><a href="#例子三" class="headerlink" title="例子三"></a>例子三</h3><ul>
+<li><p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Grandpa</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爷爷在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Grandpa</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爷爷~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span> <span class="keyword">extends</span> <span class="title class_">Grandpa</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爸爸在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爸爸~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;儿子在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是儿子~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InitializationDemo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Son</span>();  <span class="comment">//入口</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出结果是：</span></span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">儿子在静态代码块</span><br><span class="line">我是爷爷~</span><br><span class="line">我是爸爸~</span><br><span class="line">我是儿子~</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>执行流程：</p>
+</blockquote>
+<ul>
+<li>首先在入口这里我们实例化一个 Son 对象，因此会触发 Son 类的初始化，而 Son 类的初始化又会带动 Father 、Grandpa 类的初始化，从而执行对应类中的静态代码块。因此会输出：「爷爷在静态代码块」、「爸爸在静态代码块」、「儿子在静态代码块」。</li>
+<li>当 Son 类完成初始化之后，便会调用 Son 类的构造方法，而 Son 类构造方法的调用同样会带动 Father、Grandpa 类构造方法的调用，最后会输出：「我是爷爷<del>」、「我是爸爸</del>」、「我是儿子~」。</li>
+</ul>
+<h3 id="例子四"><a href="#例子四" class="headerlink" title="例子四"></a>例子四</h3><ul>
+<li><p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Book</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span></span><br><span class="line">    &#123;</span><br><span class="line">        staticFunction();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">Book</span> <span class="variable">book</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Book</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Book()</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;,amount=&quot;</span> + amount);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">staticFunction</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">price</span> <span class="operator">=</span> <span class="number">110</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">amount</span> <span class="operator">=</span> <span class="number">112</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//-----输出结果是：-------------</span></span><br><span class="line">书的普通代码块</span><br><span class="line">书的构造方法</span><br><span class="line">price=<span class="number">110</span>,amount=<span class="number">0</span></span><br><span class="line">书的静态代码块</span><br><span class="line">书的静态方法</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>整个执行流程。</p>
+</blockquote>
+<ul>
+<li><p>当 JVM 在准备阶段的时候，便会为<strong>类变量</strong>分配内存和进行初始化。此时，我们的 book 实例变量被初始化为 null，amount 变量被初始化为 0。</p>
+</li>
+<li><p>当进入初始化阶段后，因为 Book 方法是程序的入口，根据我们上面说到的类初始化的五种情况的第四种（当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类）。所以JVM 会初始化 Book 类，即执行<strong>类构造器</strong> 。简单表示如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="type">Book</span> <span class="variable">book</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Book</span>();</span><br><span class="line"><span class="keyword">static</span></span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">static</span> <span class="type">int</span> <span class="variable">amount</span> <span class="operator">=</span> <span class="number">112</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JVM 对 Book 类进行初始化首先是执行类构造器（按顺序收集类中所有静态代码块和类变量赋值语句就组成了类构造器 ），后执行对象的构造器（按顺序收集成员变量赋值和普通代码块，最后收集对象构造器，最终组成对象构造器 ）。</p>
+</li>
+<li><p>首先执行<code>static Book book = new Book();</code>这一条语句，这条语句又触发了类的实例化。于是 JVM 执行对象构造器 ，收集后的<strong>对象构造器</strong> 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="variable">price</span> <span class="operator">=</span> <span class="number">110</span>;</span><br><span class="line">Book()</span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;, amount=&quot;</span> + amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>于是此时 price 赋予 110 的值，输出：「书的普通代码块」、「书的构造方法」。而此时 price 为 110 的值，而 amount 的赋值语句并未执行，所以只有在准备阶段赋予的零值，所以之后输出「price&#x3D;110,amount&#x3D;0」。</p>
+</li>
+<li><p>当类实例化完成之后，JVM 继续进行类构造器的初始化：即输出：「书的静态代码块」，之后对 amount 赋予 112 的值。</p>
+</li>
+</ul>
+<h3 id="方法论"><a href="#方法论" class="headerlink" title="方法论"></a>方法论</h3><p>从上面几个例子可以看出，分析一个类的执行顺序大概可以按照如下步骤：</p>
+<ul>
+<li><strong>确定类变量的初始值。</strong>在类加载的准备阶段，JVM 会为类变量初始化零值，这时候类变量会有一个初始的零值。如果是被 final 修饰的类变量，则直接会被初始成用户想要的值。</li>
+<li><strong>初始化入口方法。</strong>当进入类加载的初始化阶段后，JVM 会寻找整个 main 方法入口，从而初始化 main 方法所在的整个类。当需要对一个类进行初始化时，会首先初始化类构造器（），之后初始化对象构造器（）。</li>
+<li><strong>初始化类构造器。</strong>JVM 会按顺序收集类变量的赋值语句、静态代码块，最终组成类构造器由 JVM 执行。</li>
+<li><strong>初始化对象构造器。</strong>JVM 会按照收集成员变量的赋值语句、普通代码块，最后收集构造方法，将它们组成对象构造器，最终由 JVM 执行。</li>
+</ul>
+<p>如果在初始化 main 方法所在类的时候遇到了其他类的初始化，那么就先加载对应的类，加载完成之后返回。如此反复循环，最终返回 main 方法所在类。</p>
+<h3 id="生命周期顺序图"><a href="#生命周期顺序图" class="headerlink" title="生命周期顺序图"></a>生命周期顺序图</h3><ul>
+<li><p>这7个阶段发生顺序如下图：</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/807bd2a4/b529fc38ebd6c463fa1d65db8803c17a.png"></p>
+</li>
+<li><p><strong>其中加载，验证，准备，解析及初始化是属于类加载机制中的步骤。注意此处的加载不等同于类加载</strong>。</p>
+</li>
+</ul>
+<h2 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h2><h3 id="什么是双亲委派机制"><a href="#什么是双亲委派机制" class="headerlink" title="什么是双亲委派机制"></a>什么是双亲委派机制</h3><ul>
+<li>主要是表示类加载器之间的层次关系<ul>
+<li>前提：除了顶层启动类加载器外，其余类加载器都应当有自己的父类加载器，且它们之间关系一般不会以继承（Inheritance）关系来实现，而是通过组合（Composition）关系来复用父加载器的代码。</li>
+</ul>
+</li>
+</ul>
+<h3 id="双亲委派模型工作流程"><a href="#双亲委派模型工作流程" class="headerlink" title="双亲委派模型工作流程"></a>双亲委派模型工作流程</h3><ul>
+<li><p>双亲委派模型的工作流程是：</p>
+<ul>
+<li><p>如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把请求委托给父加载器去完成，依次向上，因此，所有的类加载请求最终都应该被传递到顶层的启动类加载器中，只有当父加载器在它的搜索范围中没有找到所需的类时，即无法完成该加载，子加载器才会尝试自己去加载该类。</p>
+<p><img src= "/medias/detail/load.gif" data-lazy-src="/p/807bd2a4/bc167b2c137bfd64cd59c2809a5aafdd.png"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="为何需要这样"><a href="#为何需要这样" class="headerlink" title="为何需要这样"></a>为何需要这样</h3><ul>
+<li>这样的好处是不同层次的类加载器具有不同优先级<ul>
+<li>比如所有Java对象的超级父类java.lang.Object，位于rt.jar，无论哪个类加载器加载该类，最终都是由启动类加载器进行加载，<strong>因此Object类在程序的各种类加载器环境中都是同一个类</strong>,保证安全。即使用户自己编写一个java.lang.Object类并放入程序中，虽能正常编译，但不会被加载运行，保证不会出现混乱。</li>
+</ul>
+</li>
+</ul>
+<h3 id="代码实现案例展示"><a href="#代码实现案例展示" class="headerlink" title="代码实现案例展示"></a>代码实现案例展示</h3><ul>
+<li><p>ClassLoader中loadClass方法实现了双亲委派模型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="type">boolean</span> resolve)</span><br><span class="line">    <span class="keyword">throws</span> ClassNotFoundException&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">        <span class="comment">//检查该类是否已经加载过</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> findLoadedClass(name);</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">//如果该类没有加载，则进入该分支</span></span><br><span class="line">            <span class="type">long</span> <span class="variable">t0</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (parent != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">//当父类的加载器不为空，则通过父类的loadClass来加载该类</span></span><br><span class="line">                    c = parent.loadClass(name, <span class="literal">false</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//当父类的加载器为空，则调用启动类加载器来加载该类</span></span><br><span class="line">                    c = findBootstrapClassOrNull(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                <span class="comment">//非空父类的类加载器无法找到相应的类，则抛出异常</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (c == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">//当父类加载器无法加载时，则调用findClass方法来加载该类</span></span><br><span class="line">                <span class="type">long</span> <span class="variable">t1</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">                c = findClass(name); <span class="comment">//用户可通过覆写该方法，来自定义类加载器</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">//用于统计类加载器相关的信息</span></span><br><span class="line">                sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);</span><br><span class="line">                sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);</span><br><span class="line">                sun.misc.PerfCounter.getFindClasses().increment();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">            <span class="comment">//对类进行link操作</span></span><br><span class="line">            resolveClass(c);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>整个流程大致如下：</p>
+<ul>
+<li>a.首先，检查一下指定名称的类是否已经加载过，如果加载过了，就不需要再加载，直接返回。</li>
+<li>b.如果此类没有加载过，那么，再判断一下是否有父加载器；如果有父加载器，则由父加载器加载（即调用parent.loadClass(name, false);）.或者是调用bootstrap类加载器来加载。</li>
+<li>c.如果父加载器及bootstrap类加载器都没有找到指定的类，那么调用当前类加载器的findClass方法来完成类加载。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Java对象"><a href="#Java对象" class="headerlink" title="Java对象"></a>Java对象</h2><h3 id="对象的创建的条件"><a href="#对象的创建的条件" class="headerlink" title="对象的创建的条件"></a>对象的创建的条件</h3><ol>
+<li>虚拟机遇到一个new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用；</li>
+<li>检查这个符号引用代表的类是否已经被加载，解析和初始化过。如果没有，那必须先执行响应的类加载过程；</li>
+<li>在类加载检查功通过后，为新生对象分配内存。对象所需的内存大小在类加载完成后便可完全确定。</li>
+</ol>
+<h3 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h3><ul>
+<li><strong>分为3个区域：对象头，实例数据，对齐填充。</strong></li>
+</ul>
+<h4 id="对象头："><a href="#对象头：" class="headerlink" title="对象头："></a>对象头：</h4><ul>
+<li>包括两部分信息，第一部分：对象自身的运行时数据，如哈希码，GC分代年龄，锁状态标志，线程持有的锁，偏向线程ID，偏向时间戳等，这部分数据的长度在32位和64位的虚拟机中分别为32 bit和64 bit，官方称它为“Mark Word”。</li>
+<li>第二部分：类型指针，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。如果对象是一个java数组，那在对象头中还必须有一块用于记录数组长度的数据。</li>
+</ul>
+<h4 id="实例数据："><a href="#实例数据：" class="headerlink" title="实例数据："></a>实例数据：</h4><ul>
+<li>是对象真正存储的有效信息，也是在程序代码中所定义的各种类型的字段内容。</li>
+</ul>
+<h4 id="对齐填充："><a href="#对齐填充：" class="headerlink" title="对齐填充："></a>对齐填充：</h4><ul>
+<li>对齐填充不是必然存在的。HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，也就是说对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的整数倍。因此，当对象实例数据部分没有对齐时，就需要通过对其补充来补全了。</li>
+</ul>
+<h2 id="Java对象的创建过程"><a href="#Java对象的创建过程" class="headerlink" title="Java对象的创建过程"></a>Java对象的创建过程</h2><h4 id="看下创建类加载过程"><a href="#看下创建类加载过程" class="headerlink" title="看下创建类加载过程"></a>看下创建类加载过程</h4><ul>
+<li><p>Person p &#x3D; new Person()请写一下类的加载过程？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1).因为new用到了Person.class，所以会先找到Person.class文件，并加载到内存中;</span><br><span class="line">2).执行该类中的static代码块（JVM 加载类时执行，仅执行一次。），如果有的话，给Person.class类进行初始化;</span><br><span class="line">3).在堆内存中开辟空间分配内存地址;</span><br><span class="line">4).在堆内存中建立对象的特有属性，并进行默认初始化;</span><br><span class="line">5).对属性进行显示初始化;</span><br><span class="line">6).对对象进行构造代码块化（构造代码块或非静态代码块）初始化; 每一次创建对象时会执行。</span><br><span class="line">7).对对象进行与之对应的构造函数进行初始化;</span><br><span class="line">8).将内存地址付给栈内存中的p变量</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4><ul>
+<li><p>Java对象的创建过程，我建议最好是能默写出来，并且要掌握每一步在做什么。</p>
+<ul>
+<li>1.类加载检查</li>
+<li>2.分配内存</li>
+<li>3.初始化零值</li>
+<li>4.设置对象头</li>
+<li>5.执行init方法</li>
+</ul>
+</li>
+<li><p><strong>①类加载检查：</strong></p>
+<ul>
+<li>虚拟机遇到一条 new 指令时，首先将去检查这个指令的参数是否能在常量池中定位到这个类的符号引用，并且检查这个符号引用代表的类是否已被加载过、解析和初始化过。如果没有，那必须先执行相应的类加载过程。</li>
+</ul>
+</li>
+<li><p><strong>②分配内存：</strong></p>
+<ul>
+<li><p>在<strong>类加载检查</strong>通过后，接下来虚拟机将为新生对象<strong>分配内存</strong>。对象所需的内存大小在类加载完成后便可确定，为对象分配空间的任务等同于把一块确定大小的内存从 Java 堆中划分出来。<strong>分配方式</strong>有 <strong>“指针碰撞”</strong> 和 <strong>“空闲列表”</strong> 两种，<strong>选择那种分配方式由 Java 堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定</strong>。</p>
+</li>
+<li><p><strong>内存分配的两种方式：</strong></p>
+<ul>
+<li>选择以上两种方式中的哪一种，取决于 Java 堆内存是否规整。而 Java 堆内存是否规整，取决于 GC 收集器的算法是”标记-清除”，还是”标记-整理”（”标记-压缩”），值得注意的是，复制算法内存也是规整的</li>
+</ul>
+</li>
+<li><p><strong>内存分配并发问题</strong></p>
+<ul>
+<li>在创建对象的时候有一个很重要的问题，就是线程安全，因为在实际开发过程中，创建对象是很频繁的事情，作为虚拟机来说，必须要保证线程是安全的，通常来讲，虚拟机采用两种方式来保证线程安全：</li>
+</ul>
+</li>
+<li><p><strong>CAS+失败重试：</strong></p>
+<ul>
+<li><p>CAS 是乐观锁的一种实现方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。<strong>虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。</strong>CAS是英文单词CompareAndSwap的缩写，中文意思是：比较并替换。CAS需要有3个操作数：内存地址V，旧的预期值A，即将要更新的目标值B。</p>
+<p>CAS指令执行时，当且仅当内存地址V的值与预期值A相等时，将内存地址V的值修改为B，否则就什么都不做。整个比较并替换的操作是一个原子操作。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>TLAB：</strong></p>
+<ul>
+<li>为每一个线程预先在Eden区分配一块儿内存，JVM在给线程中的对象分配内存时，首先在TLAB分配，当对象大于TLAB中的剩余内存或TLAB的内存已用尽时，再采用上述的CAS进行内存分配</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>③初始化零值：</strong></p>
+<ul>
+<li>内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值（不包括对象头），这一步操作保证了对象的实例字段在 Java 代码中可以不赋初始值就直接使用，程序能访问到这些字段的数据类型所对应的零值。</li>
+</ul>
+</li>
+<li><p><strong>④设置对象头：</strong></p>
+<ul>
+<li>初始化零值完成之后，<strong>虚拟机要对对象进行必要的设置</strong>，例如这个对象是那个类的实例、如何才能找到类的元数据信息、对象的哈希吗、对象的 GC 分代年龄等信息。</li>
+<li><strong>这些信息存放在对象头中。</strong> 另外，根据虚拟机当前运行状态的不同，如是否启用偏向锁等，对象头会有不同的设置方式。</li>
+</ul>
+</li>
+<li><p><strong>⑤执行 init 方法：</strong></p>
+<ul>
+<li>在上面工作都完成之后，从虚拟机的视角来看，一个新的对象已经产生了，但从 Java 程序的视角来看，对象创建才刚开始，<code>&lt;init&gt;</code> 方法还没有执行，所有的字段都还为零。所以一般来说，执行 new 指令之后会接着执行 <code>&lt;init&gt;</code> 方法，把对象按照程序员的意愿进行初始化，这样一个真正可用的对象才算完全产生出来。</li>
+</ul>
+</li>
+</ul>
+<h4 id="对象的内存布局-1"><a href="#对象的内存布局-1" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ul>
+<li>在 Hotspot 虚拟机中，对象在内存中的布局可以分为3快区域：<strong>对象头</strong>、<strong>实例数据</strong>和<strong>对齐填充</strong>。</li>
+<li><strong>Hotspot虚拟机的对象头包括两部分信息</strong>，<strong>第一部分用于存储对象自身的自身运行时数据</strong>（哈希吗、GC分代年龄、锁状态标志等等），<strong>另一部分是类型指针</strong>，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是那个类的实例。</li>
+<li><strong>实例数据部分是对象真正存储的有效信息</strong>，也是在程序中所定义的各种类型的字段内容。</li>
+<li><strong>对齐填充部分不是必然存在的，也没有什么特别的含义，仅仅起占位作用。</strong></li>
+<li>因为Hotspot虚拟机的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或2倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</li>
+</ul>
+<h2 id="测试类的执行"><a href="#测试类的执行" class="headerlink" title="测试类的执行"></a>测试类的执行</h2><h3 id="加载类-类名-变量"><a href="#加载类-类名-变量" class="headerlink" title="加载类-类名.变量"></a>加载类-类名.变量</h3><ul>
+<li><p>代码案例如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span> <span class="number">134</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> <span class="keyword">extends</span>  <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> B.value;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>a.打印错误结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">B</span><br><span class="line">134</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>b.打印正确结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">134</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>观察代码，发现B.value中的value变量是A类的。所以，帮主在这里大胆的猜测一下，当遇到 <strong>类名.变量 加载时，只加载变量所在类。</strong></li>
+</ul>
+</li>
+<li><p>如何做才能打印a这种结果呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">valueA</span> <span class="operator">=</span> <span class="number">134</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> <span class="keyword">extends</span>  <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">valueB</span> <span class="operator">=</span> <span class="number">245</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span>&#123;</span><br><span class="line">       <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> B.valueB;</span><br><span class="line">       System.out.println(s);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>得到数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">B</span><br><span class="line">245</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="加载类-new"><a href="#加载类-new" class="headerlink" title="加载类-new"></a>加载类-new</h3><ul>
+<li><p>那么如果是直接使用new创建对象？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span> <span class="number">134</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    A()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> <span class="keyword">extends</span>  <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    B()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span>&#123;</span><br><span class="line">       <span class="type">B</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">B</span>();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>那么得到打印结构,子类的构造方法中，必须要调用父类的某个构造方法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">B</span><br><span class="line">构造A</span><br><span class="line">构造B</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="代码块和构造执行顺序"><a href="#代码块和构造执行顺序" class="headerlink" title="代码块和构造执行顺序"></a>代码块和构造执行顺序</h3><ul>
+<li><p>代码如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">C</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;代码块C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    C()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">()</span>&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;方法中代码块C&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span>&#123;</span><br><span class="line">        <span class="type">C</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">C</span>();</span><br><span class="line">        c.setData();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">代码块C</span><br><span class="line">构造C</span><br><span class="line">方法中代码块C</span><br><span class="line">方法C</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改代码块和构造块的位置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">C</span> &#123;</span><br><span class="line">    C()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;代码块C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法C&quot;</span>);</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;方法中代码块C&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span>&#123;</span><br><span class="line">        <span class="type">C</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">C</span>();</span><br><span class="line">        c.setData();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印结果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">代码块C</span><br><span class="line">构造C</span><br><span class="line">方法C</span><br><span class="line">方法中代码块C</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得出结论</p>
+<ul>
+<li>当遇到 类名.变量 加载时，只加载变量所在类。</li>
+<li>当遇到new加载类时，先执行父类，在执行子类。</li>
+<li>在同一个类中，代码块比构造方法先执行，方法中根据位置顺序执行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="静态，代码块，构造执行顺序"><a href="#静态，代码块，构造执行顺序" class="headerlink" title="静态，代码块，构造执行顺序"></a>静态，代码块，构造执行顺序</h3><ul>
+<li><p>代码如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Demo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造函数&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sayHello</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;普通代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;执行 main 方法&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Demo</span>().sayHello();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;---------------&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Demo</span>().sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">静态代码块</span><br><span class="line">执行 main 方法</span><br><span class="line">构造代码块</span><br><span class="line">构造函数</span><br><span class="line">普通代码块</span><br><span class="line">---------------</span><br><span class="line">构造代码块</span><br><span class="line">构造函数</span><br><span class="line">普通代码块</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结论</p>
+<ul>
+<li><p>普通代码块、静态代码块、构造代码块和构造方法执行顺序优先级：静态块 -&gt; main() -&gt; 构造块 -&gt; 构造方法。</p>
+</li>
+<li><p>普通代码块：类中的普通方法，只有被调用才执行。</p>
+</li>
+<li><p>静态代码块：用 staitc 声明，JVM 加载类时执行，仅执行一次。</p>
+</li>
+<li><p>构造代码块：类中直接用 {} 定义，每一次创建对象时执行。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="安全管理器"><a href="#安全管理器" class="headerlink" title="安全管理器"></a>安全管理器</h2><ul>
+<li><p>SecurityManager，在Java应用中，安全管理器是由System类中的方法setSecurityManager设置的。要获得当前的安全管理器，可以使用方法getSecurityManager。</p>
+</li>
+<li><p>安全管理器是一个允许应用程序实现安全策略的类。它允许应用程序在执行一个可能不安全或敏感的操作前确定该操作是什么，以及是否是在允许执行该操作的安全上下文中执行它。应用程序可以允许或不允许该操作。</p>
+</li>
+<li><p>SecurityManager应用场景</p>
+<ul>
+<li><p>当运行未知的Java程序的时候，该程序可能有恶意代码（删除系统文件、重启系统等），为了防止运行恶意代码对系统产生影响，需要对运行的代码的权限进行控制，这时候就要启用Java安全管理器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码会删除你的C盘windows文件夹。</span></span><br><span class="line">Runtime.getRuntime().exec(<span class="string">&quot;cmd /c rd C:\\Windows /S /Q&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="默认配置文件"><a href="#默认配置文件" class="headerlink" title="默认配置文件"></a>默认配置文件</h3><ul>
+<li><p>默认的安全管理器配置文件是 <code>$JAVA_HOME/jre/lib/security/java.policy</code>，即当未指定配置文件时，将会使用该配置。内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Standard extensions get all permissions by default</span></span><br><span class="line"></span><br><span class="line">grant codeBase <span class="string">&quot;file:$&#123;&#123;java.ext.dirs&#125;&#125;/*&quot;</span> &#123;</span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// default permissions granted to all domains</span></span><br><span class="line"></span><br><span class="line">grant &#123;</span><br><span class="line">    <span class="comment">// Allows any thread to stop itself using the java.lang.Thread.stop()</span></span><br><span class="line">    <span class="comment">// method that takes no argument.</span></span><br><span class="line">    <span class="comment">// Note that this permission is granted by default only to remain</span></span><br><span class="line">    <span class="comment">// backwards compatible.</span></span><br><span class="line">    <span class="comment">// It is strongly recommended that you either remove this permission</span></span><br><span class="line">    <span class="comment">// from this policy file or further restrict it to code sources</span></span><br><span class="line">    <span class="comment">// that you specify, because Thread.stop() is potentially unsafe.</span></span><br><span class="line">    <span class="comment">// See the API specification of java.lang.Thread.stop() for more</span></span><br><span class="line">        <span class="comment">// information.</span></span><br><span class="line">    permission java.lang.RuntimePermission <span class="string">&quot;stopThread&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allows anyone to listen on un-privileged ports</span></span><br><span class="line">    permission java.net.SocketPermission <span class="string">&quot;localhost:1024-&quot;</span>, <span class="string">&quot;listen&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &quot;standard&quot; properies that can be read by anyone</span></span><br><span class="line"></span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vendor&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vendor.url&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.class.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;os.name&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;os.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;os.arch&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;file.separator&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;path.separator&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;line.separator&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line"></span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.specification.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.specification.vendor&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.specification.name&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line"></span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.specification.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.specification.vendor&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.specification.name&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.version&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.vendor&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">    permission java.util.PropertyPermission <span class="string">&quot;java.vm.name&quot;</span>, <span class="string">&quot;read&quot;</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="配置文件简单解释"><a href="#配置文件简单解释" class="headerlink" title="配置文件简单解释"></a>配置文件简单解释</h3><ul>
+<li><p>在启用安全管理器的时候，配置遵循以下基本原则：</p>
+<ol>
+<li>没有配置的权限表示没有。</li>
+<li>只能配置有什么权限，不能配置禁止做什么。</li>
+<li>同一种权限可多次配置，取并集。</li>
+<li>统一资源的多种权限可用逗号分割。</li>
+</ol>
+</li>
+<li><p>第一部分授权：</p>
+<ul>
+<li>授权基于路径在”file:$&#x2F;*“的class和jar包，所有权限。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grant codeBase <span class="string">&quot;file:$&#123;&#123;java.ext.dirs&#125;&#125;/*&quot;</span> &#123;</span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二部分授权：</p>
+<ul>
+<li>这是细粒度的授权，对某些资源的操作进行授权。具体不再解释，可以查看javadoc。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grant &#123;</span><br><span class="line">    permission java.lang.RuntimePermission <span class="string">&quot;stopThread&quot;</span>;</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="启动安全管理器"><a href="#启动安全管理器" class="headerlink" title="启动安全管理器"></a>启动安全管理器</h3><ul>
+<li><p>启动安全管理有两种方式，建议使用启动参数方式。</p>
+</li>
+<li><p>启动参数方式:启动程序的时候通过附加参数启动安全管理器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Djava.security.manager</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>若要同时指定配置文件的位置那么示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Djava.security.manager -Djava.security.policy=<span class="string">&quot;E:/java.policy&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>编码方式启动,不过不建议：</p>
+<ul>
+<li>通过参数启动，本质上也是通过编码启动，不过参数启动使用灵活</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setSecurityManager(<span class="keyword">new</span> <span class="title class_">SecurityManager</span>());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>项目启动源码如下（sun.misc.Launcher）：可以发现将会创建一个默认的SecurityManager；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Finally, install a security manager if requested</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> System.getProperty(<span class="string">&quot;java.security.manager&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (s != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="type">SecurityManager</span> <span class="variable">sm</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">&quot;&quot;</span>.equals(s) || <span class="string">&quot;default&quot;</span>.equals(s)) &#123;</span><br><span class="line">        sm = <span class="keyword">new</span> <span class="title class_">java</span>.lang.SecurityManager();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            sm = (SecurityManager)loader.loadClass(s).newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassCastException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (sm != <span class="literal">null</span>) &#123;</span><br><span class="line">        System.setSecurityManager(sm);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">InternalError</span>(</span><br><span class="line">            <span class="string">&quot;Could not create SecurityManager: &quot;</span> + s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="自定义安全管理器"><a href="#自定义安全管理器" class="headerlink" title="自定义安全管理器"></a>自定义安全管理器</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义的安全管理器</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MySecurityManager</span> <span class="keyword">extends</span> <span class="title class_">SecurityManager</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkRead</span><span class="params">(String file)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(file.endsWith(<span class="string">&quot;.txt&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;不能读取 txt文件&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestDemo5</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">//		System.setSecurityManager(new MySecurityManager());</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;d:/data/a.txt&quot;</span>);</span><br><span class="line">        <span class="type">FileInputStream</span> <span class="variable">fin</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(f);</span><br><span class="line">        System.out.println(fin.read());</span><br><span class="line">        fin.close();</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="类的生命周期-1"><a href="#类的生命周期-1" class="headerlink" title="类的生命周期"></a>类的生命周期</h3><ol>
+<li><p>加载: 把字节码文件.class 加载到方法区的内存中,创建一个对应的对象,堆中(Class),通过Class对象可以获得字节码中的所有信息</p>
+</li>
+<li><p>连接</p>
+</li>
+<li><p>验证:对字节码文件.class进行验证,保证虚拟机的安全</p>
+</li>
+<li><p>准备: 为静态变量分配空间,进行默认初始化</p>
+</li>
+<li><p>解析:把符号引用替换为直接引用(如把方法用指针替换)</p>
+</li>
+<li><p>初始化:对静态变量声明处或静态块初始化</p>
+</li>
+<li><p>使用:</p>
+</li>
+<li><p>卸载</p>
+</li>
+</ol>
+<h3 id="类的初始化"><a href="#类的初始化" class="headerlink" title="类的初始化"></a>类的初始化</h3><ul>
+<li><p>当一个类被主动使用时：</p>
+<ul>
+<li>当创建某个类的<strong>新实例时</strong></li>
+<li>当调用某个类的静态成员；</li>
+<li>当初始化某个子类时，该子类的所有父类都会被初始化。</li>
+<li>当使用反射方法强制创建某个类或接口的对象时</li>
+<li>当虚拟机java命令运行启动类</li>
+</ul>
+</li>
+<li><p>static final类型的不能导致初始化的情况，静态常量在编译期就<strong>能确定值</strong>的情况<strong>不会引起初始化</strong></p>
+</li>
+<li><p>代码中会引起类的初始化的是：</p>
+<ol>
+<li>访问n的时候,会引起类的初始化</li>
+<li>访问num,不会引起类的初始化,在编译期期间就能确定了值是33.</li>
+<li>访问sn2,也不会引起类的初始化,值为88.</li>
+<li>访问sn的时候,虽然是final static修饰,但是值不能确定,会引起类的初始化</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Demo</span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> <span class="number">55</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> num=<span class="number">33</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">sn</span> <span class="operator">=</span> <span class="number">33</span> + n;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">sn2</span> <span class="operator">=</span><span class="number">33</span>+<span class="number">55</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;static 初始化&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SubDemo</span> <span class="keyword">extends</span> <span class="title class_">Demo</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestDemo1</span> &#123;</span><br><span class="line">    <span class="comment">/*static int sn = 45;</span></span><br><span class="line"><span class="comment">	static&#123;</span></span><br><span class="line"><span class="comment">		sn = 55;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">	static &#123;</span></span><br><span class="line"><span class="comment">		System.out.println(&quot;static !&quot;);</span></span><br><span class="line"><span class="comment">	&#125;*/</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        <span class="comment">//		Demo demo = new Demo();</span></span><br><span class="line">        System.out.println(Demo.sn);</span><br><span class="line">        <span class="comment">//		SubDemo demo = new SubDemo();</span></span><br><span class="line">        <span class="comment">//		Class.forName(&quot;day18.loader.Demo&quot;);</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><ol>
+<li><p>根类加载器:加载<code>\jre\lib</code>下的核心类库<br>Bootstrap ClassLoader</p>
+</li>
+<li><p>扩展类加载器:加载路径<code>\jre\lib\ext</code>的文件<br>Extension ClassLoader</p>
+</li>
+<li><p>系统(应用)类加载器: 加载classPath路径下的文件(默认当前路径)<br>App ClassLoader<br>System ClassLoader</p>
+</li>
+<li><p>自定义类加载器:加载自定义位置的文件</p>
+</li>
+</ol>
+<h3 id="加载器的顺序"><a href="#加载器的顺序" class="headerlink" title="加载器的顺序"></a>加载器的顺序</h3><ul>
+<li><p><strong>如果根类加载器不能加载,看扩展类加载器,不能给系统类加载器,给用户自定义类加载器</strong></p>
+</li>
+<li><p><strong>双亲委派模型</strong></p>
+<ul>
+<li><p>好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系。</p>
+</li>
+<li><p>例如java.lang.Object类，无论哪个类加载器去加载该类，最终都是由启动类加载器进行加载，因此Object类在程序的各种类加载器环境中都是同一个类。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestDemo2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//系统类（应用类）加载器</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">loader</span> <span class="operator">=</span> TestDemo2.class.getClassLoader();</span><br><span class="line">        System.out.println(loader);</span><br><span class="line">        <span class="comment">//父扩展</span></span><br><span class="line">        System.out.println(loader.getParent());</span><br><span class="line">        <span class="comment">//父根</span></span><br><span class="line">        System.out.println(loader.getParent().getParent());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//结果---------</span></span><br><span class="line">sun.misc.Launcher$AppClassLoader@73d16e93</span><br><span class="line">sun.misc.Launcher$ExtClassLoader@15db9742</span><br><span class="line"><span class="title function_">null</span><span class="params">(根类加载器是由C语言写的)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="加载类的Class对象"><a href="#加载类的Class对象" class="headerlink" title="加载类的Class对象"></a>加载类的Class对象</h3><ul>
+<li><p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">    <span class="comment">//加载类  完全限定命名</span></span><br><span class="line">    ClassLoader.getSystemClassLoader().loadClass(<span class="string">&quot;day18.Demo1&quot;</span>);</span><br><span class="line">    <span class="comment">//加载类 ，并初始化,Class.forNmae(加载类,初始化 true,系统类加载器 )</span></span><br><span class="line">    Class.forName(<span class="string">&quot;day18.Demo1&quot;</span>,<span class="literal">true</span>,ClassLoader.getSystemClassLoader());</span><br><span class="line">    <span class="comment">//简写</span></span><br><span class="line">    Class.forName(<span class="string">&quot;day18.Demo1&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h3><ul>
+<li><p>由于是双清委派,在项目外D:&#x2F;data，建立一个类C.java,编译得到C.Class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义类加载器</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyLoader</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span>&#123;</span><br><span class="line">    String path;</span><br><span class="line">    MyLoader(String path)&#123;</span><br><span class="line">        <span class="built_in">this</span>.path = path;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 包名.类名</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        Class&lt;?&gt;  c = <span class="literal">null</span>;</span><br><span class="line">        <span class="comment">//     &quot;d:/data/&quot; + &quot;C&quot; + &quot;.class&quot; -&gt;&quot;d:/data/C.class&quot;</span></span><br><span class="line">        <span class="comment">//带包情况下,用.替换</span></span><br><span class="line">        <span class="comment">//		path = path + name.replace(&quot;.&quot;, &quot;/&quot;).concat(&quot;.class&quot;);</span></span><br><span class="line">        path = path + name.concat(<span class="string">&quot;.class&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">FileInputStream</span> <span class="variable">fin</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            fin = <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(path);</span><br><span class="line">            <span class="comment">// 创建了一个和文件大小一样的缓冲区</span></span><br><span class="line">            <span class="type">byte</span> [] b = <span class="keyword">new</span> <span class="title class_">byte</span>[fin.available()];</span><br><span class="line">            <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> fin.read(b);</span><br><span class="line">            c = <span class="built_in">this</span>.defineClass(name, b, <span class="number">0</span>, len);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(fin != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    fin.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用自定义类加载器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestDemo4</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        <span class="comment">// 自定义类加载器 加载类 C .class</span></span><br><span class="line">        <span class="type">MyLoader</span> <span class="variable">my</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyLoader</span>(<span class="string">&quot;d:/data/&quot;</span>);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;C&quot;</span>,<span class="literal">true</span>,my);</span><br><span class="line">        System.out.println(c.getClassLoader());</span><br><span class="line">        c = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://fulsun.github.io">凉月</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://fulsun.github.io/p/807bd2a4">https://fulsun.github.io/p/807bd2a4</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fulsun.github.io" target="_blank">凉月の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a></div><div class="post_share"><div class="social-share" data-image="/medias/featureimages/007.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/p/5d5fdcd9" title="反射机制和代理"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/001.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">反射机制和代理</div></div></a></div><div class="next-post pull-right"><a href="/p/641e58d6" title="Java锁的使用"><img class="cover" src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/003.jpg" onerror="onerror=null;src='/medias/detail/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java锁的使用</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/avatar.jpg" onerror="this.onerror=null;this.src='/medias/detail/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">凉月</div><div class="author-info__description">记录生活,分享知识。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/fulsun"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fulsun" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:fl_6145@163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">感谢访问本站，若喜欢请收藏 ^_^</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-text">类加载器分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="toc-text">类加载器的概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">类加载器的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">类加载器的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="toc-text">类的加载机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%AE%9A%E4%B9%89"><span class="toc-text">类的加载定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9D%A1%E4%BB%B6"><span class="toc-text">触发类加载条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="toc-text">类加载的具体过程(*)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">类的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">什么是类的生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-text">如何理解解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80"><span class="toc-text">例子一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8C"><span class="toc-text">例子二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%89"><span class="toc-text">例子三</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E5%9B%9B"><span class="toc-text">例子四</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="toc-text">方法论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%A1%BA%E5%BA%8F%E5%9B%BE"><span class="toc-text">生命周期顺序图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6"><span class="toc-text">双亲委派机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6"><span class="toc-text">什么是双亲委派机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">双亲委派模型工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81%E8%BF%99%E6%A0%B7"><span class="toc-text">为何需要这样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%A1%88%E4%BE%8B%E5%B1%95%E7%A4%BA"><span class="toc-text">代码实现案例展示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E5%AF%B9%E8%B1%A1"><span class="toc-text">Java对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-text">对象的创建的条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-text">对象的内存布局</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%A4%B4%EF%BC%9A"><span class="toc-text">对象头：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE%EF%BC%9A"><span class="toc-text">实例数据：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85%EF%BC%9A"><span class="toc-text">对齐填充：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-text">Java对象的创建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%8B%E4%B8%8B%E5%88%9B%E5%BB%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="toc-text">看下创建类加载过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80-1"><span class="toc-text">对象的内存布局</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-text">测试类的执行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E7%B1%BB-%E7%B1%BB%E5%90%8D-%E5%8F%98%E9%87%8F"><span class="toc-text">加载类-类名.变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E7%B1%BB-new"><span class="toc-text">加载类-new</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E6%9E%84%E9%80%A0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">代码块和构造执行顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%EF%BC%8C%E4%BB%A3%E7%A0%81%E5%9D%97%EF%BC%8C%E6%9E%84%E9%80%A0%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-text">静态，代码块，构造执行顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E5%99%A8"><span class="toc-text">安全管理器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">默认配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%AE%80%E5%8D%95%E8%A7%A3%E9%87%8A"><span class="toc-text">配置文件简单解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E5%99%A8"><span class="toc-text">启动安全管理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E5%99%A8"><span class="toc-text">自定义安全管理器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F-1"><span class="toc-text">类的生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">类的初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="toc-text">加载器的顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E7%B1%BB%E7%9A%84Class%E5%AF%B9%E8%B1%A1"><span class="toc-text">加载类的Class对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">自定义类加载器</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/p/94e3914c" title="Import 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Import 注册组件"/></a><div class="content"><a class="title" href="/p/94e3914c" title="Import 注册组件">Import 注册组件</a><time datetime="2024-07-15T22:24:08.000Z" title="发表于 2024-07-15 22:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/a0c53761" title="Configuration Bean 注册组件"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Configuration Bean 注册组件"/></a><div class="content"><a class="title" href="/p/a0c53761" title="Configuration Bean 注册组件">Configuration Bean 注册组件</a><time datetime="2024-07-15T21:24:08.000Z" title="发表于 2024-07-15 21:24:08">2024-07-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/65826306" title="Spring5新功能"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/008.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring5新功能"/></a><div class="content"><a class="title" href="/p/65826306" title="Spring5新功能">Spring5新功能</a><time datetime="2024-07-14T17:24:08.000Z" title="发表于 2024-07-14 17:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/40bb048a" title="JdbcTemplate与声明式事务"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/013.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="JdbcTemplate与声明式事务"/></a><div class="content"><a class="title" href="/p/40bb048a" title="JdbcTemplate与声明式事务">JdbcTemplate与声明式事务</a><time datetime="2024-07-14T11:24:08.000Z" title="发表于 2024-07-14 11:24:08">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/p/92933cdb" title="Spring-AOP编程"><img src= "/medias/detail/load.gif" data-lazy-src="/medias/featureimages/012.jpg" onerror="this.onerror=null;this.src='/medias/detail/404.jpg'" alt="Spring-AOP编程"/></a><div class="content"><a class="title" href="/p/92933cdb" title="Spring-AOP编程">Spring-AOP编程</a><time datetime="2024-07-14T09:24:38.000Z" title="发表于 2024-07-14 09:24:38">2024-07-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 凉月</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-fulsun.netlify.app/.netlify/functions/comment',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://unpkg.com/@waline/client@3.1.2/dist/waline.css')
+      const { init } = await import('https://unpkg.com/@waline/client@3.1.2/dist/waline.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://unpkg.com/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
